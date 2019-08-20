@@ -1,0 +1,222 @@
+﻿@model VSAND.Data.Entities.VsandTeam;
+
+@{
+    ViewData["Title"] = "Team";
+    Layout = "_teamLayout.cshtml";
+
+    var adminAuthResult = await AuthorizationService.AuthorizeAsync(User, "Admin");
+    bool isAdmin = adminAuthResult.Succeeded;
+}
+
+<div id="vueApp" v-cloak>
+    <div class="row">
+        <div class="col-xs-12 col-md-5 col-lg-4 push-md-7 push-lg-8">
+            <widget-wrapper icon="table" title="Summary" v-bind:padding="true" header-class="bg-faded">
+                <div class="table-responsive">
+                    <table class="table table-condensed text-center">
+                        <thead>
+                            <tr>
+                                <th>Wins</th>
+                                <th></th>
+                                <th>Losses</th>
+                                <th v-if="allowtie"></th>
+                                <th v-if="allowtie">Ties</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><h1 class="page-title txt-color-blueDark">{{ teamrecord.wins }}</h1></td>
+                                <td><h1 class="page-title txt-color-blueDark"></h1></td>
+                                <td><h1 class="page-title txt-color-blueDark">{{ teamrecord.losses }}</h1></td>
+                                <td v-if="allowtie"><h1 class="page-title txt-color-blueDark"></h1></td>
+                                <td v-if="allowtie"><h1 class="page-title txt-color-blueDark">{{ teamrecord.ties }}</h1></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-borderless text-center">
+                        <thead>
+                            <tr>
+                                <th>Conference</th>
+                                <th>Home</th>
+                                <th>Division</th>
+                                <th>Road</th>
+                                <th>League</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{teamrecord.conferenceRecord}}</td>
+                                <td>{{teamrecord.homeRecord}}</td>
+                                <td>{{teamrecord.divisionRecord}}</td>
+                                <td>{{teamrecord.roadRecord}}</td>
+                                <td>{{teamrecord.leagueRecord}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-borderless text-center">
+                        <tbody>
+                            <tr>
+                                <th>Winning %</th>
+                                <td>{{teamrecord.winningPercentage}}</td>
+                            </tr>
+                            <tr>
+                                <th>70% Rule</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Power Points</th>
+                                <td>{{teamrecord.powerPoints}}</td>
+                            </tr>
+                            <tr>
+                                <th>Points For</th>
+                                <td>{{teamrecord.pointsFor}}</td>
+                            </tr>
+                            <tr>
+                                <th>Points Against</th>
+                                <td>{{teamrecord.pointsAgainst}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </widget-wrapper>
+        </div>
+        <div class="col-xs-12 col-md-7 col-lg-8 pull-md-5 pull-lg-4">
+            <widget-wrapper icon="table" title="Schedule/Scoreboard" v-bind:padding="false" header-class="bg-faded">
+                <template v-slot:toolbar>
+                    <a class="btn btn-sm btn-secondary mr-1 shadow-0" href="/Game/Report/createGame?teamid=@Model.TeamId">Report a Game</a>
+                    <a class="btn btn-sm btn-secondary shadow-0" href="/Game/Schedule?teamId=@Model.TeamId&sportId=@Model.Sport.SportId">Schedule a Game</a>
+                </template>
+                <template v-slot:bodytoolbar>
+                    <input-field input-id="filterSchedSb"
+                                 v-bind:default-value="filterOpponent"
+                                 v-bind:required="false"
+                                 v-bind:max-length="100"
+                                 placeholder="Filter list by opponent"
+                                 v-on:input="filterOpponent = $event">
+                        <template v-slot:inputbuttons>
+                            <button class="btn btn-default" v-bind:disabled="filterOpponent == null || filterOpponent == ''" v-on:click="filterOpponent = ''" title="Clear Filter">Clear Filter</button>
+                        </template>
+                    </input-field>
+                </template>
+                <div class="table-responsive">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Result</th>
+                                <th>Record</th>
+                                <th>Opponent</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in filteredSb" v-bind:class="{'deleted': item.deleted}">
+                                <td>{{ item.gameDate | formatDate }}</td>
+                                <td>({{item.resultName}}<span class="forfeit-indicator" v-if="item.forfeit">*</span>) {{ item.resultScore }}</td>
+                                <td> {{ item.overallRecord }}<span v-if="item.conferenceRecord != ''"> ({{ item.conferenceRecord }})</span></td>
+                                <td>
+                                    @if (isAdmin)
+                                    {
+                                        <a class="font-weight-bold" v-bind:href="'/teams/' + item.opponentId">{{ item.opponent }}</a>
+                                    }
+                                    else
+                                    {
+                                        <b>{{ item.opponent }}</b>
+                                    }
+                                    {{ item.opponentLeague }}
+                                </td>
+                                <td class="actions text-right">
+                                    <button v-if="item.oppIsOos" class="btn btn-default btn-sm" v-on:click="showOosModal(item.gameReportId)">OOS</button>
+                                    <button class="btn btn-default btn-sm">Power Points</button>
+                                    <a class="btn btn-default btn-sm" v-if="item.final" v-bind:href="'/game/review/' + item.gameReportId">View/Edit Game</a>
+                                    <a class="btn btn-default btn-sm" v-if="!item.final" v-bind:href="'/game/' + item.gameReportId">View/Edit Game</a>
+                                    <button class="btn btn-danger btn-sm" v-on:click="deleteGameData(index)">{{ item.deleted ? 'Restore' : 'Delete' }}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </widget-wrapper>
+        </div>
+    </div>
+    <b-modal v-model="fixRecordModal" size="lg" title="Fix OOS Record Information"
+             :header-bg-variant="headerBgVariant"
+             :header-text-variant="headerTextVariant"
+             :body-bg-variant="bodyBgVariant"
+             :body-text-variant="bodyTextVariant">
+        <p><h4><b>{{ oosInfo ? oosInfo.teamName : null }}</b></h4></p>
+        <div class="table-responsive">
+            <table class="table table-borderless text-align-right col-sm-12">
+                <tbody>
+                    <tr>
+                        <th class="text-right" style="width:200px">Last Update:</th>
+                        <td>{{ oosInfo ? oosInfo.lastUpdated : null | formatFullDateWithTime }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right" style="vertical-align:middle">Group Exchange:</th>
+                        <td>
+                            <input-field input-type="number"
+                                         v-bind:default-value="oosInfo ? oosInfo.groupExchange : null"
+                                         v-on:input="oosInfo.groupExchange = $event"></input-field>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">The total of wins losses and ties must not exceed 15</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-md-right" style="vertical-align:middle">Wins:</th>
+                        <td>
+                            <input-field input-type="number"
+                                         v-bind:default-value="oosInfo ? oosInfo.wins : null"
+                                         v-on:input="oosInfo.wins = $event"></input-field>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-md-right" style="vertical-align:middle">Losses:</th>
+                        <td>
+                            <input-field input-type="number"
+                                         v-bind:default-value="oosInfo ? oosInfo.losses : null"
+                                         v-on:input="oosInfo.losses = $event"></input-field>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-md-right" style="vertical-align:middle">Ties:</th>
+                        <td>
+                            <input-field input-type="number"
+                                         v-bind:default-value="oosInfo ? oosInfo.ties : null"
+                                         v-on:input="oosInfo.ties = $event"></input-field>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div slot="modal-footer">
+            <button class="btn btn-default" style="float:right; margin-left: 10px;" v-on:click.prevent="fixRecordModal = false">Cancel</button>
+            <button class="btn btn-primary" v-on:click.prevent="updateOosRecord">Save</button>
+        </div>
+    </b-modal>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        window.team = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/team.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/team.min.js" asp-append-version="true"></script>
+    </environment>
+}

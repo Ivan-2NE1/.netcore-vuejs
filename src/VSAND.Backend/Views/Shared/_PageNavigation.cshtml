@@ -1,0 +1,298 @@
+﻿
+    <ul id="js-nav-menu" class="nav-menu">
+        <li is-active-route asp-area="" asp-controller="Home" asp-action="Index">
+            <a asp-area="" asp-controller="Home" asp-action="Index" title="Dashboard" data-filter-tags="dashboard">
+                <i class="fas fa-home"></i> <span class="nav-link-text">Dashboard</span>
+            </a>
+        </li>
+
+        @if (ViewContext.RouteData.Values["Controller"].ToString().Equals("game", StringComparison.OrdinalIgnoreCase) && ViewContext.RouteData.Values["Action"].ToString().ToLower() != "report" && ViewContext.RouteData.Values.ContainsKey("id") && ViewContext.RouteData.Values["id"].ToString() != "")
+        {
+            @await Html.PartialAsync("_ActiveGameNav")
+        }
+
+        @if (ViewContext.RouteData.Values["Controller"].ToString().Equals("teams", StringComparison.OrdinalIgnoreCase) && ViewContext.RouteData.Values.ContainsKey("teamid") && ViewContext.RouteData.Values["teamid"].ToString() != "")
+        {
+            @await Html.PartialAsync("_ActiveTeamNav")
+        }
+
+        <li is-active-route asp-area="" asp-controller="Game" asp-action="Report">
+            <a asp-area="" asp-controller="Game" asp-action="Report" data-filter-tags="report new game">
+                <i class="fas fa-flag-checkered"></i> <span class="nav-link-text">Report a New Game</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.Worksheet.Schedule.." is-active-route asp-area="" asp-controller="Game" asp-action="Schedule">
+            <a asp-area="" asp-controller="Game" asp-action="Schedule" data-filter-tags="Schdeule a game">
+                <i class="fas fa-calendar"></i> <span class="nav-link-text">Schedule a Game</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="WriterOrEditor" is-active-route asp-area="" asp-controller="Work" asp-action="Mine">
+            <a asp-area="" asp-controller="Work" asp-action="Mine" data-filter-tags="my work assigned to me">
+                <i class="fas fa-pencil"></i> <span class="nav-link-text">My Work</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="WriterOrEditor" is-active-route asp-area="" asp-controller="Library">
+            <a asp-area="" asp-controller="Library" asp-action="Index" data-filter-tags="library books">
+                <i class="fas fa-book"></i> <span class="nav-link-text">Library</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.Worksheet.." is-active-route is-open-route asp-area="Worksheet">
+            <a href="#" data-filter-tags="worksheet">
+                <i class="fas fa-check-square"></i> <span class="nav-link-text">Worksheet</span>
+            </a>
+            <ul>
+                <li is-active-route asp-area="Worksheet" asp-controller="Games" asp-action="Index">
+                    <a asp-area="Worksheet" asp-controller="Games" asp-action="Index" data-filter-tags="todays games">
+                        <span class="nav-link-text">Today's Games</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Roundup.." is-active-route asp-area="Worksheet" asp-controller="Roundups" asp-action="Index">
+                    <a asp-area="Worksheet" asp-controller="Roundups" asp-action="Index" data-filter-tags="roundup">
+                        <span class="nav-link-text">Roundups</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Worksheet.Schedule.." is-active-route asp-area="Worksheet" asp-controller="Schedules" asp-action="Index">
+                    <a asp-area="Worksheet" asp-controller="Schedules" asp-action="Index" data-filter-tags="schedule">
+                        <span class="nav-link-text">Schedules</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Worksheet.Scoreboard.." is-active-route asp-area="Worksheet" asp-controller="Scoreboards" asp-action="Index">
+                    <a asp-area="Worksheet" asp-controller="Scoreboards" asp-action="Index" data-filter-tags="scoreboard">
+                        <span class="nav-link-text">Scoreboards</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="EditorOrWorksheet" is-active-route asp-area="Worksheet" asp-controller="History" asp-action="Index">
+                    <a asp-area="Worksheet" asp-controller="History" asp-action="Index" data-filter-tags="send history log">
+                        <span class="nav-link-text">Send History Log</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.School.." is-active-route asp-area="" asp-controller="Schools">
+            <a asp-area="" asp-controller="Schools" asp-action="Index" data-filter-tags="school">
+                <i class="fas fa-school"></i> <span class="nav-link-text">Schools</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.School.Team.." is-active-route is-open-route asp-area="" asp-controller="Teams" asp-action="Index">
+            <a asp-area="" asp-controller="Teams" asp-action="Index" data-filter-tags="teams">
+                <i class="fas fa-users"></i> <span class="nav-link-text">Teams</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.Player.." is-active-route asp-area="" asp-controller="Players">
+            <a asp-area="" asp-controller="Players" asp-action="Index" data-filter-tags="players">
+                <i class="fas fa-user-circle"></i> <span class="nav-link-text">Players</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.Sport.." is-active-route asp-area="" asp-controller="Sports">
+            <a asp-area="" asp-controller="Sports" asp-action="Index" data-filter-tags="sports">
+                <i class="fas fa-whistle"></i> <span class="nav-link-text">Sports</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="VSAND.Manage.." is-active-route is-open-route asp-controller="Manage">
+            <a href="#" data-filter-tags="manage">
+                <i class="fas fa-wrench"></i> <span class="nav-link-text">Manage</span>
+            </a>
+            <ul>
+                <li asp-authorize asp-policy="VSAND.Conference.." is-active-route asp-area="Manage" asp-controller="Conferences" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Conferences" asp-action="Index" data-filter-tags="conferences">
+                        <span class="nav-link-text">Conferences</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.County.." is-active-route asp-area="Manage" asp-controller="Counties" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Counties" asp-action="Index" data-filter-tags="counties">
+                        <span class="nav-link-text">Counties</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Edition.." is-active-route asp-area="Manage" asp-controller="Editions" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Editions" asp-action="Index" data-filter-tags="editions">
+                        <span class="nav-link-text">Editions</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.FeedSubscriber.." is-active-route asp-area="Manage" asp-controller="Feeds" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Feeds" asp-action="Index" data-filter-tags="feeds">
+                        <span class="nav-link-text">Feeds</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Publication.." is-active-route asp-area="Manage" asp-controller="Publications" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Publications" asp-action="Index" data-filter-tags="publications">
+                        <span class="nav-link-text">Publications</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="Admin" is-active-route asp-area="Manage" asp-controller="Users" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="Users" asp-action="Index" data-filter-tags="users">
+                        <span class="nav-link-text">Users</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.ScheduleYear.." is-active-route asp-area="Manage" asp-controller="ScheduleYears" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="ScheduleYears" asp-action="Index" data-filter-tags="schedule years provisioning">
+                        <span class="nav-link-text">Schedule Years</span>
+                    </a>
+                </li>
+                <li asp-authorize asp-policy="VSAND.State.." is-active-route asp-area="Manage" asp-controller="States" asp-action="Index">
+                    <a asp-area="Manage" asp-controller="States" asp-action="Index" data-filter-tags="states">
+                        <span class="nav-link-text">States</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li asp-authorize asp-policy="Admin" is-active-route is-open-route asp-area="Content">
+            <a asp-area="Content" asp-controller="Tagging" data-filter-tags="content">
+                <i class="far fa-newspaper"></i> <span class="nav-link-text">Content</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="UserFunction.Planner" is-active-route is-open-route asp-controller="Planner">
+            <a asp-controller="Planner" data-filter-tags="planner">
+                <i class="fas fa-calendar"></i> <span class="nav-link-text">Planner</span>
+            </a>
+        </li>
+
+        <li asp-authorize asp-policy="AdminOrReports" is-active-route is-open-route asp-area="Reports">
+            <a href="#" data-filter-tags="reports">
+                <i class="fas fa-file-chart-line"></i> <span class="nav-link-text">Reports</span>
+            </a>
+            <ul>
+                <li asp-authorize asp-policy="VSAND.Reports.Compliance" is-active-route asp-area="Reports" asp-controller="Compliance">
+                    <a href="#" data-filter-tags="compliance">
+                        <span class="nav-link-text">Compliance</span>
+                    </a>
+                    <ul>
+                        <li asp-authorize asp-policy="VSAND.Reports.Compliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="Calendar">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="Calendar" data-filter-tags="compliance calendar">
+                                <span class="nav-link-text">Calendar</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="AdminOrCompliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="PitchCountDaily">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="PitchCountDaily" data-filter-tags="compliance pitch count daily">
+                                <span class="nav-link-text">Pitch Count - Daily</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="AdminOrCompliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="PitchCountSeason">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="PitchCountSeason" data-filter-tags="compliance pitch count season">
+                                <span class="nav-link-text">Pitch Count - Season</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="AdminOrCompliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="RegularSeasonGames">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="RegularSeasonGames" data-filter-tags="compliance regular season games">
+                                <span class="nav-link-text">Regular Season Game Count</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="VSAND.Reports.Compliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="ScheduledVsReported">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="ScheduledVsReported" data-filter-tags="compliance scheduled reported">
+                                <span class="nav-link-text">Scheduled v. Reported</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="VSAND.Reports.Compliance" is-active-route asp-area="Reports" asp-controller="Compliance" asp-action="SchoolsMissingUsers">
+                            <a asp-area="Reports" asp-controller="Compliance" asp-action="SchoolsMissingUsers" data-filter-tags="compliance schools without users">
+                                <span class="nav-link-text">Schools without Users</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li asp-authorize asp-policy="EditorOrDataQuality" is-active-route asp-area="Reports" asp-controller="DataQuality">
+                    <a href="#" data-filter-tags="data quality">
+                        <span class="nav-link-text">Data Quality</span>
+                    </a>
+                    <ul>
+                        <li asp-authorize asp-policy="VSAND.Reports.DataQuality" is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="BornRanking">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="BornRanking" data-filter-tags="born ranking">
+                                <span class="nav-link-text">Born Ranking</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="VSAND.Reports.DataQuality" is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="DuplicateGames">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="DuplicateGames" data-filter-tags="duplicate games">
+                                <span class="nav-link-text">Duplicate Games</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="DuplicatePlayers">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="DuplicatePlayers" data-filter-tags="duplicate players">
+                                <span class="nav-link-text">Duplicate Players</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="UserFunction.Admin" is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="ExcludedGames">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="ExcludedGames" data-filter-tags="excluded games">
+                                <span class="nav-link-text">Excluded Games</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="UserFunction.Admin" is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="FootballvGridIron">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="FootballvGridIron" data-filter-tags="football gridiron">
+                                <span class="nav-link-text">Football v GridIron</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="PlayerNameFormat">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="PlayerNameFormat" data-filter-tags="player name format">
+                                <span class="nav-link-text">Player Name Format</span>
+                            </a>
+                        </li>
+                        <li asp-authorize asp-policy="EditorOrDataQuality" is-active-route asp-area="Reports" asp-controller="DataQuality" asp-action="ScheduleOpponents">
+                            <a asp-area="Reports" asp-controller="DataQuality" asp-action="ScheduleOpponents" data-filter-tags="schedule opponents">
+                                <span class="nav-link-text">Schedule Opponents</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li asp-authorize asp-policy="VSAND.Reports.Teams" is-active-route asp-area="Reports" asp-controller="Teams">
+                    <a href="#" data-filter-tags="teams">
+                        <span class="nav-link-text">Teams</span>
+                    </a>
+                    <ul>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="RosterScheduleSummary">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="RosterScheduleSummary" data-filter-tags="roster schedule summary">
+                                <span class="nav-link-text">Roster &amp; Schedule Summary</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="ByConference">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="ByConference" data-filter-tags="by conference">
+                                <span class="nav-link-text">By Conference</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="OOSCorrections" data-filter-tags="oos non association corrections">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="OOSCorrections">
+                                <span class="nav-link-text">OOS/Non-Association Corrections</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="OOSOpponents">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="OOSOpponents" data-filter-tags="oos opponents">
+                                <span class="nav-link-text">OOS Opponents</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="PPIneligible">
+                            <a asp-authorize asp-policy="AdminOrGoverningBody" asp-area="Reports" asp-controller="Teams" asp-action="PPIneligible" data-filter-tags="powerpoints ineligible game reports">
+                                <span class="nav-link-text">Powerpoints Ineligible Game Reports</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="PPGameCount">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="PPGameCount" data-filter-tags="powerpoints game count">
+                                <span class="nav-link-text">Powerpoints Game Count</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="Records">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="Records" data-filter-tags="records">
+                                <span class="nav-link-text">Records</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="History">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="History" data-filter-tags="history">
+                                <span class="nav-link-text">History</span>
+                            </a>
+                        </li>
+                        <li is-active-route asp-area="Reports" asp-controller="Teams" asp-action="Book">
+                            <a asp-area="Reports" asp-controller="Teams" asp-action="Book" data-filter-tags="books">
+                                <span class="nav-link-text">Book</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>

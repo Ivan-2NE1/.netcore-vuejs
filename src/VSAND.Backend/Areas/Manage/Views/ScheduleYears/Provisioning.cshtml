@@ -1,0 +1,104 @@
+﻿@model VSAND.Data.ViewModels.ScheduleYear
+
+@{
+    ViewData["Title"] = "Provisioning";
+    Layout = "_scheduleYearSportLayout.cshtml";
+    var refObj = Model.ProvisioningSummary.FirstOrDefault();
+}
+
+<div id="vueApp" v-cloak>
+    @if ((int)ViewData["RegularSeasonEventTypeId"] == 0)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <widget-wrapper icon="pencil" title="Create Regular Season Event Type" header-class="bg-faded">
+                    <input-calendar label="Start Date"
+                                    v-bind:default-value="addEventTypeForm.startDate"
+                                    v-on:input="addEventTypeForm.startDate = $event"></input-calendar>
+
+                    <input-calendar label="End Date"
+                                    v-bind:default-value="addEventTypeForm.endDate"
+                                    v-on:input="addEventTypeForm.endDate = $event"></input-calendar>
+
+                    <button class="btn btn-primary" v-on:click="addEventType">Create Event Type</button>
+                </widget-wrapper>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Available (All: {{ scheduleYear.provisioningSummary.length | numeric }}, Remaining: {{ availableSchools.length | numeric }})</label>
+                    <select multiple="multiple" size="20" class="form-control" v-model="availableSelected">
+                        <option v-for="school in availableSchools" v-bind:value="school" v-text="school.name" v-bind:key="school.schoolid"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <p>Games and Roster counts based on previous season</p>
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushSet(availableGamesOrRosters)" v-bind:disabled="availableGamesOrRostersCount < 1">With Games or Rosters ({{ availableGamesOrRostersCount | numeric }}) <i class="fal fa-chevron-right"></i></button>
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushSet(availableGames)" v-bind:disabled="availableGamesCount < 1">With Games ({{ availableGamesCount | numeric }}) <i class="fal fa-chevron-right"></i></button>
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushSet(availableRosters)" v-bind:disabled="availableRostersCount < 1">With Roster ({{ availableRostersCount | numeric }}) <i class="fal fa-chevron-right"></i></button>
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushSet(availableInCoreCoverage)" v-bind:disabled="availableInCoreCoverageCount < 1">Core Coverage ({{ availableInCoreCoverageCount | numeric }}) <i class="fal fa-chevron-right"></i></button>
+
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushSelected()" v-bind:disabled="availableSelectedCount < 1">Selected ({{ availableSelectedCount | numeric }}) <i class="fal fa-chevron-right"></i></button>
+                <button class="btn btn-success btn-block" v-on:click.prevent="pushAll()" v-bind:disabled="availableSchools.length < 1">All <i class="fal fa-chevron-double-right"></i></button>
+
+                <button class="btn btn-danger btn-block" v-on:click.prevent="pullSelected()" v-bind:disabled="selectedSelected.length < 1"><i class="fal fa-chevron-left"></i> Selected ({{ selectedSelected.length | numeric }})</button>
+                <button class="btn btn-danger btn-block" v-on:click.prevent="pullAll()" v-bind:disabled="selectedSchools.length < 1"><i class="fal fa-chevron-double-left"></i> All ({{ selectedSchools.length | numeric }})</button>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Selected ({{ selectedSchools.length | numeric }})</label>
+                    <select multiple="multiple" size="20" class="form-control" v-model="selectedSelected">
+                        <option v-for="school in selectedSchools" v-bind:value="school" v-text="school.name" v-bind:key="school.schoolid"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Existing Teams ({{ createdTeams.length | numeric }})</label>
+                    <select multiple="multiple" size="20" class="form-control">
+                        <option v-for="school in createdTeams" v-bind:value="school" v-text="school.name" v-bind:key="school.schoolid"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <template v-if="selectedSchools.length > 0 && provisioningJob.total == 0">
+            <button v-on:click="provisionTeams" class="btn btn-default">
+                Provision Teams
+            </button>
+        </template>
+
+        <template v-if="provisioningJob.total > 0">
+            <h4 class="text-center py-3">
+                {{ provisioningJob.current }} of {{ provisioningJob.total }} ({{ ((provisioningJob.current / provisioningJob.total) * 100).toFixed(2) }}%) complete
+            </h4>
+            <b-progress :max="provisioningJob.total" animated height="40px">
+                <b-progress-bar :value="provisioningJob.current" variant="success"></b-progress-bar>
+            </b-progress>
+        </template>
+    }
+</div>
+
+@section Scripts {
+    <!-- Configuration for table-grid Vue component -->
+    <col-info asp-for="@refObj" columns="SchoolId,Name,City,State,Validated,PreviousSeasonGameCount,PreviousSeasonRosterCount,CurrentSeasonGameCount,CurrentSeasonRosterCount"></col-info>
+
+    <script type="text/javascript">
+        window.scheduleYear = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.scheduleYearId = @ViewData["ScheduleYearId"];
+        window.sportId = @ViewData["SportId"];
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-provisioning.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-provisioning.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

@@ -1,0 +1,1 @@
+﻿This directory is used when schedules are uploaded to be imported.

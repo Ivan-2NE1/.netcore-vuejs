@@ -1,0 +1,41 @@
+﻿@model VSAND.Data.Entities.VsandSport;
+
+@{
+    ViewData["Title"] = $"{Model.Name} Schedule";
+
+    string basePath = ViewData["BasePath"].ToString();
+}
+
+<partial name="_sportHeader" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container" id="vueApp">
+    <div class="row">
+        <div class="col-md-8">
+            <schedule :sport-id="@Model.SportId" default-date="@ViewData["ViewDate"].ToString()" history-base-path="@basePath/schedule"></schedule>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/lib/vue/vue.js" asp-append-version="true"></script>
+        <script src="~/app/sport-schedule.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/vue.min.js" asp-append-version="true"></script>
+        <script src="~/app/sport-schedule.min.js" asp-append-version="true"></script>
+    </environment>
+}

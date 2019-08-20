@@ -1,0 +1,58 @@
+﻿@model VSAND.Data.Entities.VsandTeam;
+
+@{
+    ViewData["Title"] = "DistributionList";
+    Layout = "_teamLayout.cshtml";
+    var refObj = Model.School.NotifyList.FirstOrDefault();
+}
+
+<div id="vueApp" v-cloak>
+    <p>List of contacts that can be notified when game reports are sent.</p>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row table-responsive">
+                <table-grid grid-id="distributionlist"
+                            v-bind:col-info="rowColInfo"
+                            v-bind:all-data="sortedDistributionList"
+                            data-key-name="notifyId"
+                            title-property="emailAddress"
+                            v-bind:read-only-cols="['notifyId']"
+                            v-bind:enable-edit="true"
+                            v-bind:enable-delete="true"
+                            v-on:change="saveDistribution"
+                            v-on:delete="deleteDistribution"></table-grid>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <widget-wrapper icon="plus" title="Add Subscription" header-class="bg-faded">
+                <input-field input-id="addNotifyEmail"
+                             v-bind:default-value="addSubscriptionForm.emailAddress"
+                             label="Email Address"
+                             v-bind:required="true"
+                             v-bind:max-length="100"
+                             v-on:input="addNotifyForm.emailAddress = $event"></input-field>
+                <template v-slot:footer>
+                    <button class="btn btn-primary btn-lg" v-on:click="createSubscription" disabled="formInvalid">Add Subscription</button>
+                </template>
+            </widget-wrapper>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts {
+    <!-- Configuration for table-grid Vue component -->
+    <col-info asp-for="@refObj" columns="EmailAddress"></col-info>
+
+    <script type="text/javascript">
+        window.team = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/team-distributionlist.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/team-distributionlist.min.js" asp-append-version="true"></script>
+    </environment>
+}

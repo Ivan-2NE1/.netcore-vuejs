@@ -1,0 +1,139 @@
+﻿@model VSAND.Data.Entities.VsandSchool;
+
+@{
+    ViewData["Title"] = Model.Name;
+
+    string basePath = ViewData["BasePath"].ToString();
+}
+
+<div class="appsecondarynav school-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <div class="d-flex align-items-center school-brand">
+                    <img src="https://placehold.it/30x30" /> <strong class="ml-2 school-name">@Model.Name</strong>
+                </div>
+            </div>
+            <div class="col school-nav">
+                <nav class="navbar navbar-expand-md">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="@basePath">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="schoolTeamsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Teams <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="schoolTeamsDropdown">
+                                <a class="dropdown-item" href="#">Football</a>
+                                <a class="dropdown-item" href="#">Wrestling</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 order-12 order-md-1">
+            <div id="vueApp">
+                <schedule :school-id="@Model.SchoolId" default-date="@ViewData["ViewDate"].ToString()" history-base-path="@basePath/schedule"></schedule>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card news mb-3">
+                            <div class="row no-gutters">
+                                <div class="col-md-4 d-none d-md-block">
+                                    <div class="embed-responsive embed-responsive-4by3">
+                                        <a href="http://highschoolsports.nj.com/news/article/3540605643168970890/vote-for-best-ever-athletes-at-3-nj-schools-2019-rushmore-project-is-live/">
+                                            <img src="http://image.nj.com/home/adv-hssn-media/width180/img/NJ.com/news/6e21ca277c98277cddfc5ce543818916/1024px-Mount_Rushmore_National_Memorial_merged.jpg"
+                                                 class="embed-responsive-item card-img">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3><a href="http://highschoolsports.nj.com/news/article/3540605643168970890/vote-for-best-ever-athletes-at-3-nj-schools-2019-rushmore-project-is-live/">Last hours to VOTE for best-ever athletes at 4 N.J. schools: Rushmore, Week 3</a></h3>
+                                        @*<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>*@
+                                        <p class="card-text"><small class="text-muted">1 hour ago David Liss | NJ Advance Media for NJ.com 0</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card news mb-3">
+                            <div class="row no-gutters">
+                                <div class="col-md-4 d-none d-md-block">
+                                    <a href="http://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">
+                                        <img src="http://image.nj.com/home/adv-hssn-media/width180/img/NJ.com/news/a279b5240dd01ee125c935ba9471536a/ScreenShot2019-07-27at6.03.40PM.jpg" class="card-img">
+                                    </a>
+                                    <span class="tag-label"><a href="/football">Football</a></span>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3><a href="http://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">Think Bo Jackson. Two-sport standout set to take talents to the Big Ten</a></h3>
+                                        @*<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>*@
+                                        <p class="card-text"><small class="text-muted">Yesterday Kevin Minnick | NJ Advance Media for NJ.com 0</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card news mb-3">
+                            <div class="row no-gutters">
+                                <div class="col-md-4 d-none d-md-block">
+                                    <a href="http://highschoolsports.nj.com/news/article/-2203336901863310676/senior-spotlight-snyders-multi-talented-alicia-campbells-attacks-rehab/">
+                                        <img src="http://image.nj.com/home/adv-hssn-media/width180/img/NJ.com/news/1dbacd8f8f08eb60a3cb1015edca763c/Campbell.jpg" class="card-img">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3><a href="http://highschoolsports.nj.com/news/article/-2203336901863310676/senior-spotlight-snyders-multi-talented-alicia-campbells-attacks-rehab/">Senior Spotlight: Snyder's multi-talented Alicia Campbell's attacks rehab</a></h3>
+                                        @*<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>*@
+                                        <p class="card-text"><small class="text-muted">Two days ago Jason Bernstein | For The Jersey Journal 0</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 order-1 order-md-12">
+            <p>School Watch / Local Live Ad</p>
+
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <p>Photo Gallery Module</p>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/lib/vue/vue.js" asp-append-version="true"></script>
+        <script src="~/app/school.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/vue.min.js" asp-append-version="true"></script>
+        <script src="~/app/school.min.js" asp-append-version="true"></script>
+    </environment>
+}

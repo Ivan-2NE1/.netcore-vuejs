@@ -1,0 +1,147 @@
+﻿@model VSAND.Data.Entities.VsandTeam
+
+@{
+    ViewData["Title"] = "Import Custom Codes";
+    ViewData["HeaderSubTitle"] = "Import Team Custom Codes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int activeScheduleYearId = ViewBag.ActiveScheduleYearId;
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper title="Import Team Custom Codes"
+                    v-bind:padding="true">
+
+        <div v-if="requireFile">
+            <p class="lead"><strong>Step 1: Upload File</strong></p>
+            <sport-list v-on:change="setSport($event)"></sport-list>
+            <schedule-year-list v-on:change="setScheduleYear($event)"></schedule-year-list>
+            <div class="form-group custom-file">
+                <input type="file" class="custom-file-input" id="customFileUpload" aria-describedby="inputGroupFileAddon01" ref="file" v-on:change="setUploadFile">
+                <label class="custom-file-label" for="inputGroupFile01"><span>{{ uploadFileInfo }}</span></label>
+            </div>
+            <div v-if="fileList !== null && fileList.length > 0">
+                <p><span class="font-weight-bold">- OR - </span></p>
+                <vue-selectbase label="Choose Existing"
+                                choose-prompt="Select File"
+                                v-bind:enable-multiple="false"
+                                v-bind:required="true"
+                                v-bind:external-invalid="false"
+                                v-bind:options="fileList"
+                                option-label-key="id"
+                                v-on:change="setExistingFile($event)"></vue-selectbase>
+            </div>
+            
+            <p class="mt-3"><button class="btn btn-primary" v-on:click="doValidateFile">Process File</button></p>
+        </div>
+
+        <div v-if="requireMap">
+            <p class="lead"><strong>Step 2: Map File</strong> <a href="#" v-on:click.prevent="fileValid = false">back to step 1</a></p>
+            <vue-selectbase label="Choose Worksheet"
+                            choose-prompt="Worksheets"
+                            v-bind:enable-multiple="false"
+                            v-bind:required="true"
+                            v-bind:external-invalid="false"
+                            v-bind:options="sheetNames"
+                            option-label-key="id"
+                            v-on:change="setWorksheet($event)"></vue-selectbase>
+
+            <div v-if="userFileData === undefined || userFileData === null">
+                <p>Choose a sheet to preview data and map columns.</p>
+            </div>
+            <div v-else>
+                <div v-if="userFileData.length === 0">
+                    <p>No rows were found in the selected sheet (or there was a problem reading the sheet data)</p>
+                </div>
+                <div v-else>
+                    <div class="alert alert-danger mb-3" v-if="!mapRequirementsMet">
+                        <p v-for="msg in mapRequirementsMessages">{{ msg }}</p>
+                    </div>
+                    <div v-else>
+                        <div class="alert alert-success">
+                            <p>All basic mapping requirements have been fulfilled.</p>
+                        </div>
+                    </div>
+
+                    <p>Previewing {{ userFileDataPreview.length }} records out of {{ userFileData.length }}.</p>
+                    <table class="table table-bordered table-striped table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th v-for="(value, propertyName, index) in userFileData[0]">
+                                    <div class="text-uppercase"><strong>{{ propertyName }}</strong></div>
+                                    <vue-selectbase v-bind:choose-prompt="'Map Column ' + index"
+                                                    v-bind:enable-multiple="false"
+                                                    v-bind:required="true"
+                                                    v-bind:external-invalid="false"
+                                                    v-bind:default-value="getSelMapOpt(colMap[index].MapType)"
+                                                    v-bind:options="mapOptions"
+                                                    option-label-key="id"
+                                                    v-on:change="setMap(index, propertyName, $event)"></vue-selectbase>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="row in userFileDataPreview">
+                                <td v-for="(value, propertyName, index) in row">
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="mt-3"><button class="btn btn-primary" v-on:click="doMapFile" v-bind:disabled="!mapRequirementsMet || loading">Process Map</button></p>
+        </div>
+
+        <div v-if="requireVerify">
+            <p class="lead"><strong>Step 3: Verify Teams</strong> <a href="#" v-on:click.prevent="mapApproved = false">back to step 2</a></p>
+
+            <p>The mapping process matched {{ mappedTeams.length }} records to teams, and will apply the custom codes to them.</p>
+
+            <div v-if="unmappedTeams.length > 0">
+                <p>The following {{ unmappedTeams.length }} records were unmapped and will be ignored.</p>
+                <div style="overflow-y:auto;height:300px">
+                    <table class="table table-bordered table-striped table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th v-for="(value, propertyName, index) in unmappedTeams[0]">
+                                    <div class="text-uppercase"><strong>{{ propertyName }}</strong></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="row in unmappedTeams">
+                                <td v-for="(value, propertyName, index) in row">
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p class="mt-3"><button class="btn btn-primary" v-on:click="saveCustomCodes" v-bind:disabled="loading">Save Custom Codes</button></p>
+        </div>
+
+        <div v-if="processComplete">
+            <p class="lead"><strong>Complete</strong></p>
+
+            <div class="alert alert-success" v-if="processSuccess">
+                <p>The team custom codes were saved successfully.</p>
+            </div>
+            <div class="alert alert-danger" v-else>
+                <p>The save process had errors. No team custom codes were applied.</p>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/teams-customcodeimporter.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/teams-customcodeimporter.min.js" asp-append-version="true"></script>
+    </environment>
+}

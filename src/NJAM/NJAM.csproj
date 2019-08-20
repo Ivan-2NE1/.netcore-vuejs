@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VSAND.Data\VSAND.Data.csproj" />
+    <ProjectReference Include="..\VSAND.Interfaces\VSAND.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

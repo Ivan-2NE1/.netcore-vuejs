@@ -1,0 +1,69 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Positions";
+    Layout = "_sportLayout.cshtml";
+    var refObj = Model.Positions.FirstOrDefault();
+}
+
+<widget-wrapper icon="pencil" title="Positions" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table-grid grid-id="sportPositions"
+                v-bind:col-info="rowColInfo"
+                v-bind:all-data="sport.positions"
+                data-key-name="sportPositionId"
+                title-property="name"
+                v-bind:enable-edit="true"
+                v-bind:enable-delete="false"
+                v-on:change="updateSportPosition">
+        <template v-slot:extra-actions="slotProps">
+            <a class="btn btn-default" v-bind:href="'/Sports/' + sport.sportId + '/Positions/' + slotProps.row.sportPositionId + '/FeaturedStats'">
+                Featured Stats
+            </a>
+        </template>
+        <template v-slot:addformrow>
+            <tr class="table-success">
+                <td>
+                    <div class="form-inline">
+                        <input-field input-id="addPositionName"
+                                     v-bind:default-value="addPositionForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"
+                                     v-on:input="addPositionForm.name = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-field input-id="addPositionAbbreviation"
+                                     v-bind:default-value="addPositionForm.abbreviation"
+                                     v-bind:required="true"
+                                     v-bind:max-length="10"
+                                     v-on:input="addPositionForm.abbreviation = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <a class="btn btn-primary" v-on:click="addPosition">Add Position</a>
+                </td>
+            </tr>
+        </template>
+    </table-grid>
+</widget-wrapper>
+
+@section Scripts {
+    <!-- Configuration for table-grid Vue component -->
+    <col-info asp-for="@refObj" columns="Name,Abbreviation"></col-info>
+
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-positions.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-positions.min.js" asp-append-version="true"></script>
+    </environment>
+}

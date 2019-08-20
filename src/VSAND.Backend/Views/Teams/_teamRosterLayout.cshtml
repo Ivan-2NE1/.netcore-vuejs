@@ -1,0 +1,37 @@
+@model VSAND.Data.Entities.VsandTeam
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div class="panel">
+    <div class="panel-hdr bg-fusion-400 bg-fusion-gradient">
+        <h2>
+            <span class="pr-1"><i class="far fa fa-users"></i></span>
+            @Model.Name @Model.ScheduleYear.Name @Model.Sport.Name
+        </h2>
+        <div class="panel-toolbar">
+            <button id="btnExcel" class="btn btn-default btn-sm rounded-pill mr-1 shadow-0"><i class="fal fa-file-excel fa-lg"></i> MS Excel</button>
+            <button id="btnPDF" class="btn btn-default btn-sm rounded-pill mr-1 shadow-0"><i class="fal fa-file-pdf fa-lg"></i> PDF</button>
+            <button id="btnCSV" class="btn btn-default btn-sm rounded-pill mr-1 shadow-0"><i class="fal fa-file-csv fa-lg"></i> CSV</button>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0"><i class="fal fa-pencil"></i> Add Player</button>
+            <button class="btn btn-toolbar-master waves-effect waves-themed" data-toggle="dropdown">
+                <i class="fal fa-ellipsis-v"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-right">
+                <partial name="_teamNav" />
+            </div>
+        </div>
+    </div>
+    <div class="panel-container">
+        <div class="panel-content">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @RenderSection("Scripts", false)
+}

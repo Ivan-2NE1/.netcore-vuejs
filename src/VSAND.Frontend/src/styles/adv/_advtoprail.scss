@@ -1,0 +1,2258 @@
+﻿
+.skipTo__link {
+    position: absolute;
+    top: -15%;
+    left: 0;
+    z-index: 3000;
+    width: 100vw;
+    margin: .75em;
+    padding: 1em;
+    background-color: #1565c0;
+    text-align: center;
+    color: #fff;
+    letter-spacing: .06em;
+    border: 0;
+    border-radius: .375em;
+    box-shadow: 1px 1px 4px rgba(0,0,0,.4);
+    cursor: pointer;
+    transition: top .5s
+}
+
+.skipTo__link:after {
+    content: " \25B8"
+}
+
+.skipTo__link:focus {
+    top: 0;
+    outline: 0
+}
+
+@media screen and (min-width: 600px) {
+    .skipTo__link {
+        width: auto
+    }
+}
+
+.below-toprail {
+    display: none
+}
+
+@media screen and (min-width: 980px) {
+    .below-toprail {
+        display: block;
+        width: auto;
+        margin-bottom: 16px;
+        text-align: center
+    }
+}
+
+.footer {
+    content: " ";
+    display: table;
+    clear: both
+}
+
+.footer, .main-wrapper--two-column .full-width {
+    width: 100vw
+}
+
+@media screen and (min-width: 768px) {
+    .main-wrapper--two-column .full-width {
+        float: left;
+        width: 100%
+    }
+}
+
+.main-wrapper--two-column .main {
+    width: 100vw
+}
+
+@media screen and (min-width: 768px) {
+    .main-wrapper--two-column .main {
+        float: left;
+        width: calc(100% - 320px)
+    }
+}
+
+@media screen and (min-width: 980px) {
+    .main-wrapper--two-column .main {
+        float: left;
+        width: 631px;
+        margin-right: 0
+    }
+}
+
+.main-wrapper--two-column .sidebar {
+    width: 100vw
+}
+
+@media screen and (min-width: 768px) {
+    .main-wrapper--two-column .sidebar {
+        display: block;
+        float: right;
+        width: 300px;
+        margin-right: 10px
+    }
+}
+
+.pageType__article .below-toprail {
+    margin-top: 100px
+}
+
+.main-wrapper--section-temp .below-toprail {
+    position: relative;
+    margin: 0
+}
+
+.modal--piano .tp-container-inner, .modal--piano iframe {
+    position: relative;
+    width: 100vw !important;
+    height: 100vh !important
+}
+
+.toprail {
+    background-color: #333
+}
+
+.advtoprail {
+    clear: both;
+    position: relative;
+    display: flex;
+    height: 54px;
+    font-family: helvetica,arial,sans-serif;
+    background-color: #ebe0d2;
+    color: #333;
+    border-bottom: 1px solid #aaa;
+    text-align: center;
+    font-size: 1rem;
+    z-index: 501
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail {
+        margin-bottom: 31px
+    }
+}
+
+.advtoprail * {
+    box-sizing: content-box
+}
+
+.advtoprail__button {
+    position: relative;
+    margin-top: -2px;
+    height: 41px;
+    padding: 0 6px
+}
+
+.advtoprail__button, .advtoprail__button--close {
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem
+}
+
+.advtoprail__button--close {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    height: 30px;
+    margin: 0;
+    padding: 0
+}
+
+.advtoprail__button-mobile-backtomain {
+    position: relative;
+    margin-top: -2px;
+    cursor: pointer;
+    border: 0;
+    font-family: helvetica,arial,sans-serif;
+    width: 100%;
+    padding: 0 5px;
+    font-size: 1.5rem;
+    background-color: #333;
+    color: #fff;
+    height: 35px;
+    text-align: left;
+    display: none
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__button-mobile-backtomain {
+        display: block;
+        padding: 0
+    }
+}
+
+.advtoprail__button-icon {
+    display: block;
+    margin: auto;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    background: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png) 0 0 no-repeat transparent;
+    border: 0;
+    color: transparent
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__button-icon {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.advtoprail__button-icon--backmm {
+    font-size: 2.3rem;
+    line-height: 11pt;
+    margin-left: 3px;
+    margin-right: 15px;
+    font-family: Lucida Grande,Arial,Times New Roman
+}
+
+.advtoprail__button-icon--backmm:after {
+    content: "\2039"
+}
+
+.advtoprail__button-icon--close {
+    display: block;
+    margin: auto;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    background: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png) 0 0 no-repeat transparent;
+    border: 0;
+    color: transparent;
+    top: 0;
+    left: 0;
+    background-position: 0 -30px;
+    cursor: pointer
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__button-icon--close {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.advtoprail__button-label {
+    display: block;
+    font-size: 1rem;
+    text-align: center
+}
+
+.advtoprail__button-label--backmm {
+    position: relative;
+    top: -4px
+}
+
+.advtoprail__iconlabel, .advtoprail__iconlabel--hidden {
+    display: block;
+    text-align: center
+}
+
+.advtoprail__iconlabel--hidden {
+    width: 38px;
+    text-indent: -9000px;
+    overflow: hidden;
+    border: 0;
+    color: transparent;
+    background-color: transparent;
+    background-repeat: no-repeat
+}
+
+.advtoprail__dropdown {
+    position: absolute;
+    z-index: 600;
+    display: none;
+    top: 54px;
+    left: 10px;
+    height: auto;
+    padding-top: 10px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown {
+        left: 0;
+        width: 100%
+    }
+}
+
+.advtoprail__dropdown.js-menu-open {
+    display: block
+}
+
+.advtoprail__menuborderarrow {
+    margin-left: 40px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__menuborderarrow {
+        margin-left: 6px
+    }
+}
+
+.advtoprail__dropdown-outer {
+    border-bottom: 5px solid #999;
+    border-top: 5px solid #333;
+    margin-top: -1px
+}
+
+.advtoprail__dropdown-inner {
+    border-left: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
+    background-color: #fff;
+    position: relative
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown-inner {
+        width: 100%;
+        border: 0
+    }
+}
+
+.advtoprail__dropdown-menulist {
+    margin: 0;
+    border: 0;
+    background-color: #fff;
+    list-style-type: none
+}
+
+.advtoprail__dropdown-menuitem {
+    margin: 0;
+    padding: 5px 15px;
+    cursor: pointer;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left
+}
+
+.advtoprail__dropdown-menuitem-link, .advtoprail__dropdown-menuitem-link:active, .advtoprail__dropdown-menuitem-link:focus {
+    font-weight: 400;
+    display: inline;
+    color: #333;
+    text-decoration: none
+}
+
+.advtoprail__input {
+    background-color: #fefefd;
+    border: 1px solid #b3aaa0;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    height: 37px;
+    padding: 5px;
+    width: 300px;
+    margin: 16px 0
+}
+
+.advtoprail__submit {
+    border: 1px solid #3c6e9c;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,.2);
+    text-shadow: -1px -1px -2px #666;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 15px;
+    background: #4f90cc;
+    background-image: linear-gradient(180deg,#5091cd,#437eb5);
+    margin: auto
+}
+
+.advtoprail__left-corner {
+    display: flex;
+    align-items: center;
+    flex: 1
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__left-corner {
+        width: 100%
+    }
+}
+
+.advtoprail__right-corner {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    height: 40px;
+    width: 238px;
+    padding: 7px 0
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__right-corner {
+        width: 85px;
+        margin-right: 3px;
+        z-index: 2
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__right-corner {
+        width: 118px
+    }
+}
+
+.advtoprail__dropdown-menuitem-link:not(.js-touch):hover {
+    text-decoration: underline
+}
+
+.advtoprail__mainmenu {
+    margin: 0;
+    text-align: left
+}
+
+.advtoprail__mainmenu-nav {
+    float: left
+}
+
+.advtoprail__mainmenu-button {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    width: 100px;
+    margin: 0 10px;
+    line-height: 1.4em
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-button {
+        width: 62px;
+        margin: 0 0 0 5px;
+        height: 50px
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__mainmenu-button {
+        width: 42px
+    }
+}
+
+.advtoprail__mainmenu-button-edition {
+    position: relative;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    font-size: 1rem;
+    float: left;
+    margin: 0 10px;
+    line-height: 1.4em;
+    padding: 2px 0;
+    width: auto;
+    text-align: left;
+    font-weight: 400;
+    color: #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-button-edition {
+        width: 62px;
+        margin: 0 0 0 5px;
+        height: 50px
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__mainmenu-button-edition {
+        width: 42px
+    }
+}
+
+.advtoprail__mainmenu-button-icon {
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    background: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png) 0 0 no-repeat transparent;
+    border: 0;
+    color: transparent;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 0 -90px;
+    margin: 0 10px 0 0;
+    position: relative;
+    display: block
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-button-icon {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-button-icon {
+        margin-left: 0;
+        margin-bottom: 15px
+    }
+}
+
+.js-menu-open .advtoprail__mainmenu-button-icon {
+    background-position: 0 -120px
+}
+
+.advtoprail__mainmenu-button-label {
+    display: block;
+    text-align: center;
+    float: left;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 41px;
+    text-shadow: 1px 1px 1px hsla(0,0%,100%,.5)
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__mainmenu-button-label {
+        display: none
+    }
+}
+
+.advtoprail__mainmenu-menulist {
+    margin: 0;
+    border: 0;
+    background-color: #fff;
+    list-style-type: none;
+    padding: 5px 0 0;
+    min-width: 195px;
+    text-indent: 0;
+    text-shadow: none
+}
+
+.advtoprail__mainmenu-menuitem--subscribe-cta {
+    display: none;
+    text-align: center;
+    border-bottom: 2px solid #ececec;
+    padding: 1rem
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__mainmenu-menuitem--subscribe-cta {
+        display: block
+    }
+}
+
+.advtoprail__mainmenu-manage-button, .advtoprail__mainmenu-subscribe-button {
+    display: block;
+    width: inherit;
+    border-radius: 3px;
+    padding: .5rem;
+    margin-bottom: .7rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #363636
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-manage-button, .advtoprail__mainmenu-subscribe-button {
+        width: 70vw;
+        margin: 1rem auto
+    }
+}
+
+.advtoprail__mainmenu-subscribe-button {
+    font-weight: 500
+}
+
+.advtoprail__mainmenu-menuitem {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem {
+        padding: 5px 12px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--subscribe {
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: auto;
+    margin: 0 12px;
+    display: none;
+    color: #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--subscribe {
+        padding: 5px 12px
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__mainmenu-menuitem--subscribe {
+        display: block
+    }
+}
+
+.advtoprail__mainmenu-menuitem--subscribe span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: block
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--subscribe span {
+        padding: 5px 0 10px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--submenu {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--submenu {
+        padding: 5px 12px
+    }
+}
+
+.advtoprail__button-submenu-edition {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    min-width: 200px;
+    height: 23px;
+    padding: 0;
+    border: 0;
+    font-family: helvetica,arial,sans-serif;
+    width: 100%;
+    font-size: 1.3rem
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__button-submenu-edition {
+        padding: 0
+    }
+}
+
+.advtoprail__button-submenu-edition span {
+    float: right;
+    font-size: 2.7rem;
+    color: #bbb;
+    position: relative;
+    top: -8px;
+    font-family: Lucida Grande,Arial,Times New Roman
+}
+
+.advtoprail__mainmenu-menuitem--submenu-backtomain {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px;
+    padding: 0;
+    display: none;
+    font-family: Lucida Grande,Arial,Times New Roman;
+    margin-bottom: 10px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--submenu-backtomain {
+        display: block
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 13px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-facebook {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -31px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-facebook {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-facebook {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 13px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-google {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -62px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-google {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-google {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 12px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-instagram {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -155px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-instagram {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-instagram {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        background-position: 0 -153px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 13px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-pinterest {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -124px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-pinterest {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-pinterest {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        background-position: 0 -123px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 12px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-tumblr {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -93px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-tumblr {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-tumblr {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        background-position: 0 -92px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 13px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-twitter {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-twitter {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-twitter {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 13px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--social-youtube {
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite.png);
+    background-repeat: no-repeat;
+    line-height: 15px;
+    padding: 8px 0 0 34px;
+    height: 23px;
+    margin: 5px 10px;
+    background-position: 0 -186px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--social-youtube {
+        padding: 5px 12px 5px 35px
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__mainmenu-menuitem--social-youtube {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/social-30px-sprite_2x.png);
+        background-size: 30px;
+        background-position: 0 -184px;
+        padding-bottom: 8px;
+        padding-top: 9px;
+        height: 12px
+    }
+}
+
+.advtoprail__mainmenu-menuitem--mobile {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px;
+    display: none
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem--mobile {
+        display: block;
+        padding: 5px 12px
+    }
+}
+
+.advtoprail__mainmenu-menuitem.js-submenu-open {
+    background-color: #efefef;
+    border-top: 1px solid #c6c6c6;
+    margin-right: -4px;
+    font-weight: 700
+}
+
+.advtoprail__mainmenu-menuitem--submenu.js-submenu-open {
+    margin-right: -4px;
+    border-top: 1px solid transparent;
+    font-weight: 400;
+    background-color: transparent
+}
+
+.advtoprail__mainmenu-menulist--submenu.js-submenu-open, .advtoprail__mainmenu-menulist--subsubmenu.js-submenu-open {
+    display: block
+}
+
+.advtoprail__mainmenu-menulist--submenu {
+    border: 0;
+    padding: 1px 0 0;
+    min-width: 195px;
+    text-indent: 0;
+    text-shadow: none;
+    display: none;
+    position: absolute;
+    left: 100%;
+    border-bottom: 5px solid #999;
+    border-top: 5px solid #333;
+    top: -5px;
+    border-right: 1px solid #d3d3d3;
+    background-color: #efefef;
+    margin: 0;
+    list-style-type: none;
+    z-index: 600
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menulist--submenu {
+        width: 100%
+    }
+}
+
+.advtoprail__mainmenu-menulist--subsubmenu {
+    border: 0;
+    padding: 1px 0 0;
+    min-width: 195px;
+    text-indent: 0;
+    text-shadow: none;
+    display: none;
+    position: absolute;
+    left: 100%;
+    border-bottom: 5px solid #999;
+    border-top: 5px solid #333;
+    top: -5px;
+    border-right: 1px solid #d3d3d3;
+    margin: 0;
+    list-style-type: none;
+    z-index: 600;
+    background-color: #fff
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menulist--subsubmenu {
+        width: 100%
+    }
+}
+
+.advtoprail__mainmenu-menuitem-label, .advtoprail__mainmenu-menuitem-link, a.advtoprail__mainmenu-menuitem-label:active, a.advtoprail__mainmenu-menuitem-label:focus, a.advtoprail__mainmenu-menuitem-link:active, a.advtoprail__mainmenu-menuitem-link:focus {
+    font-weight: 400;
+    display: inline;
+    color: #333;
+    text-decoration: none;
+    padding-right: 30px;
+    float: left;
+    font-size: 1.3rem;
+    border-bottom: none
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem-link {
+        width: 50%
+    }
+}
+
+.advtoprail__mainmenu-menuitem-edition {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px;
+    position: relative;
+    padding: 5px 10px 0
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-menuitem-edition {
+        padding: 5px 12px
+    }
+}
+
+.advtoprail__mainmenu-edition {
+    position: relative;
+    float: left;
+    top: 5px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__mainmenu-edition {
+        width: 100%
+    }
+}
+
+.advtoprail__mainmenu-edition-helper {
+    position: absolute;
+    top: -13px;
+    left: 0;
+    height: 15px;
+    width: auto;
+    font-size: 1rem;
+    color: #999;
+    text-transform: uppercase
+}
+
+.advtoprail__mainmenu-edition-label {
+    position: relative;
+    top: 3px;
+    color: #333
+}
+
+.advtoprail__button-submenu {
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-size: 3.5rem;
+    color: #bbb;
+    position: relative;
+    margin: 0;
+    height: 23px;
+    padding: 0;
+    float: right;
+    line-height: 23px;
+    text-align: right;
+    font-family: Lucida Grande,Arial,Times New Roman;
+    top: -3px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__button-submenu {
+        width: 45px
+    }
+}
+
+.advtoprail__button-submenu--close, .advtoprail__button-submenu.js-submenu-open .advtoprail__button-submenu--open {
+    display: none
+}
+
+.advtoprail__button-submenu-edition.js-submenu-open .advtoprail__button-submenu--close, .advtoprail__button-submenu.js-submenu-open .advtoprail__button-submenu--close {
+    display: block;
+    color: #333
+}
+
+.advtoprail__button-submenu-edition.js-submenu-open span, .advtoprail__button-submenu.js-submenu-open {
+    color: #efefef
+}
+
+.advtoprail__mainmenu-menuitem--submenu:not(.js-touch):hover > .advtoprail__button-submenu, .advtoprail__mainmenu-menuitem:not(.js-touch):hover > .advtoprail__button-submenu, .advtoprail__mainmenu-menuitem:not(.js-touch):hover > .advtoprail__mainmenu-edition .advtoprail__button-submenu-edition span {
+    display: none
+}
+
+.advtoprail__mainmenu-menuitem--submenu:not(.js-touch):hover, .advtoprail__mainmenu-menuitem--submenu:not(.js-touch):hover > .advtoprail__mainmenu-menuitem-link, .advtoprail__mainmenu-menuitem-label:not(.js-touch):hover, .advtoprail__mainmenu-menuitem-link:not(.js-touch):hover, .advtoprail__mainmenu-menuitem:not(.js-touch):hover, .advtoprail__mainmenu-menuitem:not(.js-touch):hover > .advtoprail__mainmenu-menuitem-link {
+    font-weight: 700;
+    color: #333
+}
+
+.advtoprail__mainmenu-menuitem--submenu.js-expandable:not(.js-touch):hover {
+    border-top: 1px solid #efefef;
+    background-color: #fff
+}
+
+.advtoprail__mainmenu-menuitem.js-expandable:not(.js-touch):hover {
+    background-color: #efefef
+}
+
+.advtoprail__mainmenu-menulist--submenu.js-submenu-open, .advtoprail__mainmenu-menulist--subsubmenu.js-submenu-open, .js-expandable:not(.js-touch):hover > .advtoprail__mainmenu-menulist--submenu, .js-expandable:not(.js-touch):hover > .advtoprail__mainmenu-menulist--subsubmenu {
+    display: block
+}
+
+.advtoprail__mainmenu-menuitem--submenu:not(.js-touch):hover > .advtoprail__mainmenu-menuitem-link, .advtoprail__mainmenu-menuitem:not(.js-touch):hover > .advtoprail__mainmenu-menuitem-link {
+    text-decoration: underline
+}
+
+.advtoprail__weather-button {
+    position: relative;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    padding: 0 6px;
+    padding-right: 20px;
+    line-height: 1;
+    margin-top: 0
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-button {
+        display: none;
+        width: 100%;
+        padding: 0;
+        height: 23px
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-button.js-button-weather-mobile {
+        display: block
+    }
+}
+
+.advtoprail__weather-button--change-location {
+    position: relative;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    line-height: 1.3;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #437eb5;
+    height: auto;
+    padding: 1px 6px;
+    margin-top: 7px;
+    width: 100%;
+    text-align: left
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-button--change-location {
+        display: block;
+        width: 100%;
+        padding: 0;
+        height: 23px
+    }
+}
+
+.advtoprail__weather-conditions {
+    float: left;
+    display: block;
+    height: 40px;
+    padding: 0 0 0 54px;
+    background-repeat: no-repeat
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-conditions {
+        padding: 0;
+        height: 23px;
+        width: 100%
+    }
+}
+
+.advtoprail__weather-temperature {
+    float: left;
+    margin: 0;
+    padding: 13px 0 11px 7px;
+    font-size: 1.8rem
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-temperature {
+        padding: 0;
+        padding-left: 55px;
+        padding-top: 4px;
+        float: right;
+        font-size: 1.9rem;
+        background-repeat: no-repeat;
+        background-size: 44px 30px;
+        background-position: 10px -4px;
+        height: 23px
+    }
+}
+
+.advtoprail__weather-temperature:after {
+    position: absolute;
+    height: 30px;
+    width: 27px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png);
+    background-position: -3px 0;
+    background-repeat: no-repeat;
+    content: " ";
+    top: 7px
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__weather-temperature:after {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.js-menu-open .advtoprail__weather-temperature:after {
+    content: "\A0";
+    background-position: -3px -30px
+}
+
+@media screen and (max-width: 599px) {
+    .js-menu-open .advtoprail__weather-temperature:after {
+        background: 0 0
+    }
+}
+
+.advtoprail__dropdown--weather {
+    position: absolute;
+    z-index: 600;
+    display: none;
+    top: 54px;
+    left: 30px;
+    height: auto;
+    padding-top: 10px;
+    width: 354px;
+    overflow: hidden
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown--weather {
+        left: 0;
+        width: 100%
+    }
+}
+
+.advtoprail__dropdown--weather.js-menu-open {
+    display: block
+}
+
+.advtoprail__menuborderarrow--weather {
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__menuborderarrow--weather {
+        margin-left: 6px
+    }
+}
+
+.advtoprail__dropdown-inner--weather {
+    border-left: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
+    background-color: #fff;
+    position: relative;
+    width: 352px;
+    min-height: 200px;
+    color: #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown-inner--weather {
+        width: 100%;
+        border: 0
+    }
+}
+
+.advtoprail__weather-container {
+    padding: 10px
+}
+
+.advtoprail__weather-details {
+    display: none;
+    padding: 10px
+}
+
+.advtoprail__weather-details.js-open {
+    display: block
+}
+
+.advtoprail__weather-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0 0;
+    text-align: left
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-title--menu {
+        font-size: 1.3rem;
+        font-weight: 400;
+        float: left;
+        margin-top: 4px
+    }
+}
+
+.advtoprail__weather-subtitle {
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin: 2px 0 10px;
+    height: 16px;
+    text-align: left
+}
+
+.advtoprail__weather-label, .advtoprail__weather-label--confirm {
+    text-align: left;
+    margin-top: 15px;
+    font-size: 1.3rem
+}
+
+.advtoprail__weather-label--confirm {
+    margin-bottom: 20px;
+    line-height: 1.5
+}
+
+.advtoprail__weather-error {
+    color: red;
+    background-color: inherit;
+    margin: 10px 0 0;
+    padding: 0;
+    line-height: inherit;
+    font-weight: 400;
+    font-size: inherit;
+    text-align: left;
+    height: 13px
+}
+
+.advtoprail__weather-forecast {
+    height: 95px;
+    margin: 10px 0
+}
+
+.advtoprail__weather-forecast-period {
+    float: left;
+    width: 110px;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-position: 15px 13px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-forecast-period {
+        width: 33%
+    }
+}
+
+.advtoprail__weather-forecast-period:first-child {
+    border-right: 1px solid #ccc
+}
+
+.advtoprail__weather-forecast-period:last-child {
+    border-left: 1px solid #ccc
+}
+
+.advtoprail__weather-forecast-label {
+    text-transform: capitalize;
+    font-size: 1.4rem;
+    text-align: center;
+    line-height: 1.6;
+    padding-bottom: 40px;
+    display: block
+}
+
+.advtoprail__weather-forecast-highlow {
+    text-align: left;
+    height: 15px;
+    margin: 2px 0 -20px 8px;
+    font-size: 1rem;
+    display: block
+}
+
+.advtoprail__weather-forecast-temperature {
+    margin-right: -10px;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.1;
+    display: block;
+    position: relative;
+    top: -2px
+}
+
+.advtoprail__weather-button-fullreport {
+    border: 1px solid #3c6e9c;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,.2);
+    text-shadow: -1px -1px -2px #666;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 15px;
+    background: #4f90cc;
+    background-image: linear-gradient(180deg,#5091cd,#437eb5);
+    margin: 10px auto auto
+}
+
+.js-weather-conditions--sunny-01 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/01.png)
+}
+
+.js-weather-conditions--mostly-sunny-02 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/02.png)
+}
+
+.js-weather-conditions--partly-sunny-03 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/03.png)
+}
+
+.js-weather-conditions--intermittent-clouds-04 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/04.png)
+}
+
+.js-weather-conditions--hazy-sunshine-05 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/05.png)
+}
+
+.js-weather-conditions--mostly-cloudy-06 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/06.png)
+}
+
+.js-weather-conditions--cloudy-07 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/07.png)
+}
+
+.js-weather-conditions--overcast-08 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/08.png)
+}
+
+.js-weather-conditions--fog-11 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/11.png)
+}
+
+.js-weather-conditions--showers-12 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/12.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-showers-13 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/13.png)
+}
+
+.js-weather-conditions--partly-sunny-with-showers-14 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/14.png)
+}
+
+.js-weather-conditions--thunderstorms-15 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/15.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-thunderstorms-16 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/16.png)
+}
+
+.js-weather-conditions--partly-sunny-with-thunderstorms-17 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/17.png)
+}
+
+.js-weather-conditions--rain-18 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/18.png)
+}
+
+.js-weather-conditions--flurries-19 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/19.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-flurries-20 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/20.png)
+}
+
+.js-weather-conditions--partly-sunny-with-flurries-21 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/21.png)
+}
+
+.js-weather-conditions--snow-22 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/22.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-snow-23 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/23.png)
+}
+
+.js-weather-conditions--ice-24 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/24.png)
+}
+
+.js-weather-conditions--sleet-25 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/25.png)
+}
+
+.js-weather-conditions--freezing-rain-26 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/26.png)
+}
+
+.js-weather-conditions--rain-to-snow-29 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/29.png)
+}
+
+.js-weather-conditions--hot-30 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/30.png)
+}
+
+.js-weather-conditions--cold-31 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/31.png)
+}
+
+.js-weather-conditions--windy-32 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/32.png)
+}
+
+.js-weather-conditions--clear-33 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/33.png)
+}
+
+.js-weather-conditions--mostly-clear-34 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/34.png)
+}
+
+.js-weather-conditions--partly-cloudy-35 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/35.png)
+}
+
+.js-weather-conditions--intermittent-clouds-36 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/36.png)
+}
+
+.js-weather-conditions--hazy-moonlight-37 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/37.png)
+}
+
+.js-weather-conditions--mostly-cloudy-38 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/38.png)
+}
+
+.js-weather-conditions--partly-cloudy-with-showers-39 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/39.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-showers-40 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/40.png)
+}
+
+.js-weather-conditions--partly-cloudy-with-thunderstorms-41 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/41.png)
+}
+
+.js-weather-conditions--mostly-cloudy-with-thunderstorms-42 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/42.png)
+}
+
+.js-weather-conditions--partly-cloudy-with-flurries-43 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/43.png)
+}
+
+.js-weather-conditions--partly-cloudy-with-snow-44 {
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/weather/tiny/44.png)
+}
+
+.advtoprail__masthead {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead {
+        width: 100%;
+        z-index: 2
+    }
+}
+
+.advtoprail__masthead-logo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-logo {
+        display: block
+    }
+}
+
+.advtoprail__masthead-afflink {
+    border: 0
+}
+
+.advtoprail__masthead-afflink-logo {
+    width: 130px;
+    height: 51px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-afflink-logo {
+        position: relative
+    }
+}
+
+.advtoprail__masthead-edition {
+    position: relative;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    display: inline-block;
+    height: 14px;
+    margin: 0 0 0 5px;
+    text-align: left;
+    padding: 20px 0
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-edition {
+        position: absolute;
+        display: block;
+        top: 70px;
+        z-index: 2;
+        width: 100%;
+        box-sizing: border-box;
+        height: 33px;
+        padding: 6px 8px;
+        left: 0;
+        border-bottom: 1px solid #aaa;
+        margin: 0
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__masthead-edition {
+        display: none
+    }
+}
+
+.advtoprail__masthead-curredition {
+    position: relative;
+    float: left;
+    white-space: nowrap;
+    color: #333;
+    line-height: 1.1em;
+    font-weight: 400;
+    margin: 2px 0;
+    cursor: pointer;
+    padding-right: 25px;
+    text-transform: capitalize;
+    font-size: 1.3rem
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-curredition {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1.55rem;
+        font-weight: 700;
+        float: none
+    }
+}
+
+.advtoprail__masthead-curredition:after {
+    position: absolute;
+    height: 30px;
+    width: 27px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png);
+    background-position: -3px 0;
+    background-repeat: no-repeat;
+    content: " ";
+    top: -11px;
+    right: 0
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__masthead-curredition:after {
+        top: -8px;
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.js-menu-open .advtoprail__masthead-curredition:after {
+    content: "\A0";
+    background-position: -3px -30px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead .advtoprail__dropdown {
+        top: 77px;
+        padding-top: 0
+    }
+}
+
+.advtoprail__dropdown--edition {
+    position: absolute;
+    z-index: 600;
+    display: none;
+    left: 10px;
+    height: auto;
+    padding-top: 10px;
+    width: 200px;
+    top: 45px;
+    margin: -7px auto 0;
+    text-align: left;
+    line-height: normal
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown--edition {
+        left: 0;
+        width: 100%
+    }
+}
+
+.advtoprail__menuborderarrow--edition {
+    margin-left: 105px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid #333
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__menuborderarrow--edition {
+        margin-left: auto;
+        margin-right: 56px
+    }
+}
+
+.advtoprail__edition-menulist {
+    position: relative;
+    margin-top: -2px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    width: 200px;
+    padding: 7px 0;
+    margin: 0;
+    background-color: #fff;
+    list-style-type: none
+}
+
+.advtoprail__button-edition-select, .advtoprail__button-edition-select:active, .advtoprail__button-edition-select:focus {
+    position: relative;
+    margin-top: -2px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    padding: 0 6px;
+    width: 100%;
+    text-align: left;
+    height: 20px;
+    color: #333;
+    font-size: 1.3rem
+}
+
+.advtoprail__masthead-curredition--mobile-change {
+    display: none;
+    font-weight: 400;
+    float: right
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-curredition--mobile-change {
+        display: block;
+        font-size: .85rem
+    }
+}
+
+.advtoprail__button-edition-select:not(.js-touch):hover {
+    text-decoration: underline
+}
+
+.advtoprail .advtoprail__button-subscribe-cta {
+    float: left;
+    width: 100px;
+    padding: 12px 0;
+    border-radius: 3px;
+    margin-right: 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1b2431
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail .advtoprail__button-subscribe-cta {
+        display: none
+    }
+}
+
+.advtoprail__button-subscribe {
+    flex: 1;
+    position: relative;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    width: 90px;
+    margin: 0 28px 0 0;
+    padding: 0 25px 0 0;
+    text-align: right;
+    line-height: 2.75em;
+    font-size: 1.3rem;
+    box-sizing: border-box
+}
+
+@media screen and (max-width: 768px) {
+    .advtoprail__button-subscribe {
+        display: none
+    }
+}
+
+.advtoprail__button-subscribe-label:after {
+    position: absolute;
+    height: 30px;
+    width: 27px;
+    background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png);
+    background-position: -3px 0;
+    background-repeat: no-repeat;
+    content: " ";
+    top: 5px
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__button-subscribe-label:after {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.js-menu-open .advtoprail__button-subscribe-label:after {
+    content: "\A0";
+    background-position: -3px -30px
+}
+
+.advtoprail__dropdown--subscribe {
+    position: absolute;
+    z-index: 600;
+    display: none;
+    left: 10px;
+    height: auto;
+    padding-top: 10px;
+    top: 38px;
+    right: 10px;
+    text-align: left
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__dropdown--subscribe {
+        left: 0;
+        width: 100%
+    }
+}
+
+.advtoprail__subscription-link, .advtoprail__subscription-link:active, .advtoprail__subscription-link:focus {
+    font-weight: 400;
+    display: inline;
+    color: #333;
+    text-decoration: none;
+    padding-right: 30px;
+    font-size: 1.3rem;
+    border: 0
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__subscription-link, .advtoprail__subscription-link:active, .advtoprail__subscription-link:focus {
+        width: 50%
+    }
+}
+
+.advtoprail__subscription-link:hover {
+    color: #333
+}
+
+.advtoprail__subscription-menuitem {
+    margin: 0;
+    line-height: 23px;
+    white-space: nowrap;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: default;
+    background: transparent;
+    border-top: 1px solid transparent;
+    min-width: 200px;
+    height: 23px
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__subscription-menuitem {
+        padding: 5px 12px
+    }
+}
+
+.advtoprail__subscription-menulist {
+    margin: 0;
+    border: 0;
+    background-color: #fff;
+    list-style-type: none;
+    padding: 5px 0 0;
+    min-width: 195px;
+    text-indent: 0;
+    text-shadow: none
+}
+
+.advtoprail__button--account {
+    flex: 0;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    padding: 0 6px;
+    min-width: 50px;
+    margin: -2px 6px 0 4px;
+    box-sizing: border-box
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__button--account {
+        padding: 0;
+        width: 38px
+    }
+}
+
+.advtoprail__button-icon--account {
+    display: block;
+    margin: auto;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    background: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png) 0 0 no-repeat transparent;
+    border: 0;
+    color: transparent;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 0 -149px
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__button-icon--account {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px
+    }
+}
+
+.advtoprail__button--account.js-signedin {
+    background-size: 44px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border: 1px solid #333;
+    border-radius: 4px
+}
+
+.js-signedin .advtoprail__button-icon--account, .js-signedin .advtoprail__iconlabel {
+    display: none
+}
+
+.advtoprail__dropdown-user {
+    position: absolute;
+    z-index: 600;
+    display: none;
+    height: auto;
+    right: 0;
+    top: 0;
+    left: auto;
+    width: 200px;
+    font-size: 1.2em;
+    border: 1px solid #cfcfcf;
+    padding: 10px;
+    background: #fff;
+    text-align: left
+}
+
+.advtoprail__dropdown-user.js-menu-open {
+    display: block
+}
+
+.advtoprail__user-profile-image {
+    float: left;
+    margin: 0 5px 10px 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    border-radius: 4px
+}
+
+.advtoprail__user-profile-nameplate {
+    clear: both;
+    margin: 5px;
+    max-width: 200px;
+    box-sizing: content-box;
+    line-height: 1.5em;
+    color: #2a2a2a
+}
+
+.advtoprail__user-profile-links {
+    clear: both;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px 0;
+    vertical-align: middle;
+    font-size: 1.6em;
+    border-top: 1px solid #d3d3d3
+}
+
+.advtoprail__link--account-edit, .advtoprail__link--account-profile, .advtoprail__link--account-signout, .advtoprail__link--account-subscription {
+    display: block;
+    line-height: 1.9em;
+    color: #1565c0;
+    border: 0
+}
+
+.advtoprail__user-profile-buttons {
+    clear: both;
+    width: 100%;
+    margin: 10px 0;
+    padding: 0;
+    vertical-align: middle;
+    font-size: 1.6rem;
+    border: 1px solid #b3aaa0;
+    border-radius: 4px;
+    background-image: linear-gradient(180deg,#fff,#f0f0f0)
+}
+
+.advtoprail__user-profile-buttons button:not(:first-child) {
+    border-left: 1px solid #b3aaa0
+}
+
+.advtoprail__button--account-edit, .advtoprail__button--account-profile, .advtoprail__button--account-signout {
+    position: relative;
+    margin-top: -2px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    padding: 0 6px;
+    width: 28%;
+    height: 21px;
+    font-size: .8rem
+}
+
+.advtoprail__user-profile-username {
+    font-size: 1.3rem;
+    font-weight: 700;
+    word-wrap: break-word
+}
+
+.advtoprail__button--search {
+    flex: 0;
+    margin-top: -2px;
+    height: 41px;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: helvetica,arial,sans-serif;
+    color: #333;
+    font-size: 1rem;
+    padding: 0 6px;
+    margin-right: 10px;
+    min-width: 50px;
+    box-sizing: border-box
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__button--search {
+        margin-right: 0;
+        padding: 0;
+        width: 38px
+    }
+}
+
+.advtoprail__button-icon--search {
+    display: block;
+    margin: auto;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    background: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002.png) 0 0 no-repeat transparent;
+    border: 0;
+    color: transparent;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 0 -180px
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:2dppx),only screen and (min-resolution:192dpi) {
+    .advtoprail__button-icon--search {
+        background-image: url(//www.nj.com/pb/resources/dist/common/images/sprites/toprail-v002_2x.png);
+        background-size: 60px;
+        background-position: 0 -181px
+    }
+}
+
+.advtoprail__mainmenu-sponsor {
+    max-height: 31px;
+    max-width: 88px;
+    margin-left: 10px;
+    margin-top: 12px;
+    float: left
+}
+
+.advtoprail {
+    background-color: #4d4e4e;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1.5rem 0;
+    margin-bottom: 0;
+    height: auto
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail {
+        margin-bottom: 0
+    }
+}
+
+.advtoprail__button-subscribe, .advtoprail__iconlabel, .advtoprail__iconlabel--hidden, .advtoprail__mainmenu-button-label, .advtoprail__masthead-curredition, .advtoprail__weather-temperature {
+    color: #fff;
+    text-shadow: none;
+    font-family: Benton Sans,Arial,sans-serif
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__weather-temperature {
+        color: #333
+    }
+}
+
+.advtoprail__button-icon--account, .advtoprail__button-icon--search, .advtoprail__button-subscribe-label:after, .advtoprail__mainmenu-button-icon, .advtoprail__masthead-curredition:after, .advtoprail__weather-temperature:after, .js-menu-open .advtoprail__mainmenu-button-icon, .js-menu-open .advtoprail__weather-temperature:after {
+    background-position-x: right
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-edition {
+        top: 8.5rem
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-curredition {
+        color: #333c49
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead-curredition:after {
+        background-position-x: left
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .advtoprail__masthead .advtoprail__dropdown {
+        top: 11.1rem
+    }
+}

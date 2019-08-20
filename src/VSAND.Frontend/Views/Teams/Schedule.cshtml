@@ -1,0 +1,33 @@
+﻿@model VSAND.Data.ViewModels.Teams.FullTeam;
+
+@{
+    ViewData["Title"] = $"{Model.Name} {Model.Sport} {Model.Season} Schedule";
+}
+
+<partial name="_teamHeader" />
+
+<div class="container" id="vueApp">
+    <div class="row">
+        <div class="col-md-8">
+            <team-schedule :sport-id="@Model.SportId" 
+                      :school-id="@Model.SchoolId" 
+                      :schedule-year-id="@Model.ScheduleYearId" 
+                      :ref-team-id="@Model.TeamId"></team-schedule>
+        </div>
+        <div class="col-md-4">
+            Team Sidebar
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/lib/vue/vue.js" asp-append-version="true"></script>
+        <script src="~/app/team-schedule.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/vue.min.js" asp-append-version="true"></script>
+        <script src="~/app/team-schedule.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

@@ -1,0 +1,1 @@
+﻿This directory is used as a temporary directory for school master account sheet uploads.

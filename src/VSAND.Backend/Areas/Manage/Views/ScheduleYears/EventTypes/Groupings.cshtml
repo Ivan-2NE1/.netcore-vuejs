@@ -1,0 +1,146 @@
+﻿@model List<VSAND.Data.Entities.VsandSportEventTypeSection>
+
+@{
+    ViewData["Title"] = "Groupings";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        @ViewData["ScheduleYearName"] @ViewData["SportName"] - @ViewData["EventTypeName"] Groupings
+    </h1>*@
+
+    <widget-wrapper icon="pencil" title="Sections" v-bind:padding="false">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_eventTypeNav.cshtml"); }
+        </template>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-center">Section</th>
+                    <th></th>
+                    <th class="text-center">Groups</th>
+                </tr>
+            </thead>
+            <tbody is="draggable" v-model="sections" tag="tbody" handle=".dragndrop" v-bind="{ disabled: (editSectionRow !== null || editGroupRow !== null) }">
+                <tr v-for="section in sections" class="dragndrop" v-bind:key="section.sectionId">
+                    <td><span class="fas fa-arrows-alt" v-show="editSectionRow === null && editGroupRow === null"></span></td>
+                    <td>
+                        <div v-if="editSectionRow !== null && section.sectionId === editSectionRow.sectionId" class="form-inline">
+                            <input-field v-bind:default-value="editSectionRow.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="50"
+                                         v-on:input="editSectionRow.name = $event"></input-field>
+                        </div>
+                        <template v-else>
+                            {{ section.name }}
+                        </template>
+                    </td>
+                    <td>
+                        <template v-if="editSectionRow === null && editGroupRow === null">
+                            <button class="btn btn-primary btn-sm" v-on:click="startEditSection(section)">Edit</button>
+                            <button class="btn btn-danger btn-sm" v-on:click="deleteSection(section)">Delete</button>
+                        </template>
+                        <template v-if="editSectionRow !== null && section.sectionId === editSectionRow.sectionId">
+                            <button class="btn btn-primary btn-sm" v-on:click="updateSection">
+                                Save
+                            </button>
+                            <button class="btn btn-default btn-sm" v-on:click="editSectionRow = null">
+                                Cancel
+                            </button>
+                        </template>
+                    </td>
+                    <td>
+                        <table class="table table-bordered">
+                            <tbody is="draggable" v-model="section.groups" tag="tbody" handle=".dragndrop" v-bind="{ disabled: (editSectionRow !== null || editGroupRow !== null) }">
+                                <tr v-for="group in section.groups" class="dragndrop" v-bind:key="group.groupId">
+                                    <td><span class="fas fa-arrows-alt" v-show="editSectionRow === null && editGroupRow === null"></span></td>
+                                    <td>
+                                        <div v-if="editGroupRow !== null && group.groupId === editGroupRow.groupId" class="form-inline">
+                                            <input-field v-bind:default-value="editGroupRow.name"
+                                                         v-bind:required="true"
+                                                         v-bind:max-length="50"
+                                                         v-on:input="editGroupRow.name = $event"></input-field>
+                                        </div>
+                                        <template v-else>
+                                            {{ group.name }}
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template v-if="editSectionRow === null && editGroupRow === null">
+                                            <button class="btn btn-primary btn-sm" v-on:click="startEditGroup(group)">Edit</button>
+                                            <button class="btn btn-danger btn-sm" v-on:click="deleteGroup(section, group)">Delete</button>
+                                        </template>
+                                        <template v-if="editGroupRow !== null && group.groupId === editGroupRow.groupId">
+                                            <button class="btn btn-primary btn-sm" v-on:click="updateGroup(section)">
+                                                Save
+                                            </button>
+                                            <button class="btn btn-default btn-sm" v-on:click="editGroupRow = null">
+                                                Cancel
+                                            </button>
+                                        </template>
+                                    </td>
+                                </tr>
+                                <tr class="table-success">
+                                    <td></td>
+                                    <td>
+                                        <div class="form-inline">
+                                            <input-field v-bind:default-value="addGroupForms[section.sectionId]['name']"
+                                                         v-bind:required="true"
+                                                         v-bind:max-length="50"
+                                                         v-on:input="addGroupForms[section.sectionId].name = $event"></input-field>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" v-on:click="addGroup(section)">Add Group</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-right pr-3 pb-3">
+                            <button class="btn btn-primary btn-sm" v-on:click="saveGroupOrder(section)">Save Group Order</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="table-success">
+                    <td></td>
+                    <td>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="addSectionForm.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="50"
+                                         v-on:input="addSectionForm.name = $event"></input-field>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="addSection">Add Section</button>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-right pr-3 pb-3">
+            <button class="btn btn-primary btn-sm" v-on:click="saveSectionOrder">Save Section Order</button>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.sections = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.eventTypeId = @ViewData["EventTypeId"];
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-event-type-groupings.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-event-type-groupings.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

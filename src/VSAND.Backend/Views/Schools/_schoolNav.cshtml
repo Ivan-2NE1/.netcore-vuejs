@@ -1,0 +1,15 @@
+﻿@{
+    var schoolId = ViewData.ContainsKey("SchoolId") ? (int)ViewData["SchoolId"] : 0;
+}
+
+@if (schoolId > 0)
+{
+    <text>
+        <a asp-controller="Schools" asp-action="School" asp-route-schoolId="@schoolId" class="dropdown-item">School Info</a>
+        <a asp-controller="Schools" asp-action="Teams" asp-route-schoolId="@schoolId" class="dropdown-item">Teams</a>
+        <a asp-controller="Schools" asp-action="Users" asp-route-schoolId="@schoolId" class="dropdown-item">Users</a>
+        <a asp-controller="Schools" asp-action="Editions" asp-route-schoolId="@schoolId" class="dropdown-item">Editions</a>
+        <a asp-controller="Schools" asp-action="Contacts" asp-route-schoolId="@schoolId" class="dropdown-item">Contacts</a>
+        <a asp-controller="Schools" asp-action="Custom Codes" asp-route-schoolId="@schoolId" class="dropdown-item">Custom Codes</a>
+    </text>
+}

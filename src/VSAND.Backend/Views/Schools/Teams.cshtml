@@ -1,0 +1,56 @@
+﻿@model VSAND.Data.Entities.VsandSchool
+
+@{
+    ViewData["Title"] = ViewData["SchoolName"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp">
+    <widget-wrapper title="Teams">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_schoolNav.cshtml"); }
+        </template>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Teams</h3>
+                <schedule-year-list v-on:change="scheduleYear = $event"></schedule-year-list>
+
+                <ul>
+                    <li v-for="team in teams">
+                        <a v-bind:href="'/Teams/' + team.teamId">{{ getSportName(team.sportId) }}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <div v-if="scheduleYear.label !== undefined">
+                    <h3>Add Team</h3>
+                    <p><b>Selected Schedule Year: </b> {{ scheduleYear.label }}</p>
+                    <sport-list v-bind:default-value="sport"
+                                v-on:change="sport = $event"></sport-list>
+                    <button class="btn btn-primary" v-on:click="addTeam">Add Team</button>
+                </div>
+            </div>
+        </div>
+        <div class="float-right">
+            <div class="p-4">
+                <button class="btn btn-primary">Update School</button>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        window.school = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-school-teams.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-school-teams.min.js" asp-append-version="true"></script>
+    </environment>
+}

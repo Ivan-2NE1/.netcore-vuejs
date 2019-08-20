@@ -1,0 +1,106 @@
+﻿@{
+    var sportsByGender = (Dictionary<string, List<VSAND.Data.ViewModels.ListItem<string>>>)ViewData["SportsByGender"];
+    string appLogoDesktop = ViewData.ContainsKey("AppLogoDesktop") ? (string)ViewData["AppLogoDesktop"] : "";
+    string appLogoMobile = ViewData.ContainsKey("AppLogoMobile") ? (string)ViewData["AppLogoMobile"] : "";
+}
+
+<nav class="navbar navbar-expand appnav" data-toggle="sticky-onscroll">
+    <div class="navbar-brand d-flex align-items-center">
+        <a href="/">
+            @if (!string.IsNullOrEmpty(appLogoMobile))
+            {
+                <img src="~/img/@appLogoMobile" class="d-block d-md-none mobile" />
+            }
+            @if (!string.IsNullOrEmpty(appLogoDesktop))
+            {
+                <img src="~/img/@appLogoDesktop" class="d-none d-md-block desktop" />
+            }
+        </a>
+    </div>
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Sports</a>
+
+            <ul class="dropdown-menu mt-2 sport-submenu">
+                <li class="px-3 py-2">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Boys</strong>
+                            @foreach (var menuItem in sportsByGender["boys"])
+                            {
+                                <div><a href="/@menuItem.id" class="btn btn-link">@menuItem.name</a></div>
+                            }
+                        </div>
+                        <div class="col-6">
+                            <strong>Girls</strong>
+                            @foreach (var menuItem in sportsByGender["girls"])
+                            {
+                                <div><a href="/@menuItem.id" class="btn btn-link">@menuItem.name</a></div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/scores">Scores</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/watch">Watch</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/school">Schools</a>
+        </li>
+    </ul>
+
+    <form class="form-inline ml-auto">
+        <div class="input-group input-group-lg">
+            <input id="appNavSearchInput" class="form-control mr-sm-2 d-none d-md-block" type="search" placeholder="Search Schools, Teams, and Players" aria-label="Search">
+            <div class="input-group-append">
+                <a id="appSearchButton" href="/search" class="btn btn-link">
+                    <span class="far fa fa-search">
+                        <span class="sr-only">Search</span>
+                    </span>
+                </a>
+            </div>            
+        </div>
+        
+    </form>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link"><i class="far fa-star"></i><span class="d-none d-md-inline">Favorites</span></a>
+        </li>
+    </ul>
+
+    <form class="app-search-form" id="appSearchForm" role="search">
+        <div class="input-group input-group-lg align-self-center">
+            <input type="text" class="form-control" placeholder="Search Schools, Teams, and Players">
+            <div class="input-group-append">
+                <button type="reset" class="btn btn-primary">
+                    <span class="far fa fa-times">
+                        <span class="sr-only">Close</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!--
+    This should be an expando search button
+    When you click in box change placeholder to more descriptive text like "Search Schools, Teams, and Players"
+
+    Autocomplete dropdown that showcases matches from key entity types
+    1) Schools
+        Keep this as the first result
+    2) Teams
+        Suggest teams for matched schools that correspond to featured sports, then active season (Fall, Winter, Spring) sports
+        search term is smart, such that if you append a sport name after the match, you will start drilling into the sport
+    3) Players
+
+    4) Video
+    -->
+    @*<form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search Schools, Teams, or Players..." aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+        </form>*@
+</nav>

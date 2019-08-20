@@ -1,0 +1,34 @@
+﻿<meta charset="utf-8">
+<title>
+    @ViewData["Title"] | @ViewData["SiteUrl"]
+</title>
+<meta name="description" content="NJSchoolSports.com" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!-- Call App Mode on ios devices -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- Remove Tap Highlight on Windows Phone IE -->
+<meta name="msapplication-tap-highlight" content="no">
+
+<!-- base css -->
+<environment include="Development">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/bootstrap.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.core.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.custom.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.icons.css" asp-append-version="true">
+</environment>
+<environment exclude="Development">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.core.min.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.custom.min.css" asp-append-version="true">
+    <link rel="stylesheet" media="screen, print" href="~/sa4/css/app.icons.min.css" asp-append-version="true">
+</environment>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" media="screen, print" href="~/fontawesome/all.min.css" asp-append-version="true">
+
+
+@* TODO: This needs to be pub specific *@
+<!-- FAVICONS -->
+<link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="~/favicon.ico" type="image/x-icon" />

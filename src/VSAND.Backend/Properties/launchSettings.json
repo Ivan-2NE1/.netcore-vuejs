@@ -1,0 +1,43 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:27268/",
+      "sslPort": 44362
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ENV": "Dev",
+        "AuthenticationUrl": "https://identity.uat.njschoolsports.com",
+        "RedisUrl": "204.186.24.118:6379",
+        "HomeState": "NJ",
+        "SMTP_HOST": "",
+        "RedisPassword": "v$4nd",
+        "SiteName": "NJSchoolSports",
+        "PubName": "nj",
+        "DefaultConnection": "Server=204.186.24.115;Database=njschoolsports-DEV;User ID=njspdevuser;Password=G3t1nTh3G4m3!;MultipleActiveResultSets=true",
+        "VsandArcUrl": "https://localhost:44399",
+        "SMTP_PORT": "",
+        "SMTP_USER": "",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SiteUrl": "NJSchoolSports.com",
+        "HangfireDbConnection": "Server=204.186.24.115;Database=hangfire-DEV;User ID=hangfiredevuser;Password=D0ntBurnM3Br0!;MultipleActiveResultSets=true",
+        "LogoUrl": "logo.svg",
+        "SMTP_PASSWORD": ""
+      }
+    },
+    "VSAND.Backend": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:60654/"
+    }
+  }
+}

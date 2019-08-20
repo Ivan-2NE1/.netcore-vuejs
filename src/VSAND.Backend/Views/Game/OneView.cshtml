@@ -1,0 +1,34 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport
+
+@{
+    ViewData["Title"] = "OneView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <scoring v-bind:game-report="gameReport"></scoring>
+
+    <playerstats v-for="team in gameReport.teams" 
+                 v-bind:key="'playerstats-' + team.gameReportTeamId"
+                 v-bind:game-report-team="team"
+                 v-bind:game-report-sport="gameReport.sport"
+                 v-bind:player-stats="team.playerStats"></playerstats>
+
+    <teamstats v-bind:game-report="gameReport"></teamstats>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        window.gameReport = @Html.Raw(@Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/game-oneview.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/game-oneview.min.js" asp-append-version="true"></script>
+    </environment>
+}

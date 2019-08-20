@@ -1,0 +1,178 @@
+﻿@model VSAND.Data.Repositories.PagedResult<VSAND.Data.Identity.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-wrench"></i> Manage
+        <small>
+            @ViewData["Title"]
+        </small>
+    </h1>
+
+    <div class="subheader-block d-lg-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="School Master Account Options">
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="Users" asp-action="SchoolMasterAccounts" class="btn btn-default" title="Import School Master Accounts">
+                <span class="fas fa-upload"></span><br />School Master Accounts
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="table" title="Users"
+                    v-bind:padding="false"
+                    v-bind:page-size="@Model.PageSize"
+                    v-bind:current-page="@Model.PageNumber"
+                    v-bind:total-records="@Model.TotalResults"
+                    v-on:gotopage="gotopage">
+        <template v-slot:toolbar>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="showSearchForm = !showSearchForm">
+                <i class="fal fa-filter"></i> Filter
+            </button>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="mode = 'create'">
+                <i class="fal fa-pencil"></i> Add User
+            </button>
+        </template>
+        <template v-slot:bodytoolbar>
+            <div v-if="showSearchForm" class="hidden-print">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input-field v-bind:default-value="searchForm.username"
+                                     label="Username"
+                                     v-bind:max-length="50"
+                                     v-on:input="searchForm.username = $event"></input-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <input-field v-bind:default-value="searchForm.email"
+                                     label="Email"
+                                     v-bind:max-length="100"
+                                     v-on:input="searchForm.email = $event"></input-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <input-field v-bind:default-value="searchForm.first"
+                                     label="First Name"
+                                     v-bind:max-length="50"
+                                     v-on:input="searchForm.first = $event"></input-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <input-field v-bind:default-value="searchForm.last"
+                                     label="Last Name"
+                                     v-bind:max-length="50"
+                                     v-on:input="searchForm.last = $event"></input-field>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary btn-block" v-on:click.prevent="doSearch">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <input-checkbox label="Staff"
+                                        v-bind:default-value="searchForm.admin"
+                                        v-on:input="searchForm.admin = $event"></input-checkbox>
+                    </div>
+                    <div class="col-sm-3">
+                        <school-autocomplete v-bind:default-value.sync="searchForm.school"
+                                             v-on:update:value="searchForm.school = $event.id"></school-autocomplete>
+                    </div>
+                    <div class="col-sm-3">
+                        <publication-list v-bind:default-value="searchForm.publication"
+                                          v-on:change="searchForm.publication = $event[0].id"></publication-list>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div v-if="mode === 'view'" class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users.results">
+                        <td>{{ user.userName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.appxUser.firstName }}</td>
+                        <td>{{ user.appxUser.lastName }}</td>
+                        <td>
+                            <a v-bind:href="'/Manage/Users/' + user.id" class="hidden-print">
+                                <span class="fal fa-search d-sm-none"></span>
+                                <span class="d-none d-sm-inline">View Details</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div v-if="mode === 'create'" class="p-4">
+            <input-field label="Email"
+                         v-bind:default-value="addUserForm.email"
+                         v-on:input="addUserForm.email = $event"
+                         v-bind:required="true"
+                         v-bind:max-length="100"></input-field>
+
+            <input-field label="Password"
+                         v-bind:default-value="addUserForm.password"
+                         v-on:input="addUserForm.password = $event"
+                         v-bind:required="true"></input-field>
+
+            <input-field label="First Name"
+                         v-bind:default-value="addUserForm.firstName"
+                         v-on:input="addUserForm.firstName = $event"
+                         v-bind:required="true"
+                         v-bind:max-length="50"></input-field>
+
+            <input-field label="Last Name"
+                         v-bind:default-value="addUserForm.lastName"
+                         v-on:input="addUserForm.lastName = $event"
+                         v-bind:required="true"
+                         v-bind:max-length="50"></input-field>
+
+            <input-field label="Mobile Phone"
+                         v-bind:default-value="addUserForm.phone"
+                         v-on:input="addUserForm.phone = $event"
+                         v-bind:max-length="20"></input-field>
+
+            <button class="btn btn-default" v-on:click="mode = 'view'">Cancel</button>
+            <button class="btn btn-primary" v-on:click="createUser">Create User</button>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.searchUsername = '@Html.Raw(ViewData["SearchUsername"])';
+        window.searchEmail = '@Html.Raw(ViewData["SearchEmail"])';
+        window.searchFirstName = '@Html.Raw(ViewData["SearchFirstName"])';
+        window.searchLastName = '@Html.Raw(ViewData["SearchLastName"])';
+        window.searchIsAdmin = @ViewData["SearchIsAdmin"].ToString().ToLower();
+        window.searchSchoolId = @ViewData["SearchSchoolId"];
+        window.searchPublicationId = @ViewData["SearchPublicationId"];
+        window.users = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-users.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-users.min.js" asp-append-version="true"></script>
+    </environment>
+}

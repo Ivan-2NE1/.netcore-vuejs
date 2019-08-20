@@ -1,0 +1,112 @@
+﻿@model VSAND.Data.ViewModels.StatAggregation.SportStatsHomeView;
+
+@{
+    ViewData["Title"] = $"{Model.Sport.Name} Stats";
+
+    string basePath = ViewData["BasePath"].ToString();
+}
+
+<partial name="_sportHeader" model="@Model.Sport" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            @if (Model.Featuredstats.Any())
+            {
+                int idx = 1;
+
+                @:<div class="card-deck">
+                    foreach (var featuredStat in Model.Featuredstats)
+                    {
+                        idx++;
+                        if (idx % 2 == 0)
+                        {
+                            <div class="w-100"></div>
+                        }
+
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-borderless table-striped table-sm">
+                                    <caption class="text-center"><a href="@basePath/stats/player/@featuredStat.Stats.First().SportPlayerStatCategoryId?statid=@featuredStat.Stats.First().SportPlayerStatId">Complete Leaderboard</a></caption>
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3">@featuredStat.Stats.First().Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var player in featuredStat.Players)
+                                        {
+                                            <tr>
+                                                <td>@player.Rank</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(player.Slug))
+                                                    {
+                                                        <a href="/player/@player.Slug">@player.Name</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        @player.Name
+                                                    }
+                                                    <br />
+                                                    <small class="text-muted">@player.TeamName</small>
+                                                </td>
+                                                <td>@player.StatValues[featuredStat.Stats.First().SportPlayerStatId]</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    }
+                @:</div>
+            }
+
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-body">
+                        <b>Sortable Player Statistics</b>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-inline">
+                            @foreach (var playerCat in Model.PlayerStatCategories)
+                            {
+                                <li class="list-inline-item"><a href="@basePath/stats/player/@playerCat.SportPlayerStatCategoryId">@playerCat.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-body">
+                        <b>Sortable Team Statistics</b>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-inline">
+                            @foreach (var teamCat in Model.TeamStatCategories)
+                            {
+                                <li class="list-inline-item"><a href="@basePath/stats/team/@teamCat.SportTeamStatCategoryId">@teamCat.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

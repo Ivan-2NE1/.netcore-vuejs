@@ -1,0 +1,120 @@
+﻿@model VSAND.Data.Entities.VsandPlayer
+
+@{
+    ViewData["Title"] = "Players";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var team = Model.TeamRosters.FirstOrDefault().Team;
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="table" title="Teams" v-bind:padding="false">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_playerNav.cshtml"); }
+        </template>
+
+        @foreach (var category in team.Sport.PlayerStatCategories.Where(psc => psc.PlayerStats.Any(ps => ps.GameReportPlayerStats.Any(grps => grps.StatValue.HasValue && grps.StatValue > 0))))
+        {
+            <h1 class="pl-3 pt-4 pb-2">@category.Name</h1>
+
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        @foreach (var stat in category.PlayerStats)
+                        {
+                            <th class="text-center">@stat.Abbreviation</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var game in team.GameReportEntries)
+                    {
+                        <tr>
+                            <td>@game.GameReportId</td>
+                            @foreach (var stat in category.PlayerStats)
+                            {
+                                <td class="text-center">
+                                    @{
+                                        var pStat = Model.GameReportPlayerStats.FirstOrDefault(grps => grps.StatId == stat.SportPlayerStatId && grps.GameReportId == game.GameReportId);
+                                        if (pStat != null && pStat.StatValue.HasValue && pStat.StatValue.Value > 0)
+                                        {
+                                            <text>@pStat.StatValue</text>
+                                        }
+                                        else
+                                        {
+                                            <text>-</text>
+                                        }
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @{
+            foreach (var sportEvent in team.Sport.SportEvents.Where(se => se.EventStats.Any(ses => ses.EventPlayerStats.Any(ps => ps.StatValue > 0) || ses.EventPlayerGroupStats.Any(pgs => pgs.StatValue > 0))))
+            {
+                var gameReports = team.GameReportEntries.Where(gre => gre.TeamId == team.TeamId && gre.EventPlayers.Any(ep => ep.PlayerId == Model.PlayerId && ep.GameReportEventPlayerStats.Any(greps => greps.SportEventStat.SportEvent.SportEventId == sportEvent.SportEventId)) || gre.EventPlayerGroups.Any(epg => epg.EventPlayerGroupPlayers.Any(epgp => epgp.PlayerId == Model.PlayerId)));
+
+                if (!gameReports.Any())
+                {
+                    continue;
+                }
+                <h1 class="pl-3 pt-4 pb-2">@sportEvent.Name</h1>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            @foreach (var stat in sportEvent.EventStats)
+                            {
+                                <th class="text-center">@stat.Abbreviation</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var gameReportTeam in gameReports)
+                        {
+                            <tr>
+                                <td>@gameReportTeam.GameReport.Name</td>
+                                @foreach (var stat in sportEvent.EventStats)
+                                {
+                                    <td class="text-center">
+                                        @{
+                                            var pStat = Model.GameReportEventPlayer.FirstOrDefault(ep => ep.GameReportTeamId == gameReportTeam.GameReportTeamId)?.GameReportEventPlayerStats.FirstOrDefault(greps => greps.StatId == stat.SportEventStatId);
+                                            if (pStat != null && pStat.StatValue >= 0)
+                                            {
+                                                <text>@pStat.StatValue</text>
+                                            }
+                                            else
+                                            {
+                                                <text>-</text>
+                                            }
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/app/manage-player-stats.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-player-stats.min.js" asp-append-version="true"></script>
+    </environment>
+}

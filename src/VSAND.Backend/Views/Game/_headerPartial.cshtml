@@ -1,0 +1,13 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fal fa-flag-checkered"></i> Game Report
+        <small>
+            @if (Model != null)
+            {
+                @Model.Name
+            }
+        </small>
+    </h1>
+</div>

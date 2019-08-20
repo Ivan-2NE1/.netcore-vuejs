@@ -1,0 +1,106 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Events";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="pencil" title="Event Result Types" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Is Tie?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody is="draggable" v-model="sport.eventResults" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+            <tr v-for="event in sport.eventResults" class="dragndrop" v-bind:key="event.name">
+                <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                <td>{{ event.sportEventResultId }}</td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventResultId === editRow.sportEventResultId">
+                        <div class="form-inline pb-2">
+                            <input-field v-bind:default-value="editRow.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="100"
+                                         v-on:input="editRow.name = $event"></input-field>
+                        </div>
+                    </div>
+                    <template v-else>
+                        <p class="form-control-static">{{ event.name }}</p>
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventResultId === editRow.sportEventResultId">
+                        <input-checkbox v-bind:default-value="editRow.isTie"
+                                        v-on:input="editRow.isTie = $event"></input-checkbox>
+                    </div>
+                    <template v-else>
+                        {{ event.isTie }}
+                    </template>
+                </td>
+                <td class="text-nowrap">
+                    <template v-if="editRow === null">
+                        <button class="btn btn-primary btn-sm" v-on:click="startEditEventResult(event)">Edit</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="deleteEventResult(event)">Delete</button>
+                    </template>
+                    <template v-if="editRow !== null && event.sportEventResultId === editRow.sportEventResultId">
+                        <button class="btn btn-primary btn-sm" v-on:click="saveEventResult">
+                            Save
+                        </button>
+                        <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                            Cancel
+                        </button>
+                    </template>
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="form-inline pb-2">
+                        <input-field v-bind:default-value="addEventResultForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="addEventResultForm.name = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-checkbox v-bind:default-value="addEventResultForm.isTie"
+                                        v-on:input="addEventResultForm.isTie = $event"></input-checkbox>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" v-on:click="addEventResult">Add Event Result Type</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right pr-3 pb-3">
+        <a v-bind:href="'/Sports/' + sport.sportId + '/Events'" class="btn btn-default btn-sm">Back to Events</a>
+        <button class="btn btn-primary btn-sm" v-on:click="saveEventResultOrder">Save Sort Order</button>
+    </div>
+
+</widget-wrapper>
+
+@section Scripts {
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-event-results.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-event-results.min.js" asp-append-version="true"></script>
+    </environment>
+}

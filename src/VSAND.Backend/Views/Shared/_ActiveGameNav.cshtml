@@ -1,0 +1,41 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport;
+@{
+    bool isGameReport = ViewContext.RouteData.Values["Controller"].ToString().Equals("game", StringComparison.OrdinalIgnoreCase) && ViewContext.RouteData.Values.ContainsKey("id") && ViewContext.RouteData.Values["id"].ToString() != "";
+    int gameReportId = isGameReport ? int.Parse(ViewContext.RouteData.Values["id"].ToString()) : 0;
+}
+
+@if (isGameReport)
+{
+    <text>
+        <li is-active-route is-open-route asp-area="" asp-controller="Game">
+            <a href="#"><i class="fas fa-flag-checkered"></i> <span class="nav-link-text">Game Report</span></a>
+            <ul>
+                <li is-active-route asp-area="" asp-controller="Game" asp-action="Index">
+                    <a asp-area="" asp-controller="Game" asp-action="Index" asp-route-id="@gameReportId">
+                        <span class="nav-link-text">Overview</span>
+                    </a>
+                </li>
+                <li is-active-route asp-area="" asp-controller="Game" asp-action="Scoring">
+                    <a asp-area="" asp-controller="Game" asp-action="Scoring" asp-route-id="@gameReportId">
+                        <span class="nav-link-text">Scoring</span>
+                    </a>
+                </li>
+
+                @foreach (VSAND.Data.ViewModels.GameReport.GameReportTeam team in Model.Teams.OrderBy(grt => grt.HomeTeam))
+                {
+                    <li is-active-route asp-area="" asp-controller="Game" asp-action="PlayerStats">
+                        <a asp-area="" asp-controller="Game" asp-action="PlayerStats" asp-route-id="@gameReportId" asp-route-teamid="@team.GameReportTeamId">
+                            <span class="nav-link-text">@team.Name Player Stats</span>
+                        </a>
+                    </li>
+                }
+
+                <li is-active-route asp-area="" asp-controller="Game" asp-action="TeamStats">
+                    <a asp-area="" asp-controller="Game" asp-action="TeamStats" asp-route-id="@gameReportId">
+                        <span class="nav-link-text">Team Stats</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </text>
+}

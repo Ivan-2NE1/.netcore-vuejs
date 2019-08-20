@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Scores";
+    string basePath = "/scores";
+}
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-8 order-12 order-md-1">
+            <div id="vueApp">
+                <schedule default-date="@ViewData["ViewDate"].ToString()" history-base-path="@basePath"></schedule>
+            </div>
+        </div>
+        <div class="col-md-4 order-1 order-md-12">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/lib/vue/vue.js" asp-append-version="true"></script>
+        <script src="~/app/scores.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/vue.min.js" asp-append-version="true"></script>
+        <script src="~/app/scores.min.js" asp-append-version="true"></script>
+    </environment>
+}

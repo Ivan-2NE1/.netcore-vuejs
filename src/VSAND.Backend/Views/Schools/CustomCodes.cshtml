@@ -1,0 +1,108 @@
+﻿@model VSAND.Data.Entities.VsandSchool
+
+@{
+    ViewData["Title"] = ViewData["SchoolName"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp">
+    <widget-wrapper title="Custom Codes" v-bind:padding="false">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_schoolNav.cshtml"); }
+        </template>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code Name</th>
+                    <th>Code Value</th>
+                    <th>Sport</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="code in school.customCodes">
+                    <td>
+                        <div v-if="editRow !== null && code.customCodeId === editRow.customCodeId" class="form-inline">
+                            <input-field v-bind:default-value="editRow.codeName"
+                                         v-on:input="editRow.codeName = $event"></input-field>
+                        </div>
+                        <template v-else>
+                            {{ code.codeName }}
+                        </template>
+                    </td>
+                    <td>
+                        <div v-if="editRow !== null && code.customCodeId === editRow.customCodeId" class="form-inline">
+                            <input-field v-bind:default-value="editRow.codeValue"
+                                         v-on:input="editRow.codeValue = $event"></input-field>
+                        </div>
+                        <template v-else>
+                            {{ code.codeValue }}
+                        </template>
+                    </td>
+                    <td>
+                        <div v-if="editRow !== null && code.customCodeId === editRow.customCodeId" class="form-inline">
+                            <sport-list v-bind:default-value="editRow.sportId"
+                                        v-on:change="editRow.sportId = $event[0].id"></sport-list>
+                        </div>
+                        <template v-else>
+                            {{ getSportName(code.sportId) }}
+                        </template>
+                    </td>
+                    <td>
+                        <div v-if="editRow === null">
+                            <button class="btn btn-primary btn-sm" v-on:click="startEditCustomCode(code)">Edit</button>
+                            <button class="btn btn-danger btn-sm" v-on:click="deleteCustomCode(code)">Delete</button>
+                        </div>
+                        <div v-else-if="code.customCodeId === editRow.customCodeId">
+                            <button class="btn btn-primary btn-sm" v-on:click="saveCustomCode">
+                                Save
+                            </button>
+                            <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                                Cancel
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="table-success">
+                    <td>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="addCustomCodeForm.codeName"
+                                         v-on:input="addCustomCodeForm.codeName = $event"></input-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="addCustomCodeForm.codeValue"
+                                         v-on:input="addCustomCodeForm.codeValue = $event"></input-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-inline">
+                            <sport-list v-bind:default-value="addCustomCodeForm.sportId"
+                                        v-on:change="addCustomCodeForm.sportId = $event.id"></sport-list>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="addCustomCode">Add Custom Code</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </widget-wrapper>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+        window.school = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+</script>
+
+<environment include="Development">
+    <script src="~/app/manage-school-custom-codes.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/app/manage-school-custom-codes.min.js" asp-append-version="true"></script>
+</environment>
+}

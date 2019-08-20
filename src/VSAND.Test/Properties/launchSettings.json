@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "VSAND.Test": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

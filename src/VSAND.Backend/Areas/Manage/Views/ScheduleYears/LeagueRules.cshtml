@@ -1,0 +1,93 @@
+﻿@model List<VSAND.Data.ViewModels.LeagueRule>
+
+@{
+    ViewData["Title"] = "League Rules";
+    Layout = "_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        League Rule Configuration for @ViewData["ScheduleYearName"] @ViewData["SportName"]
+    </h1>*@
+
+    <widget-wrapper icon="table" title="Configure League Rules" v-bind:padding="false">
+        <table v-if="leagueRules.length > 0" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Conference</th>
+                    <th>Division</th>
+                    <th>Rule Type</th>
+                    <th>In-League</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="leagueRule in leagueRules">
+                    <td>{{ leagueRule.conference }}</td>
+                    <td>{{ leagueRule.division }}</td>
+                    <td>
+                        <input-select v-bind:options="ruleTypeOptions"
+                                      v-bind:option-adapter="simpleOptionsAdapter"
+                                      v-bind:default-value="leagueRule.ruleType"
+                                      v-on:change="leagueRule.ruleType = $event.value"
+                                      v-bind:padding="false"></input-select>
+                    </td>
+                    <td>
+                        <vue-selectbase v-bind:default-value="leagueRule.ruleItems"
+                                        v-bind:enable-multiple="true"
+                                        v-bind:options="leagueRuleOptions"
+                                        option-label-key="name"
+                                        v-on:change="leagueRule.ruleItems = $event"
+                                        v-bind:padding="false"></vue-selectbase>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="updateLeagueRule(leagueRule)">Save</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div v-else class="p-4">
+            <h3>No rules have been defined.</h3>
+            <p>
+                When no rules are defined, the league record is calculated assuming that only same conference + division members are considered in-league.
+            </p>
+
+            <hr />
+
+            <h3>Populate List from Conference and Division Data</h3>
+            <p>
+                The league rules list will be populated using the conferences and divisions assigned to teams in the current year. They will be created with the 'division' rule type.
+            </p>
+            <button class="btn btn-primary" v-on:click="populateFromExistingData">
+                Populate List from Conference and Division Data
+            </button>
+
+            <hr />
+
+            <h3>Populate List from Previous Year</h3>
+            <p>
+                The league rules list will be populated using the rules list from the previous schedule year.
+            </p>
+            <button class="btn btn-primary" v-on:click="populateFromPreviousYear">
+                Populate List from Previous Year
+            </button>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.scheduleYearId = @ViewData["ScheduleYearId"];
+        window.sportId = @ViewData["SportId"];
+        window.leagueRules = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.leagueRuleOptions = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["LeagueRuleOptions"]));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-league-rules.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-league-rules.min.js" asp-append-version="true"></script>
+    </environment>
+}

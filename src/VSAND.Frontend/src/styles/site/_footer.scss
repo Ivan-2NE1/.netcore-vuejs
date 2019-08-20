@@ -1,0 +1,35 @@
+﻿.footer {
+    background-color: #e9e1d2;
+    color: #333;
+    padding:10px 0;
+
+    .footer__disclaimer-title--hidden {
+        display: none;
+    }
+
+    .footer__nav-title--hidden {
+        display: none;
+    }
+
+    .footer__disclaimer-column--1 {
+        float: left;
+        width: 33%;
+        margin: 0 10px 10px 0;
+    }
+
+    @media screen and (min-width: 600px) {
+        .footer__disclaimer-column--1 {
+            margin-right: 20px
+        }
+    }
+
+    @media screen and (min-width: 767px) {
+        .footer__disclaimer-column--1 {
+            width: 130px;
+        }
+    }
+
+    .footer__disclaimer-logo-image {
+        max-width: 130px;
+    }
+}

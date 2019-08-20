@@ -1,0 +1,126 @@
+﻿@model List<VSAND.Data.Entities.VsandSportEventTypeRound>
+
+@{
+    ViewData["Title"] = "Event Type - Rounds";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        @ViewData["ScheduleYearName"] @ViewData["SportName"] - @ViewData["EventTypeName"] Rounds
+    </h1>*@
+
+    <widget-wrapper icon="pencil" title="Rounds" v-bind:padding="false">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_eventTypeNav.cshtml"); }
+        </template>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody is="draggable" v-model="rounds" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+                <tr v-for="round in rounds" class="dragndrop" v-bind:key="round.name">
+                    <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                    <td>{{ round.roundId}}</td>
+                    <td>
+                        <div v-if="editRow !== null && round.roundId === editRow.roundId" class="form-inline">
+                            <input-field v-bind:default-value="editRow.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="100"
+                                         v-on:input="editRow.name = $event"></input-field>
+                        </div>
+                        <template v-else>
+                            {{ round.name }}
+                        </template>
+                    </td>
+                    <td>
+                        <div v-if="editRow !== null && round.roundId === editRow.roundId" class="form-inline">
+                            <input-calendar v-bind:default-value="editRow.startDate"
+                                            v-on:input="editRow.endDate = $event"></input-calendar>
+                        </div>
+                        <template v-else>
+                            {{ round.startDate }}
+                        </template>
+                    </td>
+                    <td>
+                        <div v-if="editRow !== null && round.roundId === editRow.roundId" class="form-inline">
+                            <input-calendar v-bind:default-value="editRow.endDate"
+                                            v-on:input="editRow.endDate = $event"></input-calendar>
+                        </div>
+                        <template v-else>
+                            {{ round.endDate }}
+                        </template>
+                    </td>
+                    <td>
+                        <template v-if="editRow === null">
+                            <button class="btn btn-primary btn-sm" v-on:click="startEditRound(round)">Edit</button>
+                            <button class="btn btn-danger btn-sm" v-on:click="deleteRound(round)">Delete</button>
+                        </template>
+                        <template v-if="editRow !== null && round.roundId === editRow.roundId">
+                            <button class="btn btn-primary btn-sm" v-on:click="updateRound">
+                                Save
+                            </button>
+                            <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                                Cancel
+                            </button>
+                        </template>
+                    </td>
+                </tr>
+                <tr class="table-success">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="addRoundForm.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="100"
+                                         v-on:input="addRoundForm.name = $event"></input-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-inline">
+                            <input-calendar v-bind:default-value="addRoundForm.startDate"
+                                            v-on:input="addRoundForm.startDate = $event"></input-calendar>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-inline">
+                            <input-calendar v-bind:default-value="addRoundForm.endDate"
+                                            v-on:input="addRoundForm.endDate = $event"></input-calendar>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="addRound">Add Round</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-right pr-3 pb-3">
+            <button class="btn btn-primary btn-sm" v-on:click="saveRoundOrder">Save Round Order</button>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.rounds = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.eventTypeId = @ViewData["EventTypeId"];
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-event-type-rounds.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-event-type-rounds.min.js" asp-append-version="true"></script>
+    </environment>
+}

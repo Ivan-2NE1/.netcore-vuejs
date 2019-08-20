@@ -1,0 +1,111 @@
+﻿@model List<VSAND.Data.Entities.VsandSportEventType>
+
+@{
+    ViewData["Title"] = "Event Types";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        @ViewData["SportName"] - Event Types
+    </h1>*@
+
+    <widget-wrapper icon="table" title="Configure Event Types">
+        <div class="row">
+            <div class="col-md-7">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Event Type Id</th>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="eventType in eventTypes">
+                            <td>{{ eventType.eventTypeId }}</td>
+                            <td>{{ eventType.name }}</td>
+                            <td>{{ eventType.startDate }}</td>
+                            <td>{{ eventType.endDate }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                   v-bind:href="'/Manage/ScheduleYears/' + scheduleYearId + '/EventTypes/' + sportId + '/Overview/' + eventType.eventTypeId">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <widget-wrapper icon="pencil" title="Create Event Type" header-class="bg-faded">
+                    <input-field label="Name"
+                                 v-bind:default-value="addEventTypeForm.name"
+                                 v-on:input="addEventTypeForm.name = $event"
+                                 v-bind:max-length="50"
+                                 v-bind:required="true"></input-field>
+
+                    <input-field label="Venue"
+                                 v-bind:default-value="addEventTypeForm.venue"
+                                 v-on:input="addEventTypeForm.venue = $event"
+                                 v-bind:max-length="100"></input-field>
+
+                    <input-calendar label="Start Date"
+                                    v-bind:default-value="addEventTypeForm.startDate"
+                                    v-on:input="addEventTypeForm.startDate = $event"></input-calendar>
+
+                    <input-calendar label="End Date"
+                                    v-bind:default-value="addEventTypeForm.endDate"
+                                    v-on:input="addEventTypeForm.endDate = $event"></input-calendar>
+
+                    <input-select label="Scoreboard Type"
+                                  v-bind:options="scoreboardTypeOptions"
+                                  v-bind:option-adapter="simpleOptionsAdapter"
+                                  v-bind:default-value="addEventTypeForm.scoreboardTypeId"
+                                  v-on:change="addEventTypeForm.scoreboardTypeId = $event.value"></input-select>
+
+                    <input-field label="Section Label"
+                                 v-bind:default-value="addEventTypeForm.sectionLabel"
+                                 v-on:input="addEventTypeForm.sectionLabel = $event"
+                                 v-bind:max-length="50"></input-field>
+
+                    <input-field label="Group Label"
+                                 v-bind:default-value="addEventTypeForm.groupLabel"
+                                 v-on:input="addEventTypeForm.groupLabel = $event"
+                                 v-bind:max-length="50"></input-field>
+
+                    <p><b>Particpating Teams:</b></p>
+                    <input-select label="Filter Type"
+                                  choose-prompt="Choose (optional)"
+                                  v-bind:options="filterTypeOptions"
+                                  v-bind:default-value="addEventTypeForm.particpatingTeamsType"
+                                  v-on:change="addEventTypeForm.particpatingTeamsType = $event.value"></input-select>
+
+                    <input-field label="Filter Name"
+                                 v-bind:default-value="addEventTypeForm.participatingTeamsFilter"
+                                 v-on:input="addEventTypeForm.participatingTeamsFilter = $event"
+                                 placeholder="(optional)"
+                                 v-bind:max-length="50"></input-field>
+
+                    <button class="btn btn-primary" v-on:click="addEventType">Create Event Type</button>
+                </widget-wrapper>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.scheduleYearId = @ViewData["ScheduleYearId"];
+        window.sportId = @ViewData["SportId"];
+        window.eventTypes = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-event-types.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-event-types.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,71 @@
+﻿@model VSAND.Data.Entities.VsandPlayer
+
+@{
+    ViewData["Title"] = "Player Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="pencil" title="Edit Player">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_playerNav.cshtml"); }
+        </template>
+
+        <div class="row">
+            <div class="col-md-6">
+                <input-field label="First Name"
+                             v-bind:required="true"
+                             v-bind:default-value="player.firstName"
+                             v-on:input="player.firstName = $event"></input-field>
+
+                <input-field label="Last Name"
+                             v-bind:required="true"
+                             v-bind:default-value="player.lastName"
+                             v-on:input="player.lastName = $event"></input-field>
+
+                <label>Graduation Year</label>
+                <graduationyear-list v-bind:default-value="player.graduationYear"
+                                     v-on:change="player.graduationYear = $event"></graduationyear-list>
+
+                <school-autocomplete v-bind:default-value.sync="player.schoolId"
+                                     v-on:update:value="player.schoolId = $event.id"></school-autocomplete>
+
+                <input-field label="Height"
+                             v-bind:default-value="player.height"
+                             v-on:input="player.height = $event"></input-field>
+
+                <input-field label="Weight"
+                             v-bind:default-value="player.weight"
+                             v-on:input="addPlayerForm.weight = $event"></input-field>
+
+                <input-field label="Birth Date"
+                             v-bind:default-value="player.birthDate"
+                             v-on:input="player.birthDate = $event"></input-field>
+
+                <button class="btn btn-default" v-on:click="mode = 'view'">Cancel</button>
+                <button class="btn btn-primary" v-on:click="updatePlayer">Save</button>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.player = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-player.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-player.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,51 @@
+﻿<!-- base vendor bundle:
+DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations
+    may execute before a page is fully loaded, resulting 'jump' animations
++ pace.js (recommended)
++ jquery.js (core)
++ jquery-ui-cust.js (core)
++ popper.js (core)
++ bootstrap.js (core)
++ slimscroll.js (extension)
++ app.navigation.js (core)
++ ba-throttle-debounce.js (core)
++ waves.js (extension)
++ smartpanels.js (extension)
++ src/../jquery-snippets.js (core) -->
+
+<script>
+    // disable pace tracking on websockets, as this breaks SignalR
+    window.paceOptions = {
+        ajax: {
+            trackWebSockets: false
+        }
+    };
+</script>
+
+<script src="~/sa4/js/vendors.bundle.js"></script>
+<script src="~/sa4/js/app.bundle.js"></script>
+<script src="~/sa4/js/dependency/moment/moment.js"></script>
+<environment include="Development">
+    <script src="~/app/polyfills.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="~/app/filters.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/app/polyfills.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+    <script src="~/app/filters.min.js"></script>
+</environment>
+
+<script>
+    // ping a dummy keepalive handler every two minutes to refresh ASP.NET session cookie
+    jQuery(document).ready(function ($) {
+        setInterval(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/keepalive',
+                cache: false,
+                dataType: 'json'
+            });
+        }, 120000);
+    });
+</script>

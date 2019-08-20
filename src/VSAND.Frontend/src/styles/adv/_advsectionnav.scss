@@ -1,0 +1,223 @@
+﻿@charset "UTF-8";
+
+.section, .section__header, .section__nav--wrapper {
+    margin: 0 auto
+}
+
+
+
+@media screen and (max-width:599px) {
+    .section__nav--wrapper {
+        width: calc(100% - 2rem)
+    }
+}
+
+@media screen and (min-width:600px) and (max-width:767px) {
+    .section__header, .section__nav--wrapper {
+        width: calc(600px - 1.6rem)
+    }
+
+}
+
+@media screen and (min-width:768px) and (max-width:1023px) {
+    .section__header, .section__nav--wrapper {
+        width: calc(768px - 6rem)
+    }
+}
+
+@media screen and (min-width:1024px) and (max-width:1279px) {
+    .section__nav--wrapper {
+        width: calc(1024px - 4.4rem)
+    }
+}
+
+@media screen and (min-width:1280px) and (max-width:1439px) {
+    .section__nav--wrapper {
+        width: calc(1280px - 2rem)
+    }
+}
+
+@media screen and (min-width:1440px) and (max-width:1919px) {
+    .section__nav--wrapper {
+        width: calc(1440px - 7.4rem)
+    }
+}
+
+@media screen and (min-width:1920px) {
+    .section__nav--wrapper {
+        width: calc(1920px - 10rem)
+    }
+}
+
+.alertbar {
+    display: block;
+    width: 100%;
+    text-align: center
+}
+
+.alertbar.news-bar {
+    background-color: #1565c0
+}
+
+.alertbar.breaking-bar {
+    background-color: #d0021b
+}
+
+.alertbar__link {
+    display: block;
+    font-family: Benton Sans Medium,Arial,sans-serif;
+    font-weight: 700;
+    font-weight: 400;
+    color: #fff;
+    font-size: 2.8rem;
+    padding: 1.5rem 0
+}
+
+@media screen and (max-width:1023px) {
+    .alertbar__link {
+        font-size: 1.8rem
+    }
+}
+
+.section__nav {
+    font-family: Benton Sans,Arial,sans-serif;
+    font-weight: 400;
+    color: #343e4a;
+    background: #eceef1;
+    border-bottom: .1rem solid #bbb;
+    margin-bottom: -4.4rem;
+    width: 100%;
+    height: auto;
+    z-index: 500;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0
+}
+
+.section__nav--wrapper {
+    display: -webkit-box;
+    display: flex;
+    display: -ms-flexbox;
+    margin: 0 auto;
+    overflow: hidden
+}
+
+.section__nav--header-item, .section__nav--menu-item {
+    font-variant: all-small-caps;
+    letter-spacing: .1rem
+}
+
+.section__nav--header {
+    position: relative;
+    display: none;
+    color: #343e4a;
+    font-size: 3.2rem;
+    line-height: 5rem;
+    max-height: 65px;
+    overflow: hidden;
+    padding: 0 0 0 3rem;
+    text-transform: capitalize;
+    white-space: nowrap
+}
+
+@media screen and (min-width:1024px) {
+    .section__nav--header {
+        display: inline-block;
+        padding-left: 0
+    }
+}
+
+.section__nav--header-list {
+    display: inline-block;
+    position: relative;
+    list-style: initial;
+    overflow: initial;
+    padding: .5rem;
+    line-height: 5rem;
+    height: 6rem;
+    width: 275px;
+    top: 0;
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out
+}
+
+[data-active-section="1"] .section__nav--header-list {
+    top: 0
+}
+
+[data-active-section="2"] .section__nav--header-list {
+    top: -55px
+}
+
+[data-active-section="3"] .section__nav--header-list {
+    top: -110px
+}
+
+[data-active-section="4"] .section__nav--header-list {
+    top: -165px
+}
+
+.section__nav--header-item {
+    display: block;
+    font-size: 3.2rem;
+    font-weight: 400;
+    line-height: 5.5rem;
+    padding-right: 2rem;
+    text-transform: capitalize;
+    width: -webkit-min-content;
+    width: -moz-min-content;
+    width: min-content
+}
+
+.section__nav--menu {
+    max-width: 100%;
+    height: 65px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.section__nav--menu-list {
+    display: -webkit-box;
+    display: flex;
+    display: -ms-flexbox;
+    position: relative;
+    list-style: none;
+    max-height: 35px;
+    padding: 0;
+    top: 15px
+}
+
+.section__nav--menu-item {
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 3rem;
+    margin-right: 0;
+    padding: 0 12px 2px
+}
+
+@media screen and (min-width:768px) {
+    .section__nav--menu-item {
+        margin-right: 3rem
+    }
+}
+
+.section__nav--menu-link {
+    color: #343e4a;
+    padding-bottom: 2px;
+    font-size: 1.6rem;
+    white-space: nowrap
+}
+
+@media screen and (min-width:768px) {
+    .section__nav--menu-link {
+        font-size: 2rem
+    }
+}
+
+.section__nav--active {
+    border: 1px solid
+}
+

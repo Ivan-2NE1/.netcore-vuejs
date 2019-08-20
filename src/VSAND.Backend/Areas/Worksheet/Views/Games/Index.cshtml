@@ -1,0 +1,138 @@
+﻿@model VSAND.Data.Repositories.PagedResult<VSAND.Data.ViewModels.GameReportSummary>
+
+@{
+    ViewData["Title"] = "Today's Games";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var oRequestDay = DateTime.Parse(ViewData["RequestDate"].ToString());
+    var sRequestDay = oRequestDay.ToString("dddd, MMMM %d, yyyy");
+
+    var oYesterday = oRequestDay.AddDays(-1);
+    var oTomorrow = oRequestDay.AddDays(1);
+
+    var oYesterdayRequest = new Dictionary<string, string> {
+        { "requestedYear", oYesterday.ToString("yyyy") },
+        { "requestedMonth", oYesterday.ToString("MM") },
+        { "requestedDay", oYesterday.ToString("dd") }
+    };
+
+    var oTomorrowRequest = new Dictionary<string, string> {
+        { "requestedYear", oTomorrow.ToString("yyyy") },
+        { "requestedMonth", oTomorrow.ToString("MM") },
+        { "requestedDay", oTomorrow.ToString("dd") }
+    };
+}
+
+<div id="vueApp" v-cloak>
+    <div class="subheader">
+        <h1 class="subheader-title">
+            <i class="subheader-icon fas fa-check-square"></i> Games on <span class="fw-300">@DateTime.Parse(ViewData["RequestDate"].ToString()).ToString("dddd, MMMM %d, yyyy")</span>
+        </h1>
+        <div class="subheader-block d-lg-flex align-items-center">
+            <input-calendar v-bind:default-value="calendarDate" v-on:input="calendarDate = $event">
+                <template v-slot:beforeinput>
+                    <a asp-area="Worksheet" asp-controller="Games" asp-all-route-data="@oYesterdayRequest" class="btn btn-default"><i class="fal fa-chevron-circle-left"></i></a>
+                </template>
+                <template v-slot:afterinput>
+                    <button class="btn btn-default" v-on:click.prevent="changeViewDate">Go</button>
+                    <a asp-area="Worksheet" asp-controller="Games" asp-all-route-data="@oTomorrowRequest" class="btn btn-default"><i class="fal fa-chevron-circle-right"></i></a>
+                </template>
+            </input-calendar>
+
+        </div>
+    </div>
+    <widget-wrapper icon="table" title="Games"
+                    v-bind:padding="false">
+        <template v-slot:toolbar>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="showSearchForm = !showSearchForm">
+                <i class="fal fa-filter"></i> Filter
+            </button>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-if="hasFilter" v-on:click.prevent="clearFilter">
+                <span class="fa-layers fa-fw">
+                    <i class="fal fa-filter"></i>
+                    <i class="fa-inverse fas fa-times" data-fa-transform="shrink-8 down-6"></i>
+                </span>
+            </button>
+        </template>
+        <template v-slot:bodytoolbar>
+            <div v-if="showSearchForm" class="hidden-print">
+                Filters for this view. Dynamic, not a search. The page will always contain the full list of games scheduled and played on the selected date.
+                <div class="row">
+                    <div class="col">
+                        <school-autocomplete v-bind:value.sync="filterSchool"></school-autocomplete>
+                    </div>
+                    <div class="col">
+                        <publication-list input-id="filterOnPublication"
+                                          v-bind:enable-multiple="true"
+                                          v-bind:value.sync="filterPublication"
+                                          v-on:change="filterPublication = $event"></publication-list>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <sport-list input-id="filterOnsport"
+                                    v-bind:enable-multiple="true"
+                                    v-bind:value.sync="filterSport"
+                                    v-on:change="filterSport = $event"></sport-list>
+                    </div>
+                    <div class="col">
+                        <county-list input-id="filterOnCounty"
+                                     v-bind:value.sync="filterCounty"
+                                     v-bind:enable-multiple="true"
+                                     v-on:change="filterCounty = $event"></county-list>
+                    </div>
+                    <div class="col">
+                        <conference-list input-id="filterOnConference"
+                                         v-bind:value.sync="filterConference"
+                                         v-bind:enable-multiple="true"
+                                         v-on:change="filterConference = $event"></conference-list>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Sport</th>
+                        <th>Detail</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="game in filteredGameData">
+                        <td>{{ game.gameDate | formatGameTime }}</td>
+                        <td>{{ game.sportName }}</td>
+                        <td>{{ game.name }}</td>
+                        <td>
+                            <a v-bind:href="'/game/' + game.gameReportId" class="hidden-print">
+                                <span class="fal fa-search d-sm-none"></span>
+                                <span class="d-none d-sm-inline">View Details</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </widget-wrapper>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        // put any custom "window" transfer variables here
+        window.selectedDate = '@oRequestDay.ToString("MM/dd/yyyy")';
+        window.gameData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Results));
+    </script>
+    <environment include="Development">
+        <script src="~/app/worksheet-games.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/worksheet-games.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

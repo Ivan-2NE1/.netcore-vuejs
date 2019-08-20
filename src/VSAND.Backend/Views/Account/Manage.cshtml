@@ -1,0 +1,95 @@
+﻿@model VSAND.Data.Identity.ApplicationUser
+
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="page-title">
+    <i class="fa fa-user fa-fw"></i>
+    @ViewData["Title"]
+</h1>
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="pencil" title="User Info">
+        <div class="row">
+            <div class="col-md-8">
+                <input-field label="Username"
+                             v-bind:default-value="user.userName"
+                             v-on:input="user.username = $event"
+                             v-bind:required="true"
+                             v-bind:max-length="50"
+                             v-bind:input-disabled="true"
+                             form-help="Username cannot be changed."></input-field>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="Email"
+                                     v-bind:default-value="user.email"
+                                     v-on:input="user.email = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Password"
+                                     form-help="Leave this blank if you don't want to change your password."
+                                     v-bind:default-value="newPassword"
+                                     v-on:input="newPassword = $event"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="First Name"
+                                     v-bind:default-value="user.appxUser.firstName"
+                                     v-on:input="user.appxUser.firstName = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Last Name"
+                                     v-bind:default-value="user.appxUser.lastName"
+                                     v-on:input="user.appxUser.lastName = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="Mobile Phone"
+                                     form-help="Do not include +1 or any special characters, must be a 10 digit cell phone number."
+                                     v-bind:default-value="user.phoneNumber"
+                                     v-on:input="user.phoneNumber = $event"
+                                     v-bind:max-length="10"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Other Phone"
+                                     form-help="May include extensions for office phones."
+                                     v-bind:default-value="user.appxUser.phoneNumber"
+                                     v-on:input="user.appxUser.phoneNumber = $event"
+                                     v-bind:max-length="20"></input-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template v-slot:footer>
+            <button class="btn btn-default" v-on:click="mode = 'view'">Cancel</button>
+            <button class="btn btn-primary" v-on:click="updateUser">Save Changes</button>
+        </template>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.user = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/my-account.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/my-account.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,35 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport;
+
+@{
+    ViewData["Title"] = Model.Name + "| Player Stats";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var gameReportTeamId = ViewData.ContainsKey("GameReportTeamId") ? int.Parse(ViewData["GameReportTeamId"].ToString()) : 0;
+    var team = Model.Teams.FirstOrDefault(t => t.GameReportTeamId == gameReportTeamId);
+    var sport = Model.Sport;
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <playerstats v-bind:game-report-id="gameReportId"
+                 v-bind:game-report-team="gameReportTeam" 
+                 v-bind:game-report-sport="gameReportSport"
+                 v-bind:is-admin="isAdmin"></playerstats>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        window.gameReportId = @Model.GameReportId;
+        window.gameReportTeam = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(team));
+        window.gameReportSport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(sport));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/game-playerstats.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/game-playerstats.min.js" asp-append-version="true"></script>
+    </environment>
+}

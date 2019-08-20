@@ -1,0 +1,184 @@
+﻿@model List<VSAND.Data.ViewModels.ScheduleYears.ScheduleFileResolveItem>
+@{
+    ViewData["Title"] = "Process Schedule File";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+
+    int scheduleYearId = ViewData.ContainsKey("scheduleYearId") ? (int)ViewData["scheduleYearId"] : 0;
+    int sportId = ViewData.ContainsKey("sportId") ? (int)ViewData["sportId"] : 0;
+    int fileId = ViewData.ContainsKey("FileId") ? (int)ViewData["FileId"] : 0;
+    string scheduleYearName = ViewData.ContainsKey("ScheduleYearName") ? ViewData["ScheduleYearName"].ToString() : "";
+    string sportName = ViewData.ContainsKey("SportName") ? ViewData["SportName"].ToString() : "";
+}
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="table" title="Schedule File" v-bind:padding="false">
+        <template v-slot:bodytoolbar>
+
+            <div class="row" v-if="scheduleItems.length === 0">
+                <div class="col">
+                    <div v-if="!importSubmitted">
+                        <p>Rows are not yet imported for this file.</p>
+                        <p>
+                            <button class="btn btn-primary btn-lg" v-bind:disabled="loading" v-on:click="importRows">Start Row Import Process</button>
+                        </p>
+                    </div>
+                    <div v-if="importSubmitted && importJob.total === 0">
+                        <p><i class="fas fa-cog fa-spin"></i> Waiting on status...</p>
+                    </div>
+                    <template v-if="importJob.total > 0 && importJob.total !== importJob.current">
+                        <h4 class="text-center py-3">
+                            {{ importJob.current }} of {{ importJob.total }} ({{ ((importJob.current / importJob.total) * 100).toFixed(2) }}%) complete
+                        </h4>
+                        <b-progress :max="importJob.total" animated height="40px">
+                            <b-progress-bar :value="importJob.current" variant="success"></b-progress-bar>
+                        </b-progress>
+                    </template>
+                    <div v-if="importSubmitted && importJob.total == importJob.current && importJob.total > 0">
+                        <button class="btn btn-primary" v-on:click.prevent="refreshAfterImport">Refresh to process data</button>
+                    </div>
+                </div>                
+            </div>
+            <div class="row" v-if="scheduleItems.length > 0 && unresolvedCount > 0">
+                <div class="col-md-6">
+                    <p class="lead">Schedule file has <strong>{{ scheduleItems.length | numeric }}</strong> unique items</p>
+                    <div class="form-inline">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Showing</span>
+                            </div>
+                            <input type="number" class="form-control" v-model="showCount" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">/ {{ unresolvedCount | numeric }} left to resolve</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p v-if="unresolvedCount > 0">
+                        <button class="btn btn-default" v-on:click.prevent="autoResolved = !autoResolved" v-bind:disabled="loading">
+                            Show <span v-if="!autoResolved">Only Auto-Resolved</span><span v-else>All</span>
+                        </button>
+                    </p>
+                </div>
+            </div>
+            <div class="row" v-if="scheduleItems.length > 0 && unresolvedCount == 0">
+                <div class="col">
+                    <div v-if="commitErrorMessage !== ''" class="alert alert-danger">{{ commitErrorMessage }}</div>
+                    <div v-if="!commitSubmitted">
+                        <p>All schedule items are resolved in this file.</p>
+                        <p>
+                            <button class="btn btn-primary btn-lg" v-on:click="commitSchedule" v-bind:disabled="loading">Commit Schedule</button>
+                        </p>
+                    </div>
+                    <div v-if="commitSubmitted && commitJob.total === 0">
+                        <p><i class="fas fa-cog fa-spin"></i> Waiting on status...</p>
+                    </div>
+                    <template v-if="commitJob.total > 0 && commitJob.total !== commitJob.current">
+                        <h4 class="text-center py-3">
+                            {{ commitJob.current }} of {{ commitJob.total }} ({{ ((commitJob.current / commitJob.total) * 100).toFixed(2) }}%) complete
+                        </h4>
+                        <b-progress :max="commitJob.total" animated height="40px">
+                            <b-progress-bar :value="commitJob.current" variant="success"></b-progress-bar>
+                        </b-progress>
+                    </template>
+                    <div v-if="commitSubmitted && commitJob.total == commitJob.current && commitJob.total > 0">
+                        Nice work! this schedul has been imported.
+                    </div>
+                </div>
+            </div>
+        </template>
+        <table class="table table-borderless table-striped table-hover" v-if="scheduleItems.length > 0 && unresolvedCount > 0">
+            <thead>
+                <tr>
+                    <th width="40%">Name</th>
+                    <th>Resolve Method</th>
+                    <th>Resolve To</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="problem in unresolvedList" v-bind:key="problem.name">
+                    <td>
+                        <strong>{{ problem.name }}</strong>
+                        <div>Opponents: {{ getOpponentList(problem) }}</div>
+                    </td>
+                    <td>
+                        <vue-selectbase label=""
+                                        choose-prompt="Select Resolve Method"
+                                        v-bind:enable-multiple="false"
+                                        v-bind:required="false"
+                                        v-bind:external-invalid="false"
+                                        v-bind:options="resolveOptions"
+                                        option-label-key="name"
+                                        v-bind:default-value="getDefaultResolveMethodSelection(problem)"
+                                        v-on:change="setResolveMethod(problem, $event)"></vue-selectbase>
+                    </td>
+                    <td>
+                        <school-autocomplete v-on:update:value="setResolveToAutoSchool(problem, $event)" v-bind:hide-label="true"
+                                             v-show="problem.resolveMethod === 'Search'"></school-autocomplete>
+                        <vue-selectbase label="" ref="'vselectfor' + problem.Name"
+                                        choose-prompt="Choose from Recommendations"
+                                        v-bind:enable-multiple="false"
+                                        v-bind:required="false"
+                                        v-bind:external-invalid="false"
+                                        v-bind:options="problem.resolveToChoices"
+                                        option-label-key="name"
+                                        v-bind:default-value="getDefaultResolveToSelection(problem)"
+                                        v-on:change="setResolveToSchool(problem, $event)"
+                                        v-show="problem.resolveMethod === 'Selected'"></vue-selectbase>
+                        <div v-show="problem.resolveMethod === 'Create'">
+                            <div class="form-group">
+                                <label>School Name (Required)</label>
+                                <input type="text" class="form-control" v-model.trim="problem.renameTo" />
+                            </div>
+                            <state-list v-bind:enable-multiple="false"
+                                        label="State (Required)"
+                                        v-bind:default-value="problem.state"
+                                        v-on:change="setCreateSchoolState(problem, $event)"></state-list>
+                            <div class="form-group">
+                                <label>City (optional)</label>
+                                <input type="text" class="form-control" v-model.trim="problem.city" />
+                            </div>
+                            <county-list v-bind:value="problem.countyId"
+                                         v-bind:enable-multiple="false"
+                                         v-on:change="setCreateSchoolCounty(problem, $event)"></county-list>
+                            <input-checkbox label="Private School"
+                                            v-bind:default-value="problem.privateSchool"
+                                            v-on:input="problem.privateSchool = $event"></input-checkbox>
+
+                        </div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <button class="btn btn-default btn-sm" v-bind:key="problem.name+'processBtn'"
+                                v-on:click.prevent="acceptResolution(problem)"
+                                v-bind:disabled="notYetResolved(problem) || loading"
+                                v-if="!problem.processing">
+                            Accept
+                        </button>
+                        <span v-else v-bind:key="problem.name+'processStatus'"><i class="fas fa-cog fa-spin"></i> Processing...</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.sportId = @Html.Raw(sportId);
+        window.scheduleYearId = @Html.Raw(scheduleYearId);
+        window.fileId = @Html.Raw(fileId);
+        window.sportName = "@Html.Raw(sportName)";
+        window.scheduleYearName = "@Html.Raw(scheduleYearName)";
+        window.scheduleItems = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-schedules-process.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-schedules-process.min.js" asp-append-version="true"></script>
+    </environment>
+}

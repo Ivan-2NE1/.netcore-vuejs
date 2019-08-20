@@ -1,0 +1,41 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:59211",
+      "sslPort": 44338
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ENV": "Dev",
+        "RedisUrl": "204.186.24.118:6379",
+        "HomeState": "NJ",
+        "RedisPassword": "v$4nd",
+        "StatsConnection": "Server=204.186.24.115;Database=njschoolsports-stats-DEV;User ID=njspdevuser;Password=G3t1nTh3G4m3!;MultipleActiveResultSets=true",
+        "PubName": "nj",
+        "AppLogoMobile": "nj-hs-logo-mobile-50-45.png",
+        "AppLogoDesktop": "new-jersey-high-school-sports.svg",
+        "PubUrl": "https://www.nj.com",
+        "DefaultConnection": "Server=204.186.24.115;Database=njschoolsports-DEV;User ID=njspdevuser;Password=G3t1nTh3G4m3!;MultipleActiveResultSets=true",
+        "VsandArcUrl": "https://arccontent.uat.njschoolsports.com",
+        "SiteTitle": "NJ.com",
+        "PubLogo": "logo_main_inverse.svg",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PubHomeTitle": "New Jersey High School Sports"
+      }
+    },
+    "VSAND.Frontend": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    }
+  }
+}

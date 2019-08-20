@@ -1,0 +1,30 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:9843/",
+      "sslPort": 44330
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "SiteName": "NJSchoolSports",
+        "DefaultConnection": "Server=204.186.24.115;Database=njschoolsports-DEV;User ID=njspdevuser;Password=G3t1nTh3G4m3!;MultipleActiveResultSets=true",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "LogoUrl": "https://backend.uat.njschoolsports.com/images/logo.svg"
+      }
+    },
+    "VSAND.IdentityServer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:58385/"
+    }
+  }
+}

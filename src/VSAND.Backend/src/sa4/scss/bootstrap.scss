@@ -1,0 +1,5 @@
+@import "_modules/variables";
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Import Bootstrap Vue to style modals, notifications, etc. */
+@import "./node_modules/bootstrap-vue/src/index";

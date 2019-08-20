@@ -1,0 +1,20 @@
+﻿@model VSAND.Data.Entities.VsandTeam
+
+@if (Model != null)
+{
+    <text>
+        <a asp-area="" asp-controller="Teams" asp-action="Team" asp-route-teamid="@Model.TeamId" class="dropdown-item">Dashboard</a>
+        <a asp-area="" asp-controller="Teams" asp-action="Info" asp-route-teamid="@Model.TeamId" class="dropdown-item">Info</a>
+        <a asp-area="" asp-controller="Teams" asp-action="DistributionList" asp-route-teamid="@Model.TeamId" class="dropdown-item">Distribution List</a>
+        <a asp-authorize asp-policy="Admin" asp-area="" asp-controller="Teams" asp-action="Book" asp-route-teamid="@Model.TeamId" class="dropdown-item">Book</a>
+        <a asp-area="" asp-controller="Teams" asp-action="Roster" asp-route-teamid="@Model.TeamId" class="dropdown-item">Roster</a>
+        @if (Model.Sport.Name.ToLower().Contains("baseball"))
+        {
+            <a asp-area="" asp-controller="Team" asp-action="PitchCount" asp-route-teamid="@Model.TeamId" class="dropdown-item">Pitch Count</a>
+        }
+        <a asp-area="" asp-controller="Teams" asp-action="Stats" asp-route-teamid="@Model.TeamId" class="dropdown-item">Stats</a>
+        <a asp-authorize asp-policy="VSAND.School.Team.CustomCode.." asp-area="" asp-controller="Teams" asp-action="CustomCodes" asp-route-teamid="@Model.TeamId" class="dropdown-item">Custom Codes</a>
+        <a asp-authorize asp-policy="UserFunction.Admin" asp-area="" asp-controller="Teams" asp-action="Merge" asp-route-teamid="@Model.TeamId" class="dropdown-item">Merge</a>
+        <a asp-authorize asp-policy="UserFunction.Admin" asp-area="" asp-controller="Teams" asp-action="Delete" asp-route-teamid="@Model.TeamId" class="dropdown-item">Delete</a>
+    </text>
+}

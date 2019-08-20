@@ -1,0 +1,294 @@
+﻿@model VSAND.Data.ViewModels.Players.PlayerView;
+
+@{
+    ViewData["Title"] = $"{Model.Player.FirstName} {Model.Player.LastName}";
+    string basePath = ViewData["BasePath"].ToString();
+
+    VSAND.Data.Entities.VsandTeamRoster curTeam = null;
+    if (Model.TeamId > 0)
+    {
+        curTeam = Model.Player.TeamRosters.FirstOrDefault(tr => tr.TeamId == Model.TeamId);
+    }
+    string jerseyNumber = "";
+    if (curTeam != null && !string.IsNullOrWhiteSpace(curTeam.JerseyNumber))
+    {
+        jerseyNumber = $"#{curTeam.JerseyNumber}";
+    }
+    var schoolId = 0;
+    if (curTeam != null && curTeam.Team.SchoolId.HasValue)
+    {
+        schoolId = curTeam.Team.SchoolId.Value;
+    }
+    VSAND.Data.Entities.VsandSchool school = null;
+    if (schoolId > 0)
+    {
+        school = Model.Player.TeamRosters.Where(tr => tr.Team.SchoolId.HasValue && tr.Team.SchoolId == schoolId).Select(tr => tr.Team.School).FirstOrDefault();
+
+        ViewData["Title"] = $"{Model.Player.FirstName} {Model.Player.LastName} {school.Name} {curTeam.Team.Sport.Name} {curTeam.Team.ScheduleYear.Name}";
+    }
+
+    List<VSAND.Data.Entities.VsandTeamRoster> otherRosters = null;
+    var positions = "";
+
+    if (curTeam != null)
+    {
+        otherRosters = Model.Player.TeamRosters.Where(tr => tr.TeamId != curTeam.TeamId).OrderByDescending(tr => tr.Team.ScheduleYear.EndYear).ThenBy(tr => tr.Team.Sport.Name).ToList();
+        var teamPositions = curTeam.PositionList;
+        if (teamPositions.Any())
+        {
+            // look the position Name / Abbr up in the sport's positions
+            var positionNames = new List<string>();
+            foreach(var pos in teamPositions)
+            {
+                var sportPosition = (from p in curTeam.Team.Sport.Positions where p.SportPositionId == pos select p).FirstOrDefault();
+                if (sportPosition != null)
+                {
+                    positionNames.Add(sportPosition.DisplayName);
+                }
+            }
+            positions = string.Join(" | ", positionNames);
+        }
+    }
+    else
+    {
+        otherRosters = Model.Player.TeamRosters.OrderByDescending(tr => tr.Team.ScheduleYear.EndYear).ThenBy(tr => tr.Team.Sport.Name).ToList();
+    }
+}
+
+<div class="appsecondarynav player-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <img src="https://placehold.it/64x64" />
+            </div>
+            <div class="col">
+                <h1>@Model.Player.FirstName <strong>@Model.Player.LastName</strong> <span class="player-jersey-number">@jerseyNumber</span> <span class="player-positions">@positions</span></h1>
+
+                @if (curTeam != null)
+                {
+                    var schoolName = "";
+                    @if (school != null)
+                    {
+                        schoolName = school.Name;
+                    }
+                    <text>
+                        <div class="d-flex align-items-center">
+                            @schoolName @curTeam.Team.ScheduleYear.Name @curTeam.Team.Sport.Name
+                        </div>
+                    </text>
+                }
+
+                @{
+                    List<string> playerProps = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(Model.Player.Height))
+                    {
+                        playerProps.Add($"Height: {Model.Player.Height}");
+                    }
+                    if (Model.Player.Weight.HasValue && Model.Player.Weight.Value > 0)
+                    {
+                        playerProps.Add($"Weight: {Model.Player.Weight.Value}");
+                    }
+                    if (curTeam != null && curTeam.Team.ScheduleYear.EndYear.HasValue)
+                    {
+                        playerProps.Add(Model.Player.ClassYear(curTeam.Team.ScheduleYear.EndYear.Value));
+                    }
+                    @if (playerProps.Any())
+                    {
+                        <text>
+                            <div>
+                                @string.Join(" | ", playerProps)
+                            </div>
+                        </text>
+                    }
+                }
+
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col">
+                    <nav class="navbar navbar-expand-md">
+                        @if (school != null)
+                        {
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="navbar-text">@school.Name</a>
+                                </li>
+                            </ul>
+                        }
+
+                        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#playerNavBarDropdown" aria-controls="playerNavBarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                            More <i class="far fa fa-chevron-down expander"></i><i class="far fa fa-chevron-up collapser"></i>
+                        </button>
+                        <div class="collapse navbar-collapse" id="playerNavBarDropdown">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">Something Here</li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <strong>Stats</strong>
+                </div>
+                <div class="card-body">
+                    Stats table here
+                </div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="AfterPlayerStatsAd" data-load="ad" data-position="InterArticle_Center"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <strong>Game Log</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-stats table-bordered table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Opponent</th>
+                                <th>Result</th>
+                                <th>Stat Headers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Game Date</td>
+                                <td>vs/@@  Opp</td>
+                                <td>W 14-7</td>
+                                <td>Stat Value</td>
+                            </tr>
+                            <tr>
+                                <td>Game Date</td>
+                                <td>vs/@@  Opp</td>
+                                <td>W 14-7</td>
+                                <td>Stat Value</td>
+                            </tr>
+                            <tr>
+                                <td>Game Date</td>
+                                <td>vs/@@  Opp</td>
+                                <td>W 14-7</td>
+                                <td>Stat Value</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="AfterPlayerGameLogAd" data-load="ad" data-position="InterArticle_Center"></div>
+            </div>
+
+            <!-- News Feed -->
+            <div class="card news mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4 d-none d-md-block">
+                        <a href="https://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">
+                            <img src="https://image.nj.com/home/adv-hssn-media/width180/img/NJ.com/news/a279b5240dd01ee125c935ba9471536a/ScreenShot2019-07-27at6.03.40PM.jpg" class="card-img">
+                        </a>
+                        <span class="tag-label"><a href="/football">Football</a></span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3><a href="https://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">Think Bo Jackson. Two-sport standout set to take talents to the Big Ten</a></h3>
+                            @*<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>*@
+                            <p class="card-text"><small class="text-muted">Yesterday Kevin Minnick | NJ Advance Media for NJ.com 0</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card news mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4 d-none d-md-block">
+                        <a href="https://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">
+                            <img src="https://image.nj.com/home/adv-hssn-media/width180/img/NJ.com/news/a279b5240dd01ee125c935ba9471536a/ScreenShot2019-07-27at6.03.40PM.jpg" class="card-img">
+                        </a>
+                        <span class="tag-label"><a href="/football">Football</a></span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3><a href="https://highschoolsports.nj.com/news/article/8408819029422329653/think-bo-jackson-two-sport-standout-set-to-take-talents-to-michigan/">Think Bo Jackson. Two-sport standout set to take talents to the Big Ten</a></h3>
+                            @*<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>*@
+                            <p class="card-text"><small class="text-muted">Yesterday Kevin Minnick | NJ Advance Media for NJ.com 0</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <strong>Quick Facts</strong>
+                </div>
+                <div class="card-body">
+                    @if (Model.Top100Stats.Any())
+                    {
+                        <div class="mb-3">
+                            @foreach (var tStat in Model.Top100Stats)
+                            {
+                                <div>&bull; @tStat.Described</div>
+                            }
+                        </div>
+                    }
+
+
+                    @if (otherRosters.Any())
+                    {
+                        <div><strong>Other Sports &amp; Seasons</strong></div>
+                        @foreach (var tRoster in otherRosters)
+                        {
+                            var schoolName = "";
+                            if (tRoster.Team.SchoolId != schoolId)
+                            {
+                                schoolName = $" ({tRoster.Team.School.Name})";
+                            }
+
+                            // Need to build the route to navigate to the other player pages
+                            var sportSlug = Model.Slugs.FirstOrDefault(s => s.EntityType == "Sport" && s.EntityId == tRoster.Team.SportId);
+                            var seasonSlug = Model.Slugs.FirstOrDefault(s => s.EntityType == "ScheduleYear" && s.EntityId == tRoster.Team.ScheduleYearId);
+
+                            var rosterLink = "";
+                            if (sportSlug != null && seasonSlug != null)
+                            {
+                                rosterLink = $"{basePath}/{sportSlug.Slug}/season/{seasonSlug.Slug}";
+                            }
+                            var rosterName = $"{tRoster.Team.Sport.Name} {@tRoster.Team.ScheduleYear.Name}{@schoolName}";
+
+                            @if (!string.IsNullOrEmpty(rosterLink))
+                            {
+                                <text>
+                                    <div><a href="@rosterLink" class="btn btn-link">@rosterName</a></div>
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    <div>@rosterName</div>
+                                </text>
+                            }
+
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>

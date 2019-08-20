@@ -1,0 +1,19 @@
+﻿@{
+    var sportId = ViewData.ContainsKey("SportId") ? (int)ViewData["SportId"] : 0;
+    var activeScheduleYearId = (int)ViewData["ActiveScheduleYearId"];
+}
+
+@if (sportId > 0)
+{
+    <text>
+        <a asp-controller="Sports" asp-action="Edit" asp-route-sportId="@sportId" class="dropdown-item">Manage</a>
+        <a asp-controller="Sports" asp-action="Positions" asp-route-sportId="@sportId" class="dropdown-item">Positions</a>
+        <a asp-controller="Sports" asp-action="Game Meta" asp-route-sportId="@sportId" class="dropdown-item">Game Meta</a>
+        <a asp-controller="Sports" asp-action="Events" asp-route-sportId="@sportId" class="dropdown-item">Events</a>
+        <a asp-controller="Sports" asp-action="Team Stat Categories" asp-route-sportId="@sportId" class="dropdown-item">Team Stats</a>
+        <a asp-controller="Sports" asp-action="Player Stat Categories" asp-route-sportId="@sportId" class="dropdown-item">Player Stats</a>
+        <div class="dropdown-divider m-0"></div>
+        <a asp-area="Sports" asp-controller="Positions" asp-route-sportId="@sportId" class="dropdown-item">Publications</a>
+        <a asp-area="Manage" asp-controller="ScheduleYears" asp-action="EventTypes" asp-route-scheduleYearId="@activeScheduleYearId" asp-route-sportId="@sportId" class="dropdown-item">Event Types</a>
+    </text>
+}

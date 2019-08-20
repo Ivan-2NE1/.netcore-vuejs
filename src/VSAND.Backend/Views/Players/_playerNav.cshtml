@@ -1,0 +1,13 @@
+﻿@{
+    var playerId = ViewData.ContainsKey("PlayerId") ? (int)ViewData["PlayerId"] : 0;
+}
+
+@if (playerId > 0)
+{
+    <text>
+        <a asp-area="" asp-controller="Players" asp-action="PlayerInfo" asp-route-playerId="@playerId" class="dropdown-item">Player Info</a>
+        <a asp-area="" asp-controller="Players" asp-action="Teams" asp-route-playerId="@playerId" class="dropdown-item">Teams</a>
+        <a asp-area="" asp-controller="Players" asp-action="Delete" asp-route-playerId="@playerId" class="dropdown-item">Delete</a>
+        <a asp-area="" asp-controller="Players" asp-action="Merge" asp-route-playerId="@playerId" class="dropdown-item">Merge</a>
+    </text>
+}

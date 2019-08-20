@@ -1,0 +1,84 @@
+﻿@model List<VSAND.Data.ViewModels.ListItem<string>>
+@{
+    ViewData["Title"] = "All Schools";
+}
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1>Find your School</h1>
+
+                    <!-- alpha list -->
+                    @{
+                        var alphaList = (from s in Model
+                                         let first = s.name.Substring(0, 1).ToUpperInvariant()
+                                         orderby first
+                                         select first).Distinct();
+
+                        <text>
+                            <ul class="list-inline">
+                                @foreach (var startsWith in alphaList)
+                                {
+                                    string anchor = "#startsWith" + startsWith;
+                                    <li class="list-inline-item"><a href="@anchor">@startsWith</a></li>
+                                }
+                            </ul>
+                        </text>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @{
+                            var idx = 0;
+                            var startsWithSection = "";
+
+                            foreach (var schoolItem in Model)
+                            {
+                                var firstLetter = schoolItem.name.Substring(0, 1).ToUpperInvariant();
+                                if (firstLetter != startsWithSection)
+                                {
+                                    var anchor = "startsWith" + firstLetter;
+                                    startsWithSection = firstLetter;
+                                    <text>
+                                        <div class="w-100"></div>
+                                        <div class="col-12">
+                                            <h2><a id="@anchor" name="@anchor">@firstLetter</a></h2>
+                                        </div>
+                                    </text>
+                                }
+                                <text>
+                                    <div class="col">
+                                        <a href="/school/@schoolItem.id">@schoolItem.name</a>
+                                    </div>
+                                </text>
+                                idx++;
+
+                                if (idx % 2 == 0)
+                                {
+                                    <text>
+                                        <div class="w-100"></div>
+                                    </text>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>

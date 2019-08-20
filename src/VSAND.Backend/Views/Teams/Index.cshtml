@@ -1,0 +1,25 @@
+﻿@model VSAND.Data.Entities.VsandTeam
+
+@{
+    ViewData["Title"] = "Teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int activeScheduleYearId = ViewBag.ActiveScheduleYearId;
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="table" title="Find Teams"
+                    v-bind:padding="true">
+        <teams-search v-bind:active-schedule-year-id="@activeScheduleYearId"></teams-search>
+    </widget-wrapper>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/teams-dashboard.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/teams-dashboard.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,38 @@
+﻿@model List<VSAND.Data.ViewModels.News.Story>
+
+@{
+    ViewData["Title"] = "All News";
+}
+
+<div class="container">
+    <div class="col-md-8">
+        @foreach (var story in Model)
+        {
+            <div class="col-12">
+                <div class="card-deck">
+                    <div class="card news mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-md-3 d-none d-md-block">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <a href="@story.CanonicalUrl">
+                                        <img src="@story.FeatureImageUrl"
+                                             class="embed-responsive-item card-img">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h3><a href="@story.CanonicalUrl">
+                                        @story.Headline
+                                        </a></h3>
+                                    <p class="card-text"><small class="text-muted">@story.ByLine</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

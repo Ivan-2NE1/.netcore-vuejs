@@ -1,0 +1,34 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport;
+
+@if (Model != null)
+{
+    <text>
+        <a asp-area="" asp-controller="Game" asp-action="Index" asp-route-id="@Model.GameReportId" class="dropdown-item">Overview</a>
+        @if (Model.Sport != null && Model.Sport.EnablePeriodScoring)
+        {
+            <a asp-area="" asp-controller="Game" asp-action="Scoring" asp-route-id="@Model.GameReportId" class="dropdown-item">Scoring</a>
+        }
+        @if (Model.Sport != null && Model.Sport.MeetType.Equals("Team", StringComparison.OrdinalIgnoreCase))
+        {
+            <a asp-area="" asp-controller="Game" asp-action="TeamStats" asp-route-id="@Model.GameReportId" class="dropdown-item">Team Stats</a>
+        }
+        @if (Model.Sport != null && Model.Sport.MeetType.Equals("Event", StringComparison.OrdinalIgnoreCase))
+        {
+            <a asp-area="" asp-controller="Game" asp-action="Events" asp-route-id="@Model.GameReportId" class="dropdown-item">Event Results</a>
+        }
+        @if (Model.Sport != null && Model.Sport.EnableScoringPlayByPlay)
+        {
+            <a asp-area="" asp-controller="Game" asp-action="Plays" asp-route-id="@Model.GameReportId" class="dropdown-item">Play by Play</a>
+        }
+        else
+        {
+            foreach (var grt in Model.Teams.OrderBy(grt => grt.HomeTeam))
+            {
+                <a asp-area="" asp-controller="Game" asp-action="PlayerStats" asp-route-id="@Model.GameReportId" asp-route-teamid="@grt.GameReportTeamId" class="dropdown-item">@grt.Name Player Stats</a>
+            }
+        }
+        <a asp-area="" asp-controller="Game" asp-action="Review" asp-route-id="@Model.GameReportId" class="dropdown-item">Review</a>
+        <div class="dropdown-divider m-0"></div>
+        <a asp-area="" asp-controller="Game" asp-route-id="@Model.GameReportId" class="dropdown-item">Something Else</a>
+    </text>
+}

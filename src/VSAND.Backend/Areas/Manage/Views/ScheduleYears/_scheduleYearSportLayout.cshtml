@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int scheduleYearId = ViewData.ContainsKey("scheduleYearId") ? (int)ViewData["scheduleYearId"] : 0;
+    int sportId = ViewData.ContainsKey("sportId") ? (int)ViewData["sportId"] : 0;
+    string scheduleYearName = ViewData.ContainsKey("ScheduleYearName") ? ViewData["ScheduleYearName"].ToString() : "";
+    string sportName = ViewData.ContainsKey("SportName") ? ViewData["SportName"].ToString() : "";
+    string subHeader = ViewData.ContainsKey("SubHeader") ? ViewData["SubHeader"].ToString() : "";
+}
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-wrench"></i> Manage @scheduleYearName  @sportName
+        @if (!string.IsNullOrWhiteSpace(subHeader))
+        {
+            <small>
+                @subHeader
+            </small>
+        }
+    </h1>
+    <div class="subheader-block d-lg-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Teams Options">
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="Summary" asp-route-scheduleYearId="@scheduleYearId" class="btn btn-default" title="Back to Summary">
+                <span class="fas fa-arrow-circle-left"></span><br />Back to Summary
+            </a>
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="Provisioning" asp-route-scheduleYearId="@scheduleYearId" asp-route-sportId="@sportId" class="btn btn-default" title="Provisioning">
+                <span class="fas fa-users-cog"></span><br />Provisioning
+            </a>
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="EventTypes" asp-route-scheduleYearId="@scheduleYearId" asp-route-sportId="@sportId" class="btn btn-default" title="Event Types">
+                <span class="fas fa-project-diagram"></span><br />Event Types
+            </a>
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="Schedules" asp-route-scheduleYearId="@scheduleYearId" asp-route-sportId="@sportId" class="btn btn-default" title="Schedules">
+                <span class="fas fa-calendar-plus"></span><br />Schedules
+            </a>
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="PowerPoints" asp-route-scheduleYearId="@scheduleYearId" asp-route-sportId="@sportId" class="btn btn-default" title="Power Points">
+                <span class="fas fa-badge-percent"></span><br />Power Points
+            </a>
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="Manage" asp-controller="ScheduleYears" asp-action="LeagueRules" asp-route-scheduleYearId="@scheduleYearId" asp-route-sportId="@sportId" class="btn btn-default" title="League Rules">
+                <span class="fas fa-random"></span><br />League Rules
+            </a>
+        </div>
+    </div>
+</div>
+
+@RenderBody()
+
+@section Scripts{
+    @RenderSection("Scripts", false)
+}

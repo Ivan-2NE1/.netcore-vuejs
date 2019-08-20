@@ -1,0 +1,55 @@
+﻿@model List<VSAND.Data.Entities.AppxAudit>
+
+@{
+    ViewData["Title"] = "Audit History";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+}
+
+<h2>Audit History</h2>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label>Record Type</label>
+            <div class="form-control-static">@Html.Raw(ViewData["AuditTable"])</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>Record Id</label>
+            <div class="form-control-static">@Html.Raw(ViewData["AuditId"])</div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Date</th>
+            <th>Action</th>
+            <th>User</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auditRow in Model)
+        {
+            var auditRowId = "auditRow" + auditRow.AuditId;
+            <tr>
+                <td><button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#@auditRowId" aria-expanded="false" aria-controls="@auditRowId">
+                    <i class="far fa-plus-circle"></i></button></td>
+                <td>@auditRow.CreatedDate.ToString()</td>
+                <td>@auditRow.AuditAction</td>
+                <td>@auditRow.AuditUser</td>
+            </tr>
+            <tr id="@auditRowId" class="collapse">
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    <p><strong>Original Data:</strong></p>
+                    <audithistorydata audit-table="@auditRow.AuditTable" original-data="@auditRow.AuditData" additional-css-classes="table table-sm"></audithistorydata>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

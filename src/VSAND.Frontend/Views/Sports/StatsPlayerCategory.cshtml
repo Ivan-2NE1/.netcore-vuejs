@@ -1,0 +1,186 @@
+﻿@model VSAND.Data.ViewModels.StatAggregation.IndividualLeaderboardResult;
+
+@{
+    ViewData["Title"] = $"{Model.Sport.Name} Player {Model.Category.Name} Stats - {Model.ScheduleYear.Name}";
+    int curRank = 0;
+
+    string basePath = ViewData["BasePath"].ToString() + "/stats/player";
+
+    int prevPage = Model.CurrentPage - 1;
+    int nextPage = Model.CurrentPage + 1;
+    bool prevPageDisabled = false;
+    string prevPageClass = "";
+    bool nextPageDisabled = false;
+    string nextPageClass = "";
+    if (prevPage < 1)
+    {
+        prevPageDisabled = true;
+        prevPageClass = "disabled";
+    }
+    if (nextPage > Model.TotalPages)
+    {
+        nextPageDisabled = true;
+        nextPageClass = "disabled";
+    }
+}
+
+<partial name="_sportHeader" model="@Model.Sport" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <h2 class="card-header">@Model.Sport.Name Player @Model.Category.Name Stats - @Model.ScheduleYear.Name</h2>
+                <div class="card-body">
+                    @if (Model.Categories.Count > 1)
+                    {
+                        @*<ul class="list-inline">
+                <li class="list-inline-item">Statistical Categories:</li>
+                @foreach (var cat in Model.Categories)
+                {
+                    <li class="list-inline-item">
+                        @if (cat.SportPlayerStatCategoryId == Model.Category.SportPlayerStatCategoryId)
+                        {
+                            <strong>@cat.Name</strong>
+                        }
+                        else
+                        {
+                            <a href="@basePath/@cat.SportPlayerStatCategoryId">@cat.Name</a>
+                        }
+                    </li>
+                }
+            </ul>*@
+
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="playerStatCatMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Categories
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="playerStatCatMenuLink">
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    <a class="dropdown-item" href="@basePath/@cat.SportPlayerStatCategoryId">@cat.Name</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-stats table-borderless table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th class="text-left">Player</th>
+                                <th class="text-center">Games Played</th>
+                                @foreach (var stat in Model.Stats)
+                                {
+                                    var sortedClass = (stat.SportPlayerStatId == Model.OrderById) ? "sorted" : "";
+                                    var sortedIcon = (stat.SportPlayerStatId == Model.OrderById) ? (Model.OrderDir.Equals("DESC", StringComparison.OrdinalIgnoreCase) ? "fas fa-sort-down" : "fas fa-sort-up") : "";
+                                    <th class="text-center @sortedClass">
+                                        <a href="@basePath/@Model.Category.SportPlayerStatCategoryId?syid=@Model.ScheduleYear.ScheduleYearId&statid=@stat.SportPlayerStatId"
+                                           data-toggle="tooltip" title="@stat.Name">
+                                            @stat.DisplayName<i class="@sortedIcon"></i>
+                                        </a>
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var player in Model.Players)
+                            {
+                                string gradYear = VSAND.Common.ClassYearHelp.GraduationYearToClassAbbr(player.GraduationYear, Model.ScheduleYear.EndYear);
+                                if (!string.IsNullOrEmpty(gradYear))
+                                {
+                                    gradYear = $" &mdash; {gradYear}";
+                                }
+                                <tr>
+                                    <td class="text-center font-weight-bold h4">
+                                        @if (player.Rank != curRank)
+                                        {
+                                            @player.Rank
+                                        }
+                                        else
+                                        {
+                                            <text>&nbsp;</text>
+                                        }
+                                        @{
+                                            curRank = player.Rank;
+                                        }
+                                    </td>
+                                    <td class="text-left">
+                                        @player.Name@Html.Raw(gradYear)
+                                        <div><small>@player.TeamName</small></div>
+                                    </td>
+                                    <td class="text-center">@player.GamesPlayed</td>
+                                    @foreach (var stat in Model.Stats)
+                                    {
+                                        var sortedClass = (stat.SportPlayerStatId == Model.OrderById) ? "sorted" : "";
+                                        <td class="text-center @sortedClass">
+                                            @if (player.StatValues.ContainsKey(@stat.SportPlayerStatId))
+                                            {
+                                                @player.StatValues[@stat.SportPlayerStatId]
+                                            }
+                                            else
+                                            {
+                                                <text>-</text>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Player Stats Navigation">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item disabled">
+                                <span class="page-link">@Model.TotalResults.ToString("N0") Results</span>
+                            </li>
+                            <li class="page-item @prevPageClass">
+                                @if (!prevPageDisabled)
+                                {
+                                    <a class="page-link" href="@basePath/@Model.Category.SportPlayerStatCategoryId?syid=@Model.ScheduleYear.ScheduleYearId&statid=@Model.OrderById&dir=@Model.OrderDir.Substring(0,1).ToLower()&pg=@prevPage" tabindex="-1"><i class="far fa fa-chevron-left"></i></a>
+                                }
+                                else
+                                {
+                                    <span class="page-link"><i class="far fa fa-chevron-left"></i></span>
+                                }
+                            </li>
+                            <li class="page-item disabled">
+                                <span class="page-link">@Model.CurrentPage of @Model.TotalPages.ToString("N0")</span>
+                            </li>
+                            <li class="page-item @nextPageClass">
+                                @if (!nextPageDisabled)
+                                {
+                                    <a class="page-link" href="@basePath/@Model.Category.SportPlayerStatCategoryId?syid=@Model.ScheduleYear.ScheduleYearId&statid=@Model.OrderById&dir=@Model.OrderDir.Substring(0,1).ToLower()&pg=@nextPage" tabindex="-1"><i class="far fa fa-chevron-right"></i></a>
+                                }
+                                else
+                                {
+                                    <span class="page-link"><i class="far fa fa-chevron-right"></i></span>
+                                }
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="marketing-block">
+    <div id="AboveFooter" data-load="ad" data-position="InFeed_Center_Wide"></div>
+</div>

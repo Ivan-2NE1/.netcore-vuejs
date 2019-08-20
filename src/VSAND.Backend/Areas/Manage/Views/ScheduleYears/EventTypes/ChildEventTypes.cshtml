@@ -1,0 +1,120 @@
+﻿@model List<VSAND.Data.Entities.VsandSportEventType>
+
+@{
+    ViewData["Title"] = "Child Event Types";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        @ViewData["SportName"] - Child Event Types
+    </h1>*@
+
+    <widget-wrapper icon="table" title="Configure Child Event Types">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_eventTypeNav.cshtml"); }
+        </template>
+
+        <div class="row">
+            <div class="col-md-7">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Event Type Id</th>
+                            <th>Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="eventType in eventTypes">
+                            <td>{{ eventType.eventTypeId }}</td>
+                            <td>{{ eventType.name }}</td>
+                            <td>{{ eventType.startDate }}</td>
+                            <td>{{ eventType.endDate }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" v-bind:href="'/Manage/ScheduleYears/' + scheduleYearId + '/EventTypes/' + sportId + '/Overview/' + eventType.eventTypeId">
+                                    Edit
+                                </a>
+                                <button v-on:click="deleteEventType(eventType)" class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <widget-wrapper icon="pencil" title="Create Child Event Type" header-class="bg-faded">
+                    <input-field label="Name"
+                                 v-bind:default-value="addChildEventTypeForm.name"
+                                 v-on:input="addChildEventTypeForm.name = $event"
+                                 v-bind:max-length="50"
+                                 v-bind:required="true"></input-field>
+
+                    <input-field label="Venue"
+                                 v-bind:default-value="addChildEventTypeForm.venue"
+                                 v-on:input="addChildEventTypeForm.venue = $event"
+                                 v-bind:max-length="100"></input-field>
+
+                    <input-calendar label="Start Date"
+                                    v-bind:default-value="addChildEventTypeForm.startDate"
+                                    v-on:input="addChildEventTypeForm.startDate = $event"></input-calendar>
+
+                    <input-calendar label="End Date"
+                                    v-bind:default-value="addChildEventTypeForm.endDate"
+                                    v-on:input="addChildEventTypeForm.endDate = $event"></input-calendar>
+
+                    <input-select label="Scoreboard Type"
+                                  v-bind:options="scoreboardTypeOptions"
+                                  v-bind:option-adapter="simpleOptionsAdapter"
+                                  v-bind:default-value="addChildEventTypeForm.scoreboardTypeId"
+                                  v-on:change="addChildEventTypeForm.scoreboardTypeId = $event.value"></input-select>
+
+                    <input-field label="Section Label"
+                                 v-bind:default-value="addChildEventTypeForm.sectionLabel"
+                                 v-on:input="addChildEventTypeForm.sectionLabel = $event"
+                                 v-bind:max-length="50"></input-field>
+
+                    <input-field label="Group Label"
+                                 v-bind:default-value="addChildEventTypeForm.groupLabel"
+                                 v-on:input="addChildEventTypeForm.groupLabel = $event"
+                                 v-bind:max-length="50"></input-field>
+
+                    <p><b>Particpating Teams:</b></p>
+                    <input-select label="Filter Type"
+                                  choose-prompt="Choose (optional)"
+                                  v-bind:options="filterTypeOptions"
+                                  v-bind:default-value="addChildEventTypeForm.particpatingTeamsType"
+                                  v-on:change="addChildEventTypeForm.particpatingTeamsType = $event.value"></input-select>
+
+                    <input-field label="Filter Name"
+                                 v-bind:default-value="addChildEventTypeForm.participatingTeamsFilter"
+                                 v-on:input="addChildEventTypeForm.participatingTeamsFilter = $event"
+                                 placeholder="(optional)"
+                                 v-bind:max-length="50"></input-field>
+
+                    <button class="btn btn-primary" v-on:click="addEventType">Create Event Type</button>
+                </widget-wrapper>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.scheduleYearId = @ViewData["ScheduleYearId"];
+        window.sportId = @ViewData["SportId"];
+        window.parentEventTypeId = @ViewData["EventTypeId"];
+        window.eventTypes = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-child-event-types.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-child-event-types.min.js" asp-append-version="true"></script>
+    </environment>
+}

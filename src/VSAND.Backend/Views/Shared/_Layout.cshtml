@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <partial name="_Head" />
+    @RenderSection("Header", required: false)
+</head>
+
+<body class="mod-bg-1">
+    <partial name="_ScriptsLoadingSaving" />
+    <div class="page-wrapper">
+        <div class="page-inner">
+            <partial name="_LeftPanel" />
+            <div class="page-content-wrapper">
+                <partial name="_PageHeader" />
+                <main id="js-page-content" role="main" class="page-content">                    
+                    <partial name="_PageBreadCrumb" />
+                    @RenderSection("PageHeading", required: false)
+                    @RenderBody()
+                </main>
+                <partial name="_PageContentOverlay" />
+                <partial name="_PageFooter" />
+                <partial name="_ShortCutModal" />
+            </div>
+        </div>
+    </div>
+
+    <partial name="_ShortCutMenu" />
+    @*<partial name="_ShortCutMessenger" />*@
+    <partial name="_PageSettings" />
+    <partial name="_GoogleAnalytics" />
+    <partial name="_ScriptBasePlugins" />
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

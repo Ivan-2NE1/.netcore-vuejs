@@ -1,0 +1,149 @@
+@model VSAND.Data.Entities.VsandTeam;
+
+@{
+    ViewData["Title"] = "Roster";
+    Layout = "_teamLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        <a class="btn btn-default btn-sm rounded-pill mr-1 shadow-0" href="/Teams/@Model.TeamId/Roster/excel"><i class="fal fa-file-excel fa-lg"></i> MS Excel</a>
+        <a class="btn btn-default btn-sm rounded-pill mr-1 shadow-0" href="/Teams/@Model.TeamId/Roster/pdf"><i class="fal fa-file-pdf fa-lg"></i> PDF</a>
+        @*<a class="btn btn-default btn-sm rounded-pill mr-1 shadow-0"><i class="fal fa-file-csv fa-lg"></i> CSV</a>*@
+        <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed" v-on:click.prevent="mode = 'create'"><i class="fal fa-pencil"></i> Add Player</button>
+    </p>
+
+    <div v-if="mode === 'view'" class="table-responsive text-nowrap">
+        <table class="table table-condensed">
+            <thead>
+                <tr class="text-align-center">
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Graduation Year</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Jersey Number</th>
+                    <th>Position</th>
+                    <th>Position2</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(rosters, index) in rosterEntries">
+                    <td>
+                        <input-field v-bind:default-value="rosters.player.firstName"
+                                        v-bind:required="true"
+                                        v-on:input="rosters.player.firstName = $event"></input-field>
+                    </td>
+                    <td>
+                        <input-field v-bind:default-value="rosters.player.lastName"
+                                        v-bind:required="true"
+                                        v-on:input="rosters.player.lastName = $event"></input-field>
+                    </td>
+                    <td style="width: 315px;">
+                        <graduationyear-list v-bind:default-value="rosters.player.graduationYear"
+                                                v-on:change="rosters.player.graduationYear = $event"></graduationyear-list>
+                    </td>
+                    <td class="row">
+                        <div class="col-md-6" style="padding-right:0px;">
+                            <input-field v-bind:default-value="playerFoot[index]"
+                                            v-bind:required="true"
+                                            v-on:input="playerFoot[index] = $event"></input-field>
+                        </div>
+                        <div class="col-md-6" style="padding-left:0px">
+                            <input-field v-bind:default-value="playerInch[index]"
+                                            v-bind:required="true"
+                                            v-on:input="playerInch[index] = $event"></input-field>
+                        </div>
+                    </td>
+                    <td>
+                        <input-field v-bind:default-value="rosters.player.weight"
+                                        v-bind:required="true"
+                                        v-on:input="rosters.player.weight = $event"></input-field>
+                    </td>
+                    <td>
+                        <input-field v-bind:default-value="rosters.jerseyNumber"
+                                        v-bind:required="true"
+                                        v-on:input="rosters.jerseyNumber = $event"></input-field>
+                    </td>
+                    <td>
+                        <input-select v-bind:options="positions"
+                                        v-bind:option-adapter="positionOptionsAdapter"
+                                        v-bind:default-value="rosters.position"
+                                        v-on:change="rosters.position = $event.value"></input-select>
+                    </td>
+                    <td>
+                        <input-select v-bind:options="positions"
+                                        v-bind:option-adapter="positionOptionsAdapter"
+                                        v-bind:default-value="rosters.position2"
+                                        v-on:change="rosters.position2 = $event.value"></input-select>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="saveRoster(rosters, playerFoot[index], playerInch[index])">
+                            Save
+                        </button>
+                        <button class="btn btn-sm btn-danger" v-on:click="deleteRoster(rosters)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div v-if="mode === 'create'" class="row p-4">
+        <div class="col-md-6">
+            <h3>Add Player</h3>
+
+            <input-field label="First Name"
+                            v-bind:required="true"
+                            v-bind:default-value="addPlayerForm.firstName"
+                            v-on:input="addPlayerForm.firstName = $event"></input-field>
+
+            <input-field label="Last Name"
+                            v-bind:required="true"
+                            v-bind:default-value="addPlayerForm.lastName"
+                            v-on:input="addPlayerForm.lastName = $event"></input-field>
+
+            <label>Graduation Year</label>
+            <graduationyear-list v-bind:default-value="addPlayerForm.graduationYear"
+                                    v-on:change="addPlayerForm.graduationYear = $event"></graduationyear-list>
+
+            <school-autocomplete v-bind:default-value.sync="addPlayerForm.schoolId"
+                                    v-on:update:value="addPlayerForm.schoolId = $event.id"></school-autocomplete>
+
+            <label>Height</label>
+            <div class="form-inline form-group">
+                <input-field v-bind:default-value="addPlayerForm.hFoot"
+                                v-on:input="addPlayerForm.hFoot = $event"></input-field>
+                <input-field v-bind:default-value="addPlayerForm.hInch"
+                                v-on:input="addPlayerForm.hInch = $event"></input-field>
+            </div>
+
+            <input-field label="Weight"
+                            v-bind:default-value="addPlayerForm.weight"
+                            v-on:input="addPlayerForm.weight = $event"></input-field>
+
+            <input-field label="Birth Date"
+                            v-bind:default-value="addPlayerForm.birthDate"
+                            v-on:input="addPlayerForm.birthDate = $event"></input-field>
+
+            <button class="btn btn-default" v-on:click="mode = 'view'">Cancel</button>
+            <button class="btn btn-primary" v-on:click="createPlayer">Save</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.positions = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["Positions"]));
+        window.teamRoster = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.RosterEntries));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/team-roster.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/team-roster.min.js" asp-append-version="true"></script>
+    </environment>
+}

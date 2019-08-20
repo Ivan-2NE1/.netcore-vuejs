@@ -1,0 +1,18 @@
+
+@{
+    ViewData["Title"] = "Pitch Count";
+    Layout = "_teamLayout.cshtml";
+}
+
+<h2>Pitch Count</h2>
+
+
+
+@section scripts {
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/team-pitchcount.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/team-pitchcount.min.js" asp-append-version="true"></script>
+    </environment>
+}

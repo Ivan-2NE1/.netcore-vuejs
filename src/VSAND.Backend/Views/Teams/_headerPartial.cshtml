@@ -1,0 +1,32 @@
+﻿@model VSAND.Data.Entities.VsandTeam
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-users"></i> Teams
+        <small>
+            @if (Model != null)
+            {
+                <text>@Model.Name @Model.ScheduleYear.Name @Model.Sport.Name</text>
+            }
+            @if (ViewData.ContainsKey("HeaderSubTitle"))
+            {
+                <text>@ViewData["HeaderSubTitle"]</text>
+            }
+        </small>
+    </h1>
+    <div class="subheader-block d-lg-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Teams Options">
+            <a asp-authorize asp-policy="UserFunction.Admin" asp-area="" asp-controller="Teams" asp-action="CustomCodeImporter" class="btn btn-default" title="Import Custom Codes">
+                <span class="fas fa-upload"></span><br />Import Codes
+            </a>
+            @if (Model != null)
+            {
+                <text>
+                    <a asp-authorize asp-policy="UserFunction.Admin" asp-area="" asp-controller="Schools" asp-action="School" asp-route-schoolid="@Model.SchoolId" class="btn btn-default" title="Go to School Page">
+                        <span class="fas fa-school"></span><br />School
+                    </a>
+                </text>
+            }
+        </div>        
+    </div>
+</div>

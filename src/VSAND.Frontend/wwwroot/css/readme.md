@@ -1,0 +1,1 @@
+﻿The css folder is home for compiled theme files. These should not be stored in SC as they are a build product.

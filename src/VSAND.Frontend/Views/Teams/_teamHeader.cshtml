@@ -1,0 +1,74 @@
+﻿@model VSAND.Data.ViewModels.Teams.FullTeam;
+
+@{
+    // Set which of the nav tabs is active based on the current view
+    string activeTab = (ViewData.ContainsKey("ActiveTab")) ? ViewData["ActiveTab"].ToString() : "";
+    string homeActiveClass = (activeTab == "Home") ? "active" : "";
+    string statsActiveClass = (activeTab == "Stats") ? "active" : "";
+    string scheduleActiveClass = (activeTab == "Schedule") ? "active" : "";
+    string rosterActiveClass = (activeTab == "Roster") ? "active" : "";
+    string powerPointsActiveClass = (activeTab == "PowerPoints") ? "active" : "";
+
+    string basePath = ViewData["BasePath"].ToString();
+}
+
+<div class="appsecondarynav team-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <img src="https://placehold.it/64x64" />
+            </div>
+            <div class="col">
+                <h1>@Model.Name <strong>@Model.Sport</strong> @Model.Season</h1>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-primary rounded-pill mr-2"><i class="far fa fa-star"></i> Favorite</button>
+                    @if (Model.OverallRecord != null && Model.OverallRecord.HasData)
+                    {
+                        <text>@Model.OverallRecord.Format() Overall</text>
+
+                        if (Model.LeagueRecord != null && Model.LeagueRecord.HasData)
+                        {
+                            <text> &bull; @Model.LeagueRecord.Format() in @Model.League</text>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <nav class="navbar navbar-expand-md">
+                    <ul class="navbar-nav">
+                        <li class="nav-item @homeActiveClass">
+                            <a class="nav-link" href="@basePath">Home</a>
+                        </li>
+                    </ul>
+                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#teamNavBarDropdown" aria-controls="teamNavBarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        More <i class="far fa fa-chevron-down expander"></i><i class="far fa fa-chevron-up collapser"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="teamNavBarDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item @statsActiveClass">
+                                <a class="nav-link" href="@basePath/stats">Stats</a>
+                            </li>
+                            <li class="nav-item @scheduleActiveClass">
+                                <a class="nav-link" href="@basePath/schedule">Schedule</a>
+                            </li>
+                            <li class="nav-item @rosterActiveClass">
+                                <a class="nav-link" href="@basePath/roster">Roster</a>
+                            </li>
+                            @if (Model.PowerPointsEnabled)
+                            {
+                                <li class="nav-item @powerPointsActiveClass">
+                                    <a class="nav-link" href="@basePath/powerpoints">Power Points</a>
+                                </li>
+                            }
+                            <li class="nav-item dropdown">
+
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

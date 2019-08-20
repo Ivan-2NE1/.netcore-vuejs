@@ -1,0 +1,58 @@
+﻿@model VSAND.Data.Entities.VsandPlayer
+
+@{
+    ViewData["Title"] = "Player Teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="table" title="Teams" v-bind:padding="false">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_playerNav.cshtml"); }
+        </template>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>School Year</th>
+                    <th>Sport</th>
+                    <th>School</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="teamRoster in player.teamRosters">
+                    <td>{{ teamRoster.team.scheduleYear.name }}</td>
+                    <td>{{ teamRoster.team.sport.name }}</td>
+                    <td>{{ teamRoster.team.school.name }}</td>
+                    <td>
+                        <a class="btn btn-primary" v-bind:href="'/Teams/' + teamRoster.team.teamId">
+                            Go to Team
+                        </a>
+                        <a class="btn btn-primary" v-bind:href="'/Players/' + player.playerId + '/Stats/' + teamRoster.team.teamId">
+                            Stats
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.player = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-player.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-player.min.js" asp-append-version="true"></script>
+    </environment>
+}

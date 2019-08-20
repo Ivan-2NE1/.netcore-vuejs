@@ -1,0 +1,20 @@
+﻿/// <reference path="../site.scss" />
+
+.school-header {
+    .school-brand {
+        padding: 2rem 0 0;
+
+        .school-name {
+            text-transform: uppercase;
+        }
+    }
+
+    .school-nav {
+        border-left:1px solid #CCC;
+    }
+
+    a.nav-link {
+        padding-top:1rem;
+        padding-bottom:1rem;
+    }
+}

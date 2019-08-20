@@ -1,0 +1,44 @@
+﻿@model VSAND.Data.ViewModels.Sports.StandingsView;
+
+@{
+    ViewData["Title"] = $"{Model.ScheduleYear.Name} {Model.Sport.Name} Standings";
+
+    string basePath = ViewData["BasePath"].ToString();
+    string seasonSlug = Model.ScheduleYearSlug;
+}
+
+<partial name="_sportHeader" model="Model.Sport" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <strong>@Model.ScheduleYear.Name Conferences</strong>
+                </div>
+                <div class="card-body">
+                    @foreach(var conf in Model.Conferences)
+                    {
+                        <p><a href="@basePath/standings/season/@seasonSlug?conference=@conf">@conf</a></p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

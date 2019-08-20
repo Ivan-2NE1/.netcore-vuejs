@@ -1,0 +1,1 @@
+﻿The logs folder is the target for NLog log files generated during application execution. We do not want these in source control, but you want this folder!

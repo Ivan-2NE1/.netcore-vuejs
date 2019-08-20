@@ -1,0 +1,70 @@
+﻿@model VSAND.Data.Entities.VsandState
+
+@{
+    ViewData["Title"] = "States";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="page-title txt-color-blueDark">
+    <i class="fa fa-wrench fa-fw"></i>
+    Manage
+    <span>
+        <i class="fa fa-chevron-right fa-fw"></i>
+        @ViewData["Title"]
+    </span>
+</h1>
+
+<div id="vueApp" v-cloak>
+    <div class="row">
+        <div class="col-md-7">
+            <widget-wrapper icon="table" title="State List" v-bind:padding="false">
+                <table-grid grid-id="states"
+                            v-bind:col-info="rowColInfo"
+                            v-bind:all-data="sortedStates"
+                            data-key-name="stateId"
+                            title-property="name"
+                            v-bind:enable-edit="true"
+                            v-bind:enable-delete="true"
+                            v-on:change="saveEditState"
+                            v-on:delete="deleteState"></table-grid>
+            </widget-wrapper>
+        </div>
+        <div class="col-md-5">
+            <widget-wrapper icon="plus" title="Add State">
+                <input-field input-id="addStateName"
+                             v-bind:default-value="addStateForm.name"
+                             label="@Html.DisplayNameFor(model => model.Name)"
+                             v-bind:required="true"
+                             v-bind:max-length="100"
+                             v-on:input="addStateForm.name = $event"></input-field>
+                <input-field input-id="addStateAbbreviation"
+                             v-bind:default-value="addStateForm.abbreviation"
+                             label="@Html.DisplayNameFor(model => model.Abbreviation)"
+                             v-bind:required="true"
+                             v-bind:max-length="2"
+                             v-on:input="addStateForm.abbreviation = $event"></input-field>
+                <input-field input-id="addStatePubAbbreviation"
+                             label="@Html.DisplayNameFor(model => model.PubAbbreviation)"
+                             v-bind:default-value="addStateForm.pubAbbreviation"
+                             v-bind:required="true"
+                             v-bind:max-length="10"
+                             v-on:input="addStateForm.pubAbbreviation = $event"></input-field>
+                <template v-slot:footer>
+                    <button class="btn btn-primary btn-lg" v-on:click="createState">Add State</button>
+                </template>
+            </widget-wrapper>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Configuration for table-grid Vue component -->
+    <col-info asp-for="@Model" columns="Name,Abbreviation,PubAbbreviation"></col-info>
+
+    <environment include="Development">
+        <script src="~/app/manage-states.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-states.min.js" asp-append-version="true"></script>
+    </environment>
+}

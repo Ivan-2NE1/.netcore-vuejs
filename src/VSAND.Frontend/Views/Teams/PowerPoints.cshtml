@@ -1,0 +1,42 @@
+﻿@model VSAND.Data.ViewModels.Teams.FullTeam;
+
+@{
+    ViewData["Title"] = $"{Model.Name} {Model.Sport} {Model.Season} Power Points";
+}
+
+<partial name="_teamHeader" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Powerpoints</h2>                    
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-borderless table-striped">
+                        <caption>Limit first 9 games between 8/30/2018 and 10/27/2018</caption>
+                        <thead><tr><th>Date</th><th>Opp</th><th>Result</th><th>Quality</th><th>Group</th><th>Residual</th><th>PP</th></tr></thead>
+                        <tbody>
+                            <tr><td class="center">9/7/18</td><td>Mainland (6-2)</td><td>L <span style="color:red;"><sup>   </sup></span> 0-27</td><td class="center">0</td><td class="center">0</td><td class="center">5</td><td class="center">5</td></tr>
+                            <tr><td class="center">9/14/18</td><td>Cedar Creek (4-4)</td><td>L <span style="color:red;"><sup>   </sup></span> 6-41</td><td class="center">0</td><td class="center">0</td><td class="center">3</td><td class="center">3</td></tr>
+                            <tr><td class="center">9/21/18</td><td>Ocean City (3-4)</td><td>L <span style="color:red;"><sup>   </sup></span> 0-9</td><td class="center">0</td><td class="center">0</td><td class="center">3</td><td class="center">3</td></tr>
+                            <tr><td class="center">9/28/18</td><td>Hammonton (3-6)</td><td>L <span style="color:red;"><sup>   </sup></span> 12-41</td><td class="center">0</td><td class="center">0</td><td class="center">3</td><td class="center">3</td></tr>
+                            <tr><td class="center">10/5/18</td><td>Bridgeton (1-7)</td><td>W <span style="color:red;"><sup>   </sup></span> 21-0</td><td class="center">6</td><td class="center">4</td><td class="center">3</td><td class="center">13</td></tr>
+                            <tr><td class="center">10/12/18</td><td>Moorestown (2-6)</td><td>L <span style="color:red;"><sup>   </sup></span> 0-27</td><td class="center">0</td><td class="center">0</td><td class="center">2</td><td class="center">2</td></tr>
+                            <tr><td class="center">10/26/18</td><td>Egg Harbor (3-5)</td><td>W <span style="color:red;"><sup>  9</sup></span> 24-10</td><td class="center">6</td><td class="center">5</td><td class="center">9</td><td class="center">20</td></tr>
+                            <tr><td colspan="3" style="text-align:right;font-weight:bold;">Totals:</td><td class="center">12</td><td class="center">9</td><td class="center">28</td><td class="center">49</td></tr>
+                            <tr><td colspan="3" style="text-align:right;font-weight:bold;">Average:</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="center">7</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+</div>
+
+

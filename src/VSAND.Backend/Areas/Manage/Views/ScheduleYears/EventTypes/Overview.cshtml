@@ -1,0 +1,99 @@
+﻿@model VSAND.Data.Entities.VsandSportEventType
+
+@{
+    ViewData["Title"] = "Event Type";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    <h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        @ViewData["ScheduleYearName"] @ViewData["SportName"] - @Model.Name
+    </h1>
+
+    <widget-wrapper icon="pencil" title="Update Event Type">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_eventTypeNav.cshtml"); }
+        </template>
+
+        <input-field label="Name"
+                     v-bind:default-value="eventType.name"
+                     v-on:input="eventType.name = $event"
+                     v-bind:max-length="50"
+                     v-bind:required="true"></input-field>
+
+        <input-field label="Venue"
+                     v-bind:default-value="eventType.venue"
+                     v-on:input="eventType.venue = $event"
+                     v-bind:max-length="100"></input-field>
+
+        <div class="row">
+            <div class="col-md-6">
+                <input-calendar label="Start Date"
+                                v-bind:default-value="eventType.startDate"
+                                v-on:input="eventType.startDate = $event"></input-calendar>
+            </div>
+            <div class="col-md-6">
+                <input-calendar label="End Date"
+                                v-bind:default-value="eventType.endDate"
+                                v-on:input="eventType.endDate = $event"></input-calendar>
+            </div>
+        </div>
+
+        <input-select label="Scoreboard Type"
+                      v-bind:options="scoreboardTypeOptions"
+                      v-bind:option-adapter="simpleOptionsAdapter"
+                      v-bind:default-value="eventType.scoreboardTypeId"
+                      v-on:change="eventType.scoreboardTypeId = $event.value"></input-select>
+
+        <div class="row">
+            <div class="col-md-6">
+                <input-field label="Section Label"
+                             v-bind:default-value="eventType.sectionLabel"
+                             v-on:input="eventType.sectionLabel = $event"
+                             v-bind:max-length="50"></input-field>
+            </div>
+            <div class="col-md-6">
+                <input-field label="Group Label"
+                             v-bind:default-value="eventType.groupLabel"
+                             v-on:input="eventType.groupLabel = $event"
+                             v-bind:max-length="50"></input-field>
+            </div>
+        </div>
+
+        <p>
+            <b>Particpating Teams:</b>
+        </p>
+        <div class="row">
+            <div class="col-md-6">
+                <input-select label="Filter Type"
+                              choose-prompt="Choose (optional)"
+                              v-bind:options="filterTypeOptions"
+                              v-bind:default-value="eventType.particpatingTeamsType"
+                              v-on:change="eventType.particpatingTeamsType = $event.value"></input-select>
+            </div>
+            <div class="col-md-6">
+                <input-field label="Filter Name"
+                             v-bind:default-value="eventType.participatingTeamsFilter"
+                             v-on:input="eventType.participatingTeamsFilter = $event"
+                             placeholder="(optional)"
+                             v-bind:max-length="50"></input-field>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" v-on:click="updateEventType">Save Changes</button>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.eventType = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-event-type.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-event-type.min.js" asp-append-version="true"></script>
+    </environment>
+}

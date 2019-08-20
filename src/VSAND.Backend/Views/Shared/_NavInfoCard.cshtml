@@ -1,0 +1,23 @@
+﻿@{
+    var sEmail = User.Claims.FirstOrDefault(c => c.Type == "email").Value;
+    var sName = User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+}
+    <div class="info-card">
+        <gravatar email-address="@sEmail" 
+                  force-secure-request="true" 
+                  image-size="50" 
+                  additional-css-classes="profile-image rounded-circle" 
+                  default-image-url="identicon"></gravatar>
+        <div class="info-card-text">
+            <a href="#" class="d-flex align-items-center text-white">
+                <span class="text-truncate text-truncate-sm d-inline-block">
+                    @sName
+                </span>
+            </a>
+            @*<span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>*@
+        </div>
+        <img src="~/images/WHOT16.jpg" class="cover" alt="cover">
+        <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
+            <i class="fal fa-angle-down"></i>
+        </a>
+    </div>

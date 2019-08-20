@@ -1,0 +1,137 @@
+﻿@model VSAND.Data.Repositories.PagedResult<VSAND.Data.ViewModels.SchoolSummary>
+
+@{
+    ViewData["Title"] = "Schools";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="table" title="Schools"
+                    v-bind:padding="false"
+                    v-bind:page-size="@Model.PageSize"
+                    v-bind:current-page="@Model.PageNumber"
+                    v-bind:total-records="@Model.TotalResults"
+                    v-on:gotopage="gotopage">
+        <template v-slot:toolbar>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="showSearchForm = !showSearchForm">
+                <i class="fal fa-filter"></i> Filter
+            </button>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="mode = 'create'">
+                <i class="fal fa-pencil"></i> Add School
+            </button>
+        </template>
+        <template v-slot:bodytoolbar>
+            <div v-if="showSearchForm" class="hidden-print">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input-field input-id="searchSchoolName"
+                                     v-bind:default-value="searchName"
+                                     label="Name"
+                                     v-bind:max-length="100"
+                                     v-on:input="searchName = $event"></input-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <input-field input-id="searchSchoolCity"
+                                     v-bind:default-value="searchCity"
+                                     label="City"
+                                     v-bind:max-length="100"
+                                     v-on:input="searchCity = $event"></input-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <state-list input-id="searchSchoolState"
+                                    v-bind:enable-multiple="false"
+                                    v-bind:default-value="searchState"
+                                    v-on:change="searchState = $event"></state-list>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary btn-block" v-on:click.prevent="doSearch">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input-checkbox input-id="searchCoreCoverage"
+                                        v-bind:default-value="searchCore"
+                                        label="Only include core coverage schools"
+                                        v-on:input="searchCore = $event"></input-checkbox>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div v-if="mode === 'view'" class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Core Coverage</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="school in schools.results">
+                        <td v-if="school.coreCoverage">Yes</td>
+                        <td v-else>No</td>
+                        <td>{{ school.name }}</td>
+                        <td>{{ school.city }}</td>
+                        <td>{{ school.state }}</td>
+                        <td>
+                            <a v-bind:href="'/Schools/' + school.schoolId" class="hidden-print">
+                                <span class="fal fa-search d-sm-none"></span>
+                                <span class="d-none d-sm-inline">View Details</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div v-if="mode === 'create'" class="row p-4">
+            <div class="col-md-6">
+                <h3>Add School</h3>
+
+                <input-field label="School Name"
+                             v-bind:required="true"
+                             v-on:input="addSchoolForm.name = $event"></input-field>
+
+                <state-list label="State"
+                            v-bind:default-value="addSchoolForm.state"
+                            v-on:change="addSchoolForm.state = $event.id"></state-list>
+
+                <county-list label="County"
+                             v-on:change="addSchoolForm.countyId = $event.id"></county-list>
+
+                <button class="btn btn-default" v-on:click="mode = 'view'">Cancel</button>
+                <button class="btn btn-primary" v-on:click="createSchool">Save</button>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.searchName = '@Html.Raw(ViewData["SearchName"])';
+        window.searchCity = '@Html.Raw(ViewData["SearchCity"])';
+        window.searchState = '@Html.Raw(ViewData["SearchState"])';
+        window.searchCore = @Html.Raw(ViewData.ContainsKey("SearchCoreCoverage") ? ViewData["SearchCoreCoverage"].ToString().ToLower() : "true");
+        window.schools = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/schools-dashboard.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/schools-dashboard.min.js" asp-append-version="true"></script>
+    </environment>
+}

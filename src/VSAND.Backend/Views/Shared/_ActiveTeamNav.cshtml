@@ -1,0 +1,70 @@
+﻿@{
+    var teamId = ViewContext.RouteData.Values["teamid"].ToString();
+    var teamName = ViewData.ContainsKey("TeamName") ? ViewData["TeamName"] : "Team";
+    var sportId = ViewData.ContainsKey("SportId") ? (int)ViewData["SportId"] : 0;
+}
+<text>
+    <li is-active-route asp-area="" asp-controller="Teams" asp-route-teamid="@teamId">
+        <a href="#"><i class="fas fa-users"></i> <span class="nav-link-text">@teamName</span></a>
+        <ul>
+            <li is-active-route asp-area="" asp-controller="Teams" asp-action="Team">
+                <a asp-area="" asp-controller="Teams" asp-action="Team" asp-route-teamid="@teamId" data-filter-tags="team dashboard">
+                    <span class="nav-link-text">Dashboard</span>
+                </a>
+            </li>
+            <li is-active-route asp-area="" asp-controller="Teams" asp-action="Info">
+                <a asp-area="" asp-controller="Teams" asp-action="Info" asp-route-teamid="@teamId" data-filter-tags="team info">
+                    <span class="nav-link-text">Info</span>
+                </a>
+            </li>
+            <li is-active-route asp-area="" asp-controller="Teams" asp-action="DistributionList">
+                <a asp-area="" asp-controller="Teams" asp-action="DistributionList" asp-route-teamid="@teamId" data-filter-tags="distribution list">
+                    <span class="nav-link-text">Email Distribution List</span>
+                </a>
+            </li>
+            <li asp-authorize asp-policy="Admin" is-active-route asp-area="" asp-controller="Teams" asp-action="Book">
+                <a asp-area="" asp-controller="Teams" asp-action="Book" asp-route-teamid="@teamId" data-filter-tags="team books">
+                    <span class="nav-link-text">Book</span>
+                </a>
+            </li>
+            <li asp-authorize asp-policy="VSAND.School.Team.Roster.." is-active-route asp-area="" asp-controller="Teams" asp-action="Roster">
+                <a asp-area="" asp-controller="Teams" asp-action="Roster" asp-route-teamid="@teamId" data-filter-tags="team rosters">
+                    <span class="nav-link-text">Roster</span>
+                </a>
+            </li>
+            @if (sportId == 18)
+            {
+                <li is-active-route asp-area="" asp-controller="Teams" asp-action="PitchCount">
+                    <a asp-area="" asp-controller="Teams" asp-action="PitchCount" asp-route-teamid="@teamId" data-filter-tags="pitch count">
+                        <span class="nav-link-text">Pitch Count</span>
+                    </a>
+                </li>
+            }
+            <li is-active-route asp-area="" asp-controller="Teams" asp-action="Stats">
+                <a asp-area="" asp-controller="Teams" asp-action="Stats" asp-route-teamid="@teamId" data-filter-tags="team stats">
+                    <span class="nav-link-text">Stats</span>
+                </a>
+            </li>
+            <li asp-authorize asp-policy="VSAND.School.Team.CustomCode.." is-active-route asp-area="" asp-controller="Teams" asp-action="CustomCodes">
+                <a asp-area="" asp-controller="Teams" asp-action="CustomCodes" asp-route-teamid="@teamId" data-filter-tags="custom codes">
+                    <span class="nav-link-text">Custom Codes</span>
+                </a>
+            </li>
+            @*<li is-active-route asp-area="" asp-controller="Teams" asp-action="Unvalidate">
+            <a asp-area="" asp-controller="Teams" asp-action="Unvalidate" asp-route-teamid="@teamId" data-filter-tags="unvalidate teams">
+                <span class="nav-link-text">Unvalidate</span>
+            </a>
+        </li>*@
+            <li asp-authorize asp-policy="UserFunction.Admin" is-active-route asp-area="" asp-controller="Teams" asp-action="Merge">
+                <a asp-area="" asp-controller="Teams" asp-action="Merge" asp-route-teamid="@teamId" data-filter-tags="merge teams">
+                    <span class="nav-link-text">Merge</span>
+                </a>
+            </li>
+            <li asp-authorize asp-policy="UserFunction.Admin" is-active-route asp-area="" asp-controller="Teams" asp-action="Delete">
+                <a asp-area="" asp-controller="Teams" asp-action="Delete" asp-route-teamid="@teamId" data-filter-tags="delete teams">
+                    <span class="nav-link-text">Delete</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</text>

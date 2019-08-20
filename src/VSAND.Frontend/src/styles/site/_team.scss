@@ -1,0 +1,31 @@
+﻿/// <reference path="../site.scss" />
+
+.team-header {
+    padding-top:1rem;
+
+    h1 {
+        text-transform: uppercase;
+    }
+
+    .navbar {
+        padding: 1rem 0 0;
+
+        .navbar-toggler {
+            &.collapsed {
+                .collapser {
+                    display: none;
+                }                
+                .expander {
+                    display:inline;
+                }
+            }
+
+            .collapser {
+                display:inline;
+            }
+            .expander {
+                display:none;
+            }
+        }
+    }
+}

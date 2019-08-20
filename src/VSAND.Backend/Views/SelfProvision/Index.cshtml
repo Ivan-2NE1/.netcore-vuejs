@@ -1,0 +1,101 @@
+﻿@model VSAND.Data.ViewModels.SelfProvision.SelfProvisionForm
+
+@{
+    Layout = "_Layout.cshtml";
+    string siteUrl = ViewData["SiteUrl"].ToString();
+    var activeSports = ViewData["ActiveSports"] as IEnumerable<VSAND.Data.ViewModels.ListItem<int>>;
+    var errors = ViewData["Errors"] as List<string>;
+}
+
+<div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
+    <div class="row">
+        <div class="col-xl-12">
+            <h2 class="fs-xxl fw-500 mt-4 text-white text-center">
+                Create Your Own Account
+            </h2>
+        </div>
+        <div class="col-xl-6 ml-auto mr-auto">
+            <div class="card p-4 rounded-plus bg-faded">
+                @if (errors != null && errors.Count > 0)
+                {
+                    <div class="alert alert-danger text-dark" role="alert">
+                        <ul>
+                            @foreach (var error in errors)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div class="alert text-dark" role="alert">
+                    <p>All users will need to create a new, personal user account to report games at @siteUrl. You only need to complete this step one time. After you register your personal account, future logins should be done using your e-mail address and password that you provide below.</p>
+                    <p>If you have already created a personal user account, but can't remember your logon or password, you can recover the information using the e-mail address you created your account with.</p>
+                </div>
+                <form id="js-login" novalidate="" asp-action="Index">
+                    <div class="form-group row">
+                        <label class="col-xl-12 form-label" for="fname">Your first and last name</label>
+                        <div class="col-6 pr-1">
+                            <input type="text" id="fname" class="form-control" placeholder="First Name" asp-for="FirstName" required>
+                        </div>
+                        <div class="col-6 pl-1">
+                            <input type="text" id="lname" class="form-control" placeholder="Last Name" asp-for="LastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="emailverify">Email will be needed for verification and account recovery</label>
+                        <input type="email" id="emailverify" class="form-control" placeholder="Email for verification" asp-for="Email" required>
+                        <div class="help-block">Your email will also be your username</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="userpassword">Password</label>
+                        <input type="password" id="userpassword" class="form-control" placeholder="Minimum 6 characters" asp-for="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="userpassword">Confirm Password</label>
+                        <input type="password" id="userpassword" class="form-control" placeholder="Minimum 6 characters" asp-for="ConfirmPassword" required>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6 pr-1">
+                            <label class="col-xl-12 form-label" for="mphone">Mobile Phone</label>
+                            <input type="text" id="mphone" class="form-control" placeholder="Mobile Phone" asp-for="Phone">
+                        </div>
+                        <div class="col-6 pl-1">
+                            <label class="col-xl-12 form-label" for="ophone">Other Phone</label>
+                            <input type="text" id="ophone" class="form-control" placeholder="Other Phone" asp-for="OtherPhone">
+                        </div>
+                    </div>
+                    <div class="form-group border-top pt-2">
+                        <label class="form-label">Sports</label>
+                        <div class="help-block">You may change your selections at any time by going to My Account.</div>
+                    </div>
+                    <div class="row">
+                        @foreach (var activeSport in activeSports)
+                        {
+                            bool bChecked = Model?.Sports.Contains(activeSport.id) ?? false;
+
+                            <div class="col-6 mb-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input"
+                                           type="checkbox"
+                                           name="sports"
+                                           id="sport_@activeSport.id"
+                                           @(bChecked ? "checked='checked'" : "")
+                                           value="@activeSport.id" />
+                                    <label class="custom-control-label" for="sport_@activeSport.id">
+                                        @activeSport.name
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4 ml-auto text-right">
+                            <button id="js-login-btn" type="submit" class="btn btn-block btn-primary mt-3">Create Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

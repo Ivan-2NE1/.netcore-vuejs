@@ -1,0 +1,106 @@
+﻿@model VSAND.Data.ViewModels.ServiceResult<string>
+
+@{
+    ViewData["Title"] = "School Master Accounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-wrench"></i> Manage
+        <small>
+            @ViewData["Title"]
+        </small>
+    </h1>
+</div>
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="table" title="Bulk Update School Master Accounts">
+        @if (Model != null)
+        {
+            if (Model.Success)
+            {
+                if (Model.Message.Length > 0)
+                {
+                    <div class="alert alert-warning">
+                        <ul>
+                            @{
+                                var warnings = Model.Message.Split("\n", StringSplitOptions.None);
+                                foreach (var warning in warnings)
+                                {
+                                    <li>@warning</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success">
+                        Master accounts updated successfully!
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @{
+                            var errors = Model.Message.Split("\n", StringSplitOptions.None);
+                            foreach (var error in errors)
+                            {
+                                <li>@error</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        }
+
+        <p class="lead">
+            <strong>Step 1: Download the Spreadsheet</strong>
+            <br />
+            This spreadsheet will contain the schools in Core Coverage.
+        </p>
+        <a href="/Manage/Users/SchoolMasterAccounts/Download" class="btn btn-default">
+            <span class="far fa-file-excel"></span> Download Spreadsheet
+        </a>
+
+        <br /><br /><br />
+
+        <p class="lead">
+            <strong>Step 2: Update the Spreadsheet</strong>
+            <br />
+            Set a password for each school master account.
+        </p>
+
+        <br />
+
+        <p class="lead">
+            <strong>Step 3: Upload the Completed Spreadsheet</strong>
+        </p>
+        <form method="post" enctype="multipart/form-data" asp-area="Manage" asp-controller="Users" asp-action="SchoolMasterAccountsUpload">
+            <div class="form-group custom-file">
+                <input type="file" class="custom-file-input" name="spreadsheet">
+                <label for="inputGroupFile01" class="custom-file-label"><span>Choose file to upload...</span></label>
+            </div>
+            <br /><br />
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Upload</button>
+            </div>
+        </form>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-school-master-accounts.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-school-master-accounts.min.js" asp-append-version="true"></script>
+    </environment>
+}

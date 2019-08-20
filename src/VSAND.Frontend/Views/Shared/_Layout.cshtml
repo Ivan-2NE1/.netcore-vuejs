@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - @ViewData["SiteTitle"]</title>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" media="screen, print" href="~/fontawesome/all.min.css" asp-append-version="true">
+    <!-- Advance Internet Top Rail -->
+    <link rel="stylesheet" type="text/css" href="https://www.nj.com/pb/resources/dist/nj/css/default8178a11ebebce87c49f7.css" />
+    <link rel="stylesheet" type="text/css" href="https://static.advance.net/static/common/css/homepage.css" />
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    <script type="text/javascript" src="~/js/modernizr.js"></script>
+
+    <script type="text/javascript">
+        var adiData = ({
+            affiliate: "nj",
+            environment: "dev",
+            pageType: 'hsindex',
+            siteSection: 'Sports',
+            'hssnSport': "",
+            'hssnSchoolIds': "22091",
+            'hssnType': 'player',
+            'entryContext': 'vsand_page',
+            'entryDateOriginal': '',
+            'entryHeadline': '',
+            'entryAuthorUsername': '',
+            'entryTags': '',
+            'entryId': '',
+            'entryWordcount': ''
+        });
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(adiData);
+    </script>
+
+    <script type="text/javascript" src="https://static.advance.net/static/common/js/adv_gigya.js"></script>
+
+    <script type="text/javascript">
+        rg_product = "hssn";
+    </script>
+    <script type="text/javascript" src="//static.advance.net/static/common/js/ads/revgen.v2.js"></script>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WNN6V5F');</script>
+</head>
+<body class="njo" data-affiliate="nj" data-page-type="home" data-ticker="true">
+    <partial name="_pubHeader.cshtml" />
+    <partial name="_appSubHeader.cshtml" />
+    <div id="AdWallpaper" data-load="ad" data-position="Wallpaper"></div>
+
+    <div class="vsandfe">
+        @RenderBody()
+    </div>
+
+    <partial name="_pubFooter.cshtml" />
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script src="~/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></script>
+        <script src="~/app/user.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+        <script src="~/app/user.min.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var adSlots = $("div[data-load=ad][data-position]");
+            if (adSlots.length > 0 && window.AdManager) {
+                adSlots.each(function (idx, val) {
+                    var slot = $(this);
+                    var slotId = "adSlot" + idx;
+                    if (slot[0].hasAttribute("id")) {
+                        slotId = slot.attr("id");
+                    } else {
+                        slot.attr("id", slotId);
+                    }
+                    AdManager.makeSmartAd(document.getElementById(slotId), {
+                        position: slot.data("position")
+                    });
+                });
+            }
+        });
+    </script>
+
+
+    <script type="text/javascript" src="https://static.advance.net/static/njo/static/js/adv_region.js"></script>
+    @*<script type="text/javascript" defer="" src="https://static.advance.net/static/common/js/adv_toprail_v002.js"></script>*@
+    <script type="text/javascript" src="https://www.nj.com/pb/resources/dist/common/js/home644667ccf7403d9ba1b1.js"></script>
+    <script type="text/javascript" defer="" src="https://static.advance.net/static/common/js/adv_queryly.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Custom
+            var stickyToggle = function (sticky, stickyWrapper, scrollElement) {
+                var stickyHeight = sticky.outerHeight();
+                var stickyTop = stickyWrapper.offset().top;
+                if (scrollElement.scrollTop() >= stickyTop) {
+                    stickyWrapper.height(stickyHeight);
+                    sticky.addClass("is-sticky");
+                }
+                else {
+                    sticky.removeClass("is-sticky");
+                    stickyWrapper.height('auto');
+                }
+            };
+
+            // Find all data-toggle="sticky-onscroll" elements
+            $('[data-toggle="sticky-onscroll"]').each(function () {
+                var sticky = $(this);
+                var stickyWrapper = $('<div>').addClass('sticky-wrapper'); // insert hidden element to maintain actual top offset on page
+                sticky.before(stickyWrapper);
+                sticky.addClass('sticky');
+
+                // Scroll & resize events
+                $(window).on('scroll.sticky-onscroll resize.sticky-onscroll', function () {
+                    stickyToggle(sticky, stickyWrapper, $(this));
+                });
+
+                // On page load
+                stickyToggle(sticky, stickyWrapper, $(window));
+            });
+
+            /* App Search */
+            $('body, form.app-search-form button[type="reset"]').on('click keyup', function (event) {
+                if (event.which == 27 && $('form.app-search-form').hasClass('active') ||
+                    $(event.currentTarget).attr('type') == 'reset') {
+                    closeSearch();
+                }
+            });
+
+            function closeSearch() {
+                var $form = $('form.app-search-form.active');
+                $form.find('input').val('');
+                $form.removeClass('active');
+            }
+
+            $('#appNavSearchInput').on("click focus", function (event) {
+                event.preventDefault();
+                var $form = $("#appSearchForm");
+                var $input = $form.find('input');
+                $form.addClass('active');
+                $input.focus();
+            });
+
+            $("#appSearchButton").on("click", function (event) {
+                event.preventDefault();
+                var $form = $("#appSearchForm");
+                var $input = $form.find('input');
+                $form.addClass('active');
+                $input.focus();
+            });
+
+            // enable tooltips when they appear
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

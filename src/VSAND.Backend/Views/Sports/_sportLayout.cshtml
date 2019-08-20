@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial.cshtml"); }
+
+<div id="vueApp" v-cloak>
+    <div class="row">
+        <div class="col-md-3">
+            <widget-wrapper icon="table" title="Configured Sports">
+                <sport-sidebar></sport-sidebar>
+            </widget-wrapper>
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+

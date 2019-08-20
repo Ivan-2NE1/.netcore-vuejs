@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Scheduled Games";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var oRequestDay = DateTime.Parse(ViewData["RequestDate"].ToString());
+    var sRequestDay = oRequestDay.ToString("dddd, MMMM %d, yyyy");
+
+    var oYesterday = oRequestDay.AddDays(-1);
+    var oTomorrow = oRequestDay.AddDays(1);
+
+    var oYesterdayRequest = new Dictionary<string, string> {
+        { "requestedYear", oYesterday.ToString("yyyy") },
+        { "requestedMonth", oYesterday.ToString("MM") },
+        { "requestedDay", oYesterday.ToString("dd") }
+    };
+
+    var oTomorrowRequest = new Dictionary<string, string> {
+        { "requestedYear", oTomorrow.ToString("yyyy") },
+        { "requestedMonth", oTomorrow.ToString("MM") },
+        { "requestedDay", oTomorrow.ToString("dd") }
+    };
+}
+
+<div id="vueApp" v-cloak>
+    <div class="subheader">
+        <h1 class="subheader-title">
+            <i class="subheader-icon fas fa-check-square"></i> Scheduled Games for <span class="fw-300">@DateTime.Parse(ViewData["RequestDate"].ToString()).ToString("dddd, MMMM %d, yyyy")</span>
+        </h1>
+        <div class="subheader-block d-lg-flex align-items-center">
+            <input-calendar v-bind:default-value="calendarDate" v-on:input="calendarDate = $event">
+                <template v-slot:beforeinput>
+                    <a asp-area="Worksheet" asp-controller="Schedules" asp-all-route-data="@oYesterdayRequest" class="btn btn-default"><i class="fal fa-chevron-circle-left"></i></a>
+                </template>
+                <template v-slot:afterinput>
+                    <button class="btn btn-default" v-on:click.prevent="changeViewDate">Go</button>
+                    <a asp-area="Worksheet" asp-controller="Schedules" asp-all-route-data="@oTomorrowRequest" class="btn btn-default"><i class="fal fa-chevron-circle-right"></i></a>
+                </template>
+            </input-calendar>
+
+        </div>
+    </div>
+
+    <widget-wrapper icon="table" title="Schedule"
+                    v-bind:padding="false">
+        <template v-slot:bodytoolbar>
+            <div class="hidden-print">
+                Keyword Filters for this view. Dynamic, not a search. The page will always contain the full list of scheduled games on the selected date.
+            </div>
+        </template>
+
+        @*<div class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>View Type</th>
+                        <th>Send Type</th>
+                        <th>Publication</th>
+                        <th>Description</th>
+                        <th>Sent At</th>
+                        <th>Sent By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="log in historyData"></tr>
+                </tbody>
+            </table>
+        </div>*@
+    </widget-wrapper>
+</div>
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        // put any custom "window" transfer variables here
+        window.selectedDate = '@oRequestDay.ToString("MM/dd/yyyy")';
+        window.scheduleData = null; @*@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Results));*@ 
+    </script>
+    <environment include="Development">
+        <script src="~/app/worksheet-schedules.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/worksheet-schedules.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

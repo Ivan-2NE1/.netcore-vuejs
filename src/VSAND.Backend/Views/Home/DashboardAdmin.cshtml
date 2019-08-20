@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "My Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int activeScheduleYearId = ViewBag.ActiveScheduleYearId;
+    string sHomeState = ViewBag.HomeState;
+}
+
+<h2>My Dashboard</h2>
+<div id="vueApp" v-cloak>
+    <div class="row">
+        <div class="col-md-8">
+            <widget-wrapper icon="search" title="Search for Game">
+                <game-search v-bind:active-schedule-year-id="@activeScheduleYearId"></game-search>
+            </widget-wrapper>
+        </div>
+        <div class="col-md-4">
+            <team-search v-bind:active-schedule-year-id="@activeScheduleYearId"></team-search>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/dashboard-admin.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/dashboard-admin.min.js" asp-append-version="true"></script>
+    </environment>
+}

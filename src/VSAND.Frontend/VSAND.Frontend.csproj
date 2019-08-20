@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-VSAND.Frontend-990984ED-DAE2-487C-80E1-0D406192E616</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="1.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="NLog" Version="4.6.6" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\VSAND.Services\VSAND.Services.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Areas\SiteApi\Data\" />
+    <Folder Include="Areas\SiteApi\Models\" />
+    <Folder Include="Areas\SiteApi\Views\" />
+    <Folder Include="src\styles\bootstrap\scss\modules\" />
+    <Folder Include="src\styles\bootstrap\scss\site\" />
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon.ico">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,119 @@
+﻿@model VSAND.Data.Repositories.PagedResult<VSAND.Data.ViewModels.News.Story>
+
+@{
+    ViewData["Title"] = "Tagging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Content Tagging</h2>
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        @ViewData["PagedResultMessage"]
+    </p>
+    <widget-wrapper icon="table" title="Stories"
+                    v-bind:padding="false"
+                    v-bind:page-size="@Model.PageSize"
+                    v-bind:current-page="@Model.PageNumber"
+                    v-bind:total-records="@Model.TotalResults"
+                    v-on:gotopage="gotopage">
+        <template v-slot:toolbar>
+            <button class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed"
+                    v-on:click.prevent="showSearchForm = !showSearchForm">
+                <i class="fal fa-filter"></i> Filter
+            </button>
+        </template>
+        <template v-slot:bodytoolbar>
+            <div v-if="showSearchForm" class="hidden-print">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input-field v-bind:default-value="searchHeadline"
+                                     label="Headline"
+                                     v-on:input="searchHeadline = $event"></input-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <input-calendar label="Start Date"
+                                        v-bind:default-value="searchStartDate"
+                                        v-on:input="searchStartDate = $event"></input-calendar>
+                    </div>
+                    <div class="col-sm-3">
+                        <input-calendar label="End Date"
+                                        v-bind:default-value="searchEndDate"
+                                        v-on:input="searchEndDate = $event"></input-calendar>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary btn-block" v-on:click.prevent="doSearch">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input-checkbox v-bind:default-value="searchPublished"
+                                        label="Published Only"
+                                        form-help="Only search for published stories."
+                                        v-on:input="searchPublished = $event"></input-checkbox>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div v-if="stories.totalResults != 0" class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Featured Image</th>
+                        <th>Headline / By Line</th>
+                        <th>Published</th>
+                        <th>Publish Date</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="story in stories.results">
+                        <td>
+                            <img v-bind:src="story.featureImageUrl" style="width: 150px; display: block; margin: 0 auto;" />
+                        </td>
+                        <td>
+                            <p class="lead">{{ story.headline }}</p>
+                            <p class="text-muted">{{ story.byLine }}</p>
+                        </td>
+                        <td>
+                            <span v-if="story.published">Yes</span>
+                            <span v-else>No</span>
+                        </td>
+                        <td>{{ story.publishDateUtc }}</td>
+                        <td>
+                            <a v-bind:href="'/Stories/' + story.storyId" class="hidden-print">
+                                <span class="fal fa-search d-sm-none"></span>
+                                <span class="d-none d-sm-inline">View Details</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else class="p-4">
+            <h3>No Results</h3>
+            <p class="lead">There are no stories which match your search criteria.</p>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.searchHeadline = '@Html.Raw(ViewData["SearchHeadline"])';
+        window.searchStartDate = '@Html.Raw(ViewData["SearchStartDate"])';
+        window.searchEndDate = '@Html.Raw(ViewData["SearchEndDate"])';
+        window.searchPublished = @Html.Raw(ViewData.ContainsKey("SearchPublished") ? ViewData["SearchPublished"].ToString().ToLower() : "false");
+        window.stories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/content-tagging-dashboard.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/content-tagging-dashboard.min.js" asp-append-version="true"></script>
+    </environment>
+}

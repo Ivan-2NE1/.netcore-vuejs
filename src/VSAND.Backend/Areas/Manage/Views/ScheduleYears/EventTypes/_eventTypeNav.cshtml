@@ -1,0 +1,15 @@
+﻿@{
+    var eventTypeId = ViewData.ContainsKey("EventTypeId") ? (int)ViewData["EventTypeId"] : 0;
+}
+
+@if (eventTypeId > 0)
+{
+    <text>        
+        <a asp-controller="ScheduleYears" asp-action="EventTypeOverview" asp-route-eventTypeId="@eventTypeId" class="dropdown-item">Overview</a>
+        <a asp-controller="ScheduleYears" asp-action="Rounds" asp-route-eventTypeId="@eventTypeId" class="dropdown-item">Rounds</a>
+        <a asp-controller="ScheduleYears" asp-action="Groupings" asp-route-eventTypeId="@eventTypeId" class="dropdown-item">Groupings</a>
+        <a asp-controller="ScheduleYears" asp-action="ChildEventTypes" asp-route-eventTypeId="@eventTypeId" class="dropdown-item">Child Event Types</a>
+        <div class="dropdown-divider m-0"></div>
+        <a asp-controller="ScheduleYears" asp-action="EventTypes" class="dropdown-item">Back to Event Types</a>
+    </text>
+}

@@ -1,0 +1,188 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Events";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="pencil" title="Events" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Enabled</th>
+                <th>Event Name / Abbreviation</th>
+                <th>Result Handler</th>
+                <th>Default Enabled</th>
+                <th>Maximum Results</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody is="draggable" v-model="sport.sportEvents" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+            <tr v-for="event in sport.sportEvents" class="dragndrop" v-bind:key="event.name">
+                <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                <td>{{ event.sportEventId }}</td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventId === editRow.sportEventId">
+                        <input-checkbox v-bind:default-value="editRow.enabled"
+                                        v-on:input="editRow.enabled = $event"></input-checkbox>
+                    </div>
+                    <template v-else>
+                        {{ event.enabled }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventId === editRow.sportEventId">
+                        <div class="form-inline pb-2">
+                            <input-field v-bind:default-value="editRow.name"
+                                         v-bind:required="true"
+                                         v-bind:max-length="100"
+                                         v-on:input="editRow.name = $event"></input-field>
+                        </div>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="editRow.abbreviation"
+                                         v-bind:required="true"
+                                         v-bind:max-length="5"
+                                         v-on:input="editRow.abbreviation = $event"></input-field>
+                        </div>
+                    </div>
+                    <template v-else>
+                        <p class="form-control-static">{{ event.name }}</p>
+                        <p class="form-control-static">{{ event.abbreviation }}</p>
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventId === editRow.sportEventId">
+                        <div class="form-inline pb-2">
+                            <input-select v-bind:options="resultTypes"
+                                          v-bind:default-value="editRow.resultType"
+                                          choose-prompt="Choose Result Type"
+                                          v-on:change="editRow.resultType = $event.value"
+                                          v-bind:required="true"
+                                          v-bind:option-adapter="resultTypeOptionAdapter"></input-select>
+                        </div>
+                        <div class="form-inline">
+                            <input-field v-bind:default-value="editRow.resultHandler"
+                                         v-bind:max-length="100"
+                                         v-on:input="editRow.resultHandler = $event"></input-field>
+                        </div>
+                    </div>
+                    <template v-else>
+                        <p class="form-control-static">{{ event.resultType }}</p>
+                        <p class="form-control-static">{{ event.resultHandler }}</p>
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventId === editRow.sportEventId" class="form-inline">
+                        <input-checkbox v-bind:default-value="editRow.defaultActivated"
+                                        v-on:input="editRow.defaultActivated = $event"></input-checkbox>
+                    </div>
+                    <template v-else>
+                        {{ event.defaultActivated }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && event.sportEventId === editRow.sportEventId" class="form-inline input-number">
+                        <input-field v-bind:default-value="editRow.maxResults.toString()"
+                                     type="number"
+                                     v-on:input="editRow.maxResults = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ event.maxResults }}
+                    </template>
+                </td>
+                <td class="text-nowrap">
+                    <template v-if="editRow === null">
+                        <button class="btn btn-primary btn-sm" v-on:click="startEditEvent(event)">Edit</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="deleteEvent(event)">Delete</button>
+                    </template>
+                    <template v-if="editRow !== null && event.sportEventId === editRow.sportEventId">
+                        <button class="btn btn-primary btn-sm" v-on:click="saveEvent">
+                            Save
+                        </button>
+                        <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                            Cancel
+                        </button>
+                    </template>
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td></td>
+                <td></td>
+                <td>
+                    <input-checkbox v-bind:default-value="addEventForm.enabled"
+                                    v-on:input="addEventForm.enabled = $event"></input-checkbox>
+                </td>
+                <td>
+                    <div class="form-inline pb-2">
+                        <input-field v-bind:default-value="addEventForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="addEventForm.name = $event"></input-field>
+                    </div>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addEventForm.abbreviation"
+                                     v-bind:required="true"
+                                     v-bind:max-length="5"
+                                     v-on:input="addEventForm.abbreviation = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline pb-2">
+                        <input-select v-bind:options="resultTypes"
+                                      v-bind:default-value="addEventForm.resultType"
+                                      choose-prompt="Choose Result Type"
+                                      v-on:change="addEventForm.resultType = $event.value"
+                                      v-bind:required="true"
+                                      v-bind:option-adapter="resultTypeOptionAdapter"></input-select>
+                    </div>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addEventForm.resultHandler"
+                                     v-bind:max-length="200"
+                                     v-on:input="addEventForm.resultHandler = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-checkbox v-bind:default-value="addEventForm.defaultActivated"
+                                        v-on:input="addEventForm.defaultActivated = $event"></input-checkbox>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline input-number">
+                        <input-field v-bind:default-value="addEventForm.maxResults"
+                                     type="number"
+                                     v-on:input="addEventForm.maxResults = $event">
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" v-on:click="addEvent">Add Event</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right pr-3 pb-3">
+        <a v-bind:href="'/Sports/' + sport.sportId + '/EventResultTypes'" class="btn btn-default btn-sm">Event Result Types</a>
+        <button class="btn btn-primary btn-sm" v-on:click="saveEventOrder">Save Sort Order</button>
+    </div>
+
+</widget-wrapper>
+
+@section Scripts {
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-events.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-events.min.js" asp-append-version="true"></script>
+    </environment>
+}

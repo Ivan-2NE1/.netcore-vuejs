@@ -1,0 +1,1 @@
+﻿The app folder is home for compiled theme CSS files. These should not be stored in SC as they are a build product.

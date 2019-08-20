@@ -1,0 +1,60 @@
+﻿/// <reference path="../site.scss" / >
+
+.game-header {
+    padding-top: 1rem;
+
+    h1 {
+        text-transform: uppercase;
+    }
+
+    .away-team {
+        text-align: right;
+    }
+
+    .home-team {
+        text-align: left;
+    }
+
+    .final-score {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #343e4a;
+
+        .home-win, .away-win, .tie-result {
+            color: #333;
+        }
+    }
+
+    .team-name {
+        font-weight: 700;
+        font-size: 1.7rem;
+    }
+
+    .game-time-result {
+        padding: 0 2rem;
+    }
+
+    .navbar {
+        padding: 1rem 0 0;
+
+        .navbar-toggler {
+            &.collapsed {
+                .collapser {
+                    display: none;
+                }
+
+                .expander {
+                    display: inline;
+                }
+            }
+
+            .collapser {
+                display: inline;
+            }
+
+            .expander {
+                display: none;
+            }
+        }
+    }
+}

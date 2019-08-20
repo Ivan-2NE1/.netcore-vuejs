@@ -1,0 +1,42 @@
+﻿@model VSAND.Data.ViewModels.Sports.PowerpointsView;
+
+@{
+    ViewData["Title"] = $"{Model.Sport.Name} Power Points";
+
+    string basePath = ViewData["BasePath"].ToString();
+    string seasonSlug = Model.ScheduleYearSlug;
+}
+
+<partial name="_sportHeader" model="Model.Sport" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <strong>@Model.ScheduleYear.Name Classifications</strong>
+                </div>
+                <div class="card-body">
+                    @foreach (var classification in Model.Classifications)
+                    {
+                        // split classification.id on |
+                        var requestInfo = classification.id.Split('|');
+                        <p><a href="@basePath/powerpoints/season/@seasonSlug?section=@requestInfo[0]&group=@requestInfo[1]">@classification.name</a></p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

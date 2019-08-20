@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <partial name="_Head" />
+    @RenderSection("Header", required: false)
+</head>
+
+<body class="mod-bg-1">
+    <partial name="_ScriptsLoadingSaving" />
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                @RenderSection("PageHeading", required: false)
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <partial name="_GoogleAnalytics" />
+    <partial name="_ScriptBasePlugins" />
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

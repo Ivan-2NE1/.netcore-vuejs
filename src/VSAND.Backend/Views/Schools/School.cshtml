@@ -1,0 +1,173 @@
+﻿@model VSAND.Data.Entities.VsandSchool
+
+@{
+    ViewData["Title"] = ViewData["SchoolName"];
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+<div id="vueApp">
+    <widget-wrapper title="School Information">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_schoolNav.cshtml"); }
+        </template>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                <h3>Basic Information</h3>
+                <div class="form-row align-items-center">
+                    <div class="col-sm-12 col-md-9">
+                        <input-field label="Name"
+                                     v-bind:default-value="school.name"
+                                     v-on:input="school.name = $event"></input-field>
+                    </div>
+                    <div class="col-sm-12 col-md-3 my-1">
+                        <div class="form-check">
+                            <input-checkbox label="Private School"
+                                            v-bind:default-value="school.privateSchool"
+                                            v-on:input="school.privateSchool = $event"></input-checkbox>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-check">
+                            <input-checkbox label="Force cascade of name to active teams, game report participants and game report names"></input-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-9">
+                        <input-field label="Alternate Name"
+                                     v-bind:default-value="school.altName"
+                                     v-on:input="school.altName = $event"></input-field>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <input-field label="City"
+                                     v-bind:default-value="school.city"
+                                     v-on:input="school.city = $event"></input-field>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <state-list input-id="schoolState"
+                                    v-bind:enable-multiple="false"
+                                    v-bind:default-value="school.state"></state-list>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <input-field label="Zip Code"
+                                     v-bind:default-value="school.zipCode"
+                                     v-on:input="school.zipCode = $event"></input-field>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <county-list label="County"
+                                     input-id="schoolCounty"
+                                     v-bind:enable-multiple="false"
+                                     v-bind:default-value="school.countyId"
+                                     v-on:change="school.countyId = $event.id"></county-list>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-6">
+                        <div class="form-check">
+                            <input-checkbox label="Core Coverage School"
+                                            v-bind:default-value="school.coreCoverage"
+                                            v-on:input="school.coreCoverage = $event"></input-checkbox>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-check">
+                            <input-checkbox label="Front End Display"
+                                            v-bind:default-value="school.frontEndDisplay"
+                                            v-on:input="school.frontEndDisplay= $event"></input-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <h3>Sports Club Information</h3>
+                <div class="col-sm-12">
+                    <input-field label="Nickname"
+                                 v-bind:default-value="school.nickname"
+                                 v-on:input="school.nickname = $event"></input-field>
+                </div>
+                <div class="col-sm-12">
+                    <input-field label="Mascot"
+                                 v-bind:default-value="school.mascot"
+                                 v-on:input="school.mascot = $event"></input-field>
+                </div>
+                <div class="col-sm-12">
+                    <input-field label="Color 1"
+                                 v-bind:default-value="school.color1"
+                                 v-on:input="school.color1 = $event"></input-field>
+                </div>
+                <div class="col-sm-12">
+                    <input-field label="Color 2"
+                                 v-bind:default-value="school.color2"
+                                 v-on:input="school.color2 = $event"></input-field>
+                </div>
+                <div class="col-sm-12">
+                    <label for="schoolGraphic" class="control-label">Graphic / Logo</label>
+                    <div class="form-control">
+                        <input id="schoolGraphic" type="file" class="form-control-file" />
+                    </div>
+                </div>
+                <div class="col-sm-12" v-if="school.graphic !== null && school.graphic.length > 0">
+                    <label class="control-label">Graphic Preview</label>
+                    <div class="ImagePreviewBox"></div>
+                </div>
+            </div>
+        </div>
+        @if (User.HasClaim(c => c.Type == "UserFunction.Admin" && c.Value == "true"))
+        {
+            <hr />
+            <div class="row">
+                <div class="col-6" v-if="masterAccountId === 0">
+                    <h3>Quick Create School Master Account</h3>
+                    <p>Enter a username and password to create a master account fo this school.</p>
+                    <input-field label="Username"
+                                 v-bind:default-value="masterAccountUsername"
+                                 v-on:input="masterAccountUsername = $event"></input-field>
+                    <input-field label="Password"
+                                 v-bind:default-value="masterAccountPassword"
+                                 v-on:input="masterAccountPassword = $event"></input-field>
+                    <button class="btn btn-primary" v-on:click="createMasterAccount">Create School Master Account</button>
+                </div>
+                <div class="col-12" v-else>
+                    <a v-bind:href="'/Manage/Users/' + masterAccountId" class="btn btn-default">
+                        Manage Master Account
+                    </a>
+                </div>
+            </div>
+        }
+        <div class="float-right">
+            <div class="p-4">
+                <button class="btn btn-primary" v-on:click="updateSchool">Update School</button>
+                <button class="btn btn-danger" v-on:click="showDeleteModal = true">Delete School</button>
+            </div>
+        </div>
+    </widget-wrapper>
+
+    <b-modal v-model="showDeleteModal" title="Delete School">
+        <p>Are you sure you want to delete <b>{{ school.name }}</b>?</p>
+
+        <div slot="modal-footer">
+            <button class="btn btn-default" v-on:click="showDeleteModal = false">Cancel</button>
+            <button class="btn btn-danger" v-on:click="deleteSchool()">Delete</button>
+        </div>
+    </b-modal>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        window.school = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.masterAccountId = @ViewData["MasterAccountId"];
+        window.masterAccountUsername = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MasterAccountUsername"]));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-school.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-school.min.js" asp-append-version="true"></script>
+    </environment>
+}

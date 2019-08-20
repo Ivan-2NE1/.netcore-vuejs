@@ -1,0 +1,195 @@
+﻿@import '_imports/_global-import';
+
+[v-cloak] {
+    display: block;
+    padding: 50px 0;
+
+    @keyframes spinner {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    &:before {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin-top: -10px;
+        margin-left: -10px;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        border-top-color: #333;
+        animation: spinner .6s linear infinite;
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    > * {
+        display: none;
+    }
+}
+
+/* Form Control Sizing based on expected input data requirements */
+.input-number {
+    .form-control {
+        max-width: 55px;
+    }
+
+    .btn {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+/* Remove margin from alert that is last child in panel */
+.panel .panel-content .alert:last-child,
+.panel .panel-content .table:last-child {
+    margin-bottom: 0;
+}
+
+caption {
+    caption-side: top;
+    padding-bottom:0;
+    .form-group {
+        margin-bottom: 0;
+    }
+}
+
+.event-scoring {
+    .card-body + .card-body {
+        padding-top:0;
+    }
+
+    .form-group {
+        margin-bottom:0;
+    }
+}
+
+tr.deleted td {
+    text-decoration: line-through;
+    color:#FF0000;
+    
+    &.actions {
+        text-decoration:none;
+    }
+
+    .btn {
+        text-decoration:none;
+    }
+}
+
+/* Responsive Table (pivot from horizontal to vertical; requires data attributes) */
+@media only screen and (max-width: 800px) {
+    /* Force table to not be like tables anymore */
+    table.responsive {
+        display: block;
+
+        thead, tbody, th, td, tr {
+            display: block
+        }
+        /* Hide table headers (but not display: none;, for accessibility) */
+        thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        tr {
+            border: 1px solid #ccc;
+        }
+
+        td {
+            /* Behave like a "row" */
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+            white-space: normal;
+            text-align: left !important;
+            width: auto !important;
+        }
+
+        td.responsive-wrap {
+            padding-left: 0;
+        }
+
+        .btn.btn-info.add-on {
+            display: none;
+        }
+
+        .input-append, .input-prepend {
+            font-size: inherit !important;
+        }
+
+        td:before {
+            /* Now like a table header */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            width: 45%;
+            padding: 10px;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: bold;
+            content: attr(data-title);
+        }
+
+        td.responsive-wrap:before {
+            position: relative;
+            width: 100%;
+            content: attr(data-title);
+        }
+
+        td.center, td.text-center {
+            text-align: left !important;
+        }
+
+        td.right, td.text-right {
+            text-align: left;
+        }
+
+        td > div {
+            position: relative;
+            /*padding-left: 50%;*/
+            white-space: normal;
+            text-align: left;
+            display: block;
+        }
+
+        td div.form-group {
+            margin-bottom: 0;
+        }
+
+        td.responsive-wrap > div {
+            padding-left: 0;
+        }
+
+        input[type='text'],
+        input[type='password'],
+        input[type='datetime'],
+        input[type='datetime-local'],
+        input[type='date'],
+        input[type='month'],
+        input[type='time'],
+        input[type='week'],
+        input[type='number'],
+        input[type='email'],
+        input[type='url'],
+        input[type='search'],
+        input[type='tel'],
+        input[type='color'],
+        select {
+            width: 100%;
+        }
+    }
+}
+/* Disable highlighting of the widget wrapper dropdown menu */
+.panel-toolbar .dropdown-menu {
+    user-select: none;
+}

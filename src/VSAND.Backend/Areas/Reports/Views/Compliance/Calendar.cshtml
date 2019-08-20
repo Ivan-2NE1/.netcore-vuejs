@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "Compliance Calendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="page-title txt-color-blueDark">
+    <span class="fa fa-bar-chart fa-fw"></span>
+    Compliance Reports
+    <span>
+        <span class="fa fa-chevron-right fa-fw"></span>
+        @ViewData["Title"]
+    </span>
+</h1>
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="search" title="Compliance Calendar">
+        <full-calendar></full-calendar>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/app/reports-compliance-calendar.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/reports-compliance-calendar.min.js" asp-append-version="true"></script>
+    </environment>
+}

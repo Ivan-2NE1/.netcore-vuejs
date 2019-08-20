@@ -1,0 +1,85 @@
+﻿@model List<VSAND.Data.Entities.VsandScheduleLoadFile>;
+@{
+    ViewData["Title"] = "Schedules";
+    Layout = "../_scheduleYearSportLayout.cshtml";
+
+    int scheduleYearId = ViewData.ContainsKey("scheduleYearId") ? (int)ViewData["scheduleYearId"] : 0;
+    int sportId = ViewData.ContainsKey("sportId") ? (int)ViewData["sportId"] : 0;
+    string scheduleYearName = ViewData.ContainsKey("ScheduleYearName") ? ViewData["ScheduleYearName"].ToString() : "";
+    string sportName = ViewData.ContainsKey("SportName") ? ViewData["SportName"].ToString() : "";
+}
+
+    <div id="vueApp" v-cloak>
+        <div class="row">
+            <div class="col-md-8">
+                <widget-wrapper icon="table" title="Schedule Import  Files" v-bind:padding="false">
+                    <div v-if="scheduleFiles !== undefined && scheduleFiles !== null && scheduleFiles.length > 0">    
+                        <table class="table table-borderless table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Uploaded</th>
+                                    <th>Imported</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="file in scheduleFiles">
+                                    <td>{{ file.fileName }}</td>
+                                    <td>{{ file.fileType }}</td>
+                                    <td>{{ file.fileSize }}</td>
+                                    <td>{{ file.dateLoaded | compactDateWithTime }}</td>
+                                    <td>{{ file.importDate | compactDateWithTime }}</td>
+                                    <td>
+                                        <button class="btn btn-default btn-sm" v-if="file.importDate === null" v-bind:disabled="loading" v-on:click.prevent="processFile(file)">Process File</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div v-else class="alert alert-light">
+                        <p>There are no schedule files uploaded yet for @scheduleYearName  @sportName.</p>
+                    </div>
+                </widget-wrapper>
+            </div>
+            <div class="col-md-4">
+                <widget-wrapper icon="upload" title="Add Schedule File">
+                    <div class="form-group custom-file">
+                        <input type="file" class="custom-file-input" id="customFileUpload" aria-describedby="inputGroupFileAddon01" ref="file" v-on:change="setUploadFile">
+                        <label class="custom-file-label" for="inputGroupFile01"><span>{{ uploadFileInfo }}</span></label>
+                    </div>
+
+                    <template v-slot:footer>
+                        <button class="btn btn-primary btn-lg" v-on:click.prevent="uploadScheduleFile" v-bind:disabled="loading">Upload Schedule File</button>
+                    </template>
+                </widget-wrapper>
+
+                <widget-wrapper icon="download" title="Download Schedule Template">
+                    <p>The schedule import process requires the uploaded schedule files to match a specific format. Download the sample file to start your schedule with.</p>
+                    <p>Only one schedule year and sport should exist per file.</p>
+                    <template v-slot:footer>
+                        <a href="~/Samples/SportScheduleImport.xlsx" class="btn btn-link">Download Template</a>
+                    </template>
+                </widget-wrapper>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.sportId = @Html.Raw(sportId);
+        window.scheduleYearId = @Html.Raw(scheduleYearId);
+        window.sportName = "@Html.Raw(sportName)";
+        window.scheduleYearName = "@Html.Raw(scheduleYearName)";
+        window.scheduleFiles = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-schedules.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-schedules.min.js" asp-append-version="true"></script>
+    </environment>
+}

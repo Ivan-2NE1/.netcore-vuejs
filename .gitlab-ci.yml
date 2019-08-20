@@ -1,0 +1,81 @@
+image: docker:stable
+
+services:
+    - docker:dind
+  
+build:
+    stage: build
+    script: 
+        - docker build -f src/VSAND.Frontend/Dockerfile -t registry.applicationx.net/vsand-frontend:${CI_COMMIT_SHA} .
+        - docker build -f src/VSAND.Backend/Dockerfile -t registry.applicationx.net/vsand-backend:${CI_COMMIT_SHA} .
+        - docker build -f src/VSAND.Arc/Dockerfile -t registry.applicationx.net/vsand-arc:${CI_COMMIT_SHA} .
+        - docker build -f src/VSAND.IdentityServer/Dockerfile -t registry.applicationx.net/vsand-identity:${CI_COMMIT_SHA} .
+        
+        - docker push registry.applicationx.net/vsand-frontend:${CI_COMMIT_SHA}
+        - docker push registry.applicationx.net/vsand-backend:${CI_COMMIT_SHA}
+        - docker push registry.applicationx.net/vsand-arc:${CI_COMMIT_SHA}
+        - docker push registry.applicationx.net/vsand-identity:${CI_COMMIT_SHA}
+    tags:
+        - docker
+
+test:
+    stage: test
+    script:
+        # this Dockerfile doesn't actually build, but instead runs "dotnet test" using the dotnet sdk image
+        - docker build -f src/VSAND.Test/Dockerfile .
+    tags:
+        - docker
+        
+tag-latest:
+    stage: deploy
+    script:
+        # VSAND Web Frontend
+        - docker pull registry.applicationx.net/vsand-frontend:${CI_COMMIT_SHA}
+        - docker tag registry.applicationx.net/vsand-frontend:${CI_COMMIT_SHA} registry.applicationx.net/vsand-frontend:latest
+        - docker push registry.applicationx.net/vsand-frontend:latest
+        
+        # VSAND Web Backend
+        - docker pull registry.applicationx.net/vsand-backend:${CI_COMMIT_SHA}
+        - docker tag registry.applicationx.net/vsand-backend:${CI_COMMIT_SHA} registry.applicationx.net/vsand-backend:latest
+        - docker push registry.applicationx.net/vsand-backend:latest
+        
+        # VSAND Arc
+        - docker pull registry.applicationx.net/vsand-arc:${CI_COMMIT_SHA}
+        - docker tag registry.applicationx.net/vsand-arc:${CI_COMMIT_SHA} registry.applicationx.net/vsand-arc:latest
+        - docker push registry.applicationx.net/vsand-arc:latest
+        
+        # Identity Server
+        - docker pull registry.applicationx.net/vsand-identity:${CI_COMMIT_SHA}
+        - docker tag registry.applicationx.net/vsand-identity:${CI_COMMIT_SHA} registry.applicationx.net/vsand-identity:latest
+        - docker push registry.applicationx.net/vsand-identity:latest
+    only:
+        - 'master'
+    tags:
+        - docker
+        
+deploy-uat:
+    stage: deploy
+    only:
+        - 'master'
+    tags:
+        - docker
+    image: alpine:3.9.4
+    before_script:
+        # install ssh
+        - apk update && apk add openssh-client
+    
+        # create .ssh directory
+        - mkdir -p ~/.ssh
+        
+        # save the SSH private key
+        - echo "$UAT_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa
+    script:
+        # pull down the latest version of the containers
+        - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $UAT_USERNAME@$UAT_HOST "docker pull registry.applicationx.net/vsand-frontend:latest"
+        - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $UAT_USERNAME@$UAT_HOST "docker pull registry.applicationx.net/vsand-backend:latest"
+        - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $UAT_USERNAME@$UAT_HOST "docker pull registry.applicationx.net/vsand-arc:latest"
+        - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $UAT_USERNAME@$UAT_HOST "docker pull registry.applicationx.net/vsand-identity:latest"
+        
+        # restart docker containers
+        - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $UAT_USERNAME@$UAT_HOST "cd /home/appx && docker-compose down && docker-compose up -d"

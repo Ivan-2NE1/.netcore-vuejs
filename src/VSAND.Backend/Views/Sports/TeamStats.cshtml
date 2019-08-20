@@ -1,0 +1,180 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Team Stats";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="pencil" v-bind:title="'Team Stats - ' + teamStatCategoryName" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Abbreviation</th>
+                <th>Data Type</th>
+                <th>Calculated</th>
+                <th>Enabled</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody is="draggable" v-model="teamStatCategory.teamStats" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+            <tr v-for="teamStat in teamStatCategory.teamStats" class="dragndrop" v-bind:key="teamStat.name">
+                <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                <td>{{ teamStat.sportTeamStatId }}</td>
+                <td>
+                    <div v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId" class="form-inline">
+                        <input-field v-bind:default-value="editRow.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"
+                                     v-on:input="editRow.name = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ teamStat.name }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId" class="form-inline">
+                        <input-field v-bind:default-value="editRow.abbreviation"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"
+                                     v-on:input="editRow.abbreviation = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ teamStat.abbreviation }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId" class="form-inline">
+                        <input-select v-bind:default-value="editRow.dataType"
+                                      v-bind:required="true"
+                                      v-on:change="editRow.dataType = $event.value"
+                                      v-bind:options="dataTypeOptions"></input-select>
+                    </div>
+                    <template v-else>
+                        {{ teamStat.dataType }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId" class="form-inline">
+                        <input-checkbox v-bind:default-value="editRow.calculated"
+                                        v-on:input="editRow.calculated = $event"></input-checkbox>
+                    </div>
+                    <template v-else>
+                        {{ teamStat.calculated }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId" class="form-inline">
+                        <input-checkbox v-bind:default-value="editRow.enabled"
+                                        v-on:input="editRow.enabled = $event"></input-checkbox>
+                    </div>
+                    <template v-else>
+                        {{ teamStat.enabled }}
+                    </template>
+                </td>
+                <td>
+                    <template v-if="editRow === null">
+                        <button class="btn btn-primary btn-sm" v-on:click="startEditTeamStat(teamStat)">Edit</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="deleteTeamStat(teamStat)">Delete</button>
+                        <b-button v-b-modal="'moveTeamStat_' + teamStat.sportTeamStatId"
+                                  v-on:click.prevent="moveTeamStatForm.teamStatId = teamStat.sportTeamStatId"
+                                  class="btn btn-primary btn-sm">Move</b-button>
+                    </template>
+                    <template v-if="editRow !== null && teamStat.sportTeamStatId === editRow.sportTeamStatId">
+                        <button class="btn btn-primary btn-sm" v-on:click="saveTeamStat">
+                            Save
+                        </button>
+                        <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                            Cancel
+                        </button>
+                    </template>
+
+                    <b-modal v-bind:id="'moveTeamStat_' + teamStat.sportTeamStatId" centered
+                             title="Move Team Stat"
+                             cancel-variant="default"
+                             ok-title="Move"
+                             v-on:ok="moveStat"
+                             v-bind:ok-disabled="moveTeamStatForm.teamStatCategoryId === null">
+                        <p>New Category for {{ teamStat.name }}:</p>
+                        <select v-model="moveTeamStatForm.teamStatCategoryId" class="form-control">
+                            <option v-for="category in sport.teamStatCategories"
+                                    v-bind:value="category.sportTeamStatCategoryId"
+                                    v-if="category.sportTeamStatCategoryId !== teamStatCategoryId">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                    </b-modal>
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addTeamStatForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"
+                                     v-on:input="addTeamStatForm.name = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addTeamStatForm.abbreviation"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"
+                                     v-on:input="addTeamStatForm.abbreviation = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-select v-bind:default-value="addTeamStatForm.dataType"
+                                      v-bind:required="true"
+                                      v-on:change="addTeamStatForm.dataType = $event.value"
+                                      v-bind:options="dataTypeOptions"></input-select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-checkbox v-bind:default-value="addTeamStatForm.calculated"
+                                        v-on:input="addTeamStatForm.calculated = $event"></input-checkbox>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-checkbox v-bind:default-value="addTeamStatForm.enabled"
+                                        v-on:input="addTeamStatForm.enabled = $event"></input-checkbox>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" v-on:click="addTeamStat">Add Team Stat</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right pr-3 pb-3">
+        <a v-bind:href="'/Sports/' + sport.sportId + '/TeamStatCategories'" class="btn btn-default btn-sm">Back to Categories</a>
+        <button class="btn btn-primary btn-sm" v-on:click="saveMetaOrder">Save Sort Order</button>
+    </div>
+
+</widget-wrapper>
+
+@section Scripts {
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.teamStatCategoryId = @ViewData["TeamStatCategoryId"];
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-team-stats.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-team-stats.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,49 @@
+@model VSAND.Data.Entities.VsandTeam;
+
+@{
+    ViewData["Title"] = "Stats";
+    Layout = "_teamLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    <p class="text-right">
+        <a class="btn btn-sm btn-secondary mr-1 shadow-0" href="#">Overview</a>
+        <a class="btn btn-sm btn-secondary mr-1 shadow-0" href="#">Team Stats Queries</a>
+        <a class="btn btn-sm btn-secondary mr-1 shadow-0" href="#">Player Stats Queries</a>
+    </p>
+    <div class="table-responsive">
+        <p class="text-left">
+            <h3>Team Statistics</h3>
+        </p>
+        <table class="table table-condensed">
+            <thead>
+                <tr class="text-align-center">
+                    <th>&nbsp;</th>
+                    <th>{{team.name}}</th>
+                    <th>Opponents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="statistics in teamStatistics">
+                    <td>{{ statistics.teamStatistic }}</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        window.team = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+    <environment include="Development">
+        <script type="text/javascript" src="~/app/team-stats.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/app/team-stats.min.js" asp-append-version="true"></script>
+    </environment>
+}

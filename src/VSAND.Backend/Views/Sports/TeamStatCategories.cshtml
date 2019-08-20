@@ -1,0 +1,102 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Team Stat Categories";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="pencil" title="Team Stat Categories" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Default Sort Stat</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody is="draggable" v-model="sport.teamStatCategories" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+            <tr v-for="teamStatCategory in sport.teamStatCategories" class="dragndrop" v-bind:key="teamStatCategory.name">
+                <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                <td>{{ teamStatCategory.sportTeamStatCategoryId }}</td>
+                <td>
+                    <div v-if="editRow !== null && teamStatCategory.sportTeamStatCategoryId === editRow.sportTeamStatCategoryId" class="form-inline">
+                        <input-field v-bind:default-value="editRow.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="editRow.name = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ teamStatCategory.name }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && teamStatCategory.sportTeamStatCategoryId === editRow.sportTeamStatCategoryId" class="form-inline">
+                        <input-select choose-prompt="Choose (optional)"
+                                      v-bind:options="teamStatCategory.teamStats"
+                                      v-bind:default-value="editRow.defaultSortStatId"
+                                      v-bind:option-adapter="teamStatOptionsAdapter"
+                                      v-on:change="editRow.defaultSortStatId = $event.value"></input-select>
+                    </div>
+                    <template v-else>
+                        {{ getDefaultSortStatName(teamStatCategory) }}
+                    </template>
+                </td>
+                <td>
+                    <template v-if="editRow === null">
+                        <button class="btn btn-primary btn-sm" v-on:click="startEditTeamStatCategory(teamStatCategory)">Edit</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="deleteTeamStatCategory(teamStatCategory)">Delete</button>
+                        <a v-bind:href="'/Sports/' + sport.sportId + '/TeamStats/' + teamStatCategory.sportTeamStatCategoryId" class="btn btn-default btn-sm">Stats</a>
+                    </template>
+                    <template v-if="editRow !== null && teamStatCategory.sportTeamStatCategoryId === editRow.sportTeamStatCategoryId">
+                        <button class="btn btn-primary btn-sm" v-on:click="saveTeamStatCategory">
+                            Save
+                        </button>
+                        <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                            Cancel
+                        </button>
+                    </template>
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addTeamStatCategoryForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="addTeamStatCategoryForm.name = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" v-on:click="addTeamStatCategory">Add Team Stat Category</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right pr-3 pb-3">
+        <button class="btn btn-primary btn-sm" v-on:click="saveTeamStatCategoryOrder">Save Sort Order</button>
+    </div>
+
+</widget-wrapper>
+
+@section Scripts {
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-team-stat-categories.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-team-stat-categories.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,127 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Game Meta";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="pencil" title="Game Meta" v-bind:padding="false">
+    <template v-slot:toolbarmasterbuttons>
+        @{ await Html.RenderPartialAsync("_sportNav.cshtml"); }
+    </template>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Value Type</th>
+                <th>Prompt Help</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody is="draggable" v-model="sport.gameMeta" tag="tbody" handle=".dragndrop" v-bind="{ disabled: editRow !== null }">
+            <tr v-for="gameMeta in sport.gameMeta" class="dragndrop" v-bind:key="gameMeta.name">
+                <td><span class="fas fa-arrows-alt" v-show="editRow === null"></span></td>
+                <td>{{ gameMeta.sportGameMetaId }}</td>
+                <td>
+                    <div v-if="editRow !== null && gameMeta.sportGameMetaId === editRow.sportGameMetaId" class="form-inline">
+                        <input-field v-bind:default-value="editRow.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="editRow.name = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ gameMeta.name }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && gameMeta.sportGameMetaId === editRow.sportGameMetaId" class="form-inline">
+                        <input-select v-bind:options="metaValueTypes"
+                                      v-bind:default-value="editRow.valueType"
+                                      choose-prompt="Choose Type (optional)"
+                                      v-on:change="editRow.valueType = $event.value"
+                                      v-bind:required="true"></input-select>
+                    </div>
+                    <template v-else>
+                        {{ gameMeta.valueType }}
+                    </template>
+                </td>
+                <td>
+                    <div v-if="editRow !== null && gameMeta.sportGameMetaId === editRow.sportGameMetaId" class="form-inline">
+                        <input-field v-bind:default-value="editRow.promptHelp"
+                                     v-bind:max-length="100"
+                                     v-on:input="editRow.promptHelp = $event"></input-field>
+                    </div>
+                    <template v-else>
+                        {{ gameMeta.promptHelp }}
+                    </template>
+                </td>
+                <td>
+                    <template v-if="editRow === null">
+                        <button class="btn btn-primary btn-sm" v-on:click="startEditGameMeta(gameMeta)">Edit</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="deleteGameMeta(gameMeta)">Delete</button>
+                    </template>
+                    <template v-if="editRow !== null && gameMeta.sportGameMetaId === editRow.sportGameMetaId">
+                        <button class="btn btn-primary btn-sm" v-on:click="saveGameMeta">
+                            Save
+                        </button>
+                        <button class="btn btn-default btn-sm" v-on:click="editRow = null">
+                            Cancel
+                        </button>
+                    </template>
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addGameMetaForm.name"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"
+                                     v-on:input="addGameMetaForm.name = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-select v-bind:options="metaValueTypes"
+                                      v-bind:default-value="addGameMetaForm.valueType"
+                                      choose-prompt="Choose Type (optional)"
+                                      v-on:change="addGameMetaForm.valueType = $event.value"
+                                      v-bind:required="true"></input-select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <input-field v-bind:default-value="addGameMetaForm.promptHelp"
+                                     v-bind:max-length="200"
+                                     v-on:input="addGameMetaForm.promptHelp = $event"></input-field>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" v-on:click="addGameMeta">Add Game Meta</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right pr-3 pb-3">
+        <button class="btn btn-primary btn-sm" v-on:click="saveMetaOrder">Save Sort Order</button>
+    </div>
+
+</widget-wrapper>
+
+@section Scripts {
+    <script>
+        window.sport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-sport-game-meta.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-sport-game-meta.min.js" asp-append-version="true"></script>
+    </environment>
+}

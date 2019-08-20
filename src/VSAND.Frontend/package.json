@@ -1,0 +1,40 @@
+{
+  "name": "vsand-frontend",
+  "private": true,
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+    "@adi/gigya_js": "0.1.5",
+    "@adi/piano": "0.1.10",
+    "babel-core": "6.26.3",
+    "babel-preset-env": "1.7.0",
+    "bootstrap-vue": "2.0.0-rc.22",
+    "css-loader": "3.0.0",
+    "del": "5.0.0",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "6.1.0",
+    "gulp-babel": "7.0.1",
+    "gulp-clean-css": "4.2.0",
+    "gulp-concat": "2.6.1",
+    "gulp-mode": "1.0.2",
+    "gulp-rename": "1.4.0",
+    "gulp-sass": "4.0.2",
+    "gulp-sass-glob": "1.1.0",
+    "gulp-sourcemaps": "2.6.5",
+    "gulp-uglify": "3.0.2",
+    "merge-stream": "2.0.0",
+    "moment": "2.24.0",
+    "sass-loader": "7.1.0",
+    "v-calendar": "1.0.0-beta.16",
+    "vinyl-named": "1.1.0",
+    "vue": "2.6.10",
+    "vue-loader": "15.7.0",
+    "vue-style-loader": "4.1.2",
+    "vue-template-compiler": "2.6.10",
+    "webpack": "4.35.2",
+    "webpack-stream": "5.0.0"
+  }
+}

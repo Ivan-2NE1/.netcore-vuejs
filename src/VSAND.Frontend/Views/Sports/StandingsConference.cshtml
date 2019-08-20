@@ -1,0 +1,166 @@
+﻿@model VSAND.Data.ViewModels.Sports.StandingsView;
+
+@{
+    ViewData["Title"] = $"{Model.ScheduleYear.Name} {Model.Conference} {Model.Sport.Name} Standings";
+
+    string basePath = ViewData["BasePath"].ToString();
+    string seasonSlug = Model.ScheduleYearSlug;
+
+    var divisions = (from s in Model.Standings select s.Division).Distinct().OrderBy(s => s).ToList();
+}
+
+<partial name="_sportHeader" model="Model.Sport" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" id="vueApp" v-cloak>
+            <div class="card">
+                <div class="card-body text-right">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="conferenceMenuList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Conferences
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="conferenceMenuList">
+                            @foreach (var conf in Model.Conferences)
+                            {
+                                <a class="dropdown-item" href="@basePath/standings/season/@seasonSlug?conference=@conf">@conf</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <strong>@Model.ScheduleYear.Name @Model.Conference Standings</strong>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group btn-group-toggle">
+                        <label v-bind:class="['btn', 'btn-secondary', {'active': viewMode == 'Conference'}]">
+                            <input type="radio" name="viewMode" id="viewModeConference" value="Conference" autocomplete="off" v-model="viewMode"> Conference
+                        </label>
+                        <label v-bind:class="['btn', 'btn-secondary', {'active': viewMode == 'Division'}]">
+                            <input type="radio" name="viewMode" id="viewModeDivision" value="Division" autocomplete="off" v-model="viewMode"> By Division
+                        </label>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-stats table-borderless table-striped table-hover table-sm" v-show="viewMode == 'Conference'">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Record</th>
+                                <th class="section-end">PCT</th>
+                                <th>CONF</th>
+                                <th class="section-end">DIV</th>
+                                <th class="d-none d-md-table-cell">HOME</th>
+                                <th class="d-none d-md-table-cell section-end">AWAY</th>
+                                <th class="d-none d-md-table-cell">PF</th>
+                                <th class="d-none d-md-table-cell">PA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var team in Model.Standings.OrderByDescending(s => s.WinningPercentage))
+                            {
+                                var schoolSlug = "";
+                                if (Model.SchoolSlugs.ContainsKey(team.SchoolId))
+                                {
+                                    schoolSlug = Model.SchoolSlugs[team.SchoolId];
+                                }
+
+                                <tr>
+                                    <td class="text-left">
+                                        @if (!string.IsNullOrWhiteSpace(schoolSlug))
+                                        {
+                                            <a href="/school/@schoolSlug/@Model.SportSlug/season/@Model.ScheduleYearSlug">@team.TeamName</a>
+                                        }
+                                        else
+                                        {
+                                            @team.TeamName
+                                        }
+                                    </td>
+                                    <td>@team.OverallRecord</td>
+                                    <td class="section-end">@team.WinningPercentage.ToString("#.000")</td>
+                                    <td>@team.ConferenceRecord</td>
+                                    <td class="section-end">@team.DivisionRecord</td>
+                                    <td class="d-none d-md-table-cell">@team.HomeRecord</td>
+                                    <td class="d-none d-md-table-cell section-end">@team.RoadRecord</td>
+                                    <td class="d-none d-md-table-cell">@team.PointsFor</td>
+                                    <td class="d-none d-md-table-cell">@team.PointsAgainst</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="table table-stats table-borderless table-striped table-hover table-sm" v-show="viewMode == 'Division'">
+                        <tbody>
+                            @foreach (var divsion in divisions)
+                            {
+                                <tr class="group-header">
+                                    <td class="text-left"><strong>@divsion</strong></td>
+                                    <td>Record</td>
+                                    <td class="section-end">PCT</td>
+                                    <td>CONF</td>
+                                    <td class="section-end">DIV</td>
+                                    <td class="d-none d-md-table-cell">HOME</td>
+                                    <td class="d-none d-md-table-cell section-end">AWAY</td>
+                                    <td class="d-none d-md-table-cell">PF</td>
+                                    <td class="d-none d-md-table-cell">PA</td>
+                                </tr>
+                                @foreach (var team in Model.Standings.Where(t => t.Division == divsion).OrderByDescending(t => t.WinningPercentage))
+                                {
+                                    var schoolSlug = "";
+                                    if (Model.SchoolSlugs.ContainsKey(team.SchoolId))
+                                    {
+                                        schoolSlug = Model.SchoolSlugs[team.SchoolId];
+                                    }
+                                    <tr>
+                                        <td class="text-left">
+                                            @if (!string.IsNullOrWhiteSpace(schoolSlug))
+                                            {
+                                                <a href="/school/@schoolSlug/@Model.SportSlug/season/@Model.ScheduleYearSlug">@team.TeamName</a>
+                                            }
+                                            else
+                                            {
+                                                @team.TeamName
+                                            }
+                                        </td>
+                                        <td>@team.OverallRecord</td>
+                                        <td class="section-end">@team.WinningPercentage.ToString("#.000")</td>
+                                        <td>@team.ConferenceRecord</td>
+                                        <td class="section-end">@team.DivisionRecord</td>
+                                        <td class="d-none d-md-table-cell">@team.HomeRecord</td>
+                                        <td class="d-none d-md-table-cell section-end">@team.RoadRecord</td>
+                                        <td class="d-none d-md-table-cell">@team.PointsFor</td>
+                                        <td class="d-none d-md-table-cell">@team.PointsAgainst</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/lib/vue/vue.js" asp-append-version="true"></script>
+        <script src="~/app/sport-standingsconference.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/vue.min.js" asp-append-version="true"></script>
+        <script src="~/app/sport-standingsconference.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,65 @@
+﻿/// <reference path="../site.scss" />
+
+.schedule {
+
+    // The list group in schedule widget shouldn't have any borders
+    .list-group {
+        .list-group-item {
+            border: 0;
+            text-align: center;
+
+            &.active {
+                font-weight: bold;
+                background-color: $pub-accent;
+            }
+
+            .day-name {
+                text-transform: uppercase;
+                text-align: center;
+            }
+
+            .day-date {
+                text-align: center;
+            }
+        }
+    }
+
+    .win {
+        font-weight: 700;
+        color: green;
+    }
+
+    .loss {
+        font-weight: 700;
+        color: red;
+    }
+
+    table.table {
+        border-left:0;
+        border-right:0;
+        border-bottom:0;
+
+        th {
+            background-color: #FFF;
+            text-transform: uppercase;
+            border-color: #bbb;
+            border-bottom:1px solid #bbb;
+        }
+
+        tbody + thead th {
+            border-top:1px solid #bbb;
+        }
+
+        td {
+            border-color: #bbb;
+        }
+
+        tr:nth-of-type(2n+1) {
+            background-color: #FFF;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #eceef1;
+        }
+    }
+}

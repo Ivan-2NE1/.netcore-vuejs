@@ -1,0 +1,152 @@
+﻿@model VSAND.Data.ViewModels.GameReport.GameReport;
+
+@{
+    ViewData["Title"] = Model.Name + "| Game Overview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ await Html.RenderPartialAsync("_headerPartial"); }
+
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="users" title="Game Overview"
+                    v-bind:padding="true">
+        <template v-slot:toolbarmasterbuttons>
+            @{ await Html.RenderPartialAsync("_gameNav.cshtml"); }
+        </template>
+
+        <template v-slot:toolbar>
+            <audit-button v-if="isAdmin"
+                          audit-table="vsand_GameReport"
+                          v-bind:audit-id="gameReport.gameReportId"></audit-button>
+        </template>
+
+        <div class="row" v-if="validationMsgs !== null && validationMsgs.length > 0">
+            <div class="col">
+                <div class="alert alert-danger">
+                    <p class="lead">Please correct the following to continue:</p>
+                    <ul>
+                        <li v-for="msg in validationMsgs">{{ msg }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4" v-if="!gameReport.final">
+            <div class="col">
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col col-sm">
+                            <p class="lead">This game is currently in <strong>Schedule Mode</strong>.</p>
+                            <p class="lead">If this game was played, switch to report mode by clicking the <strong>"Game Played"</strong> button.</p>
+                        </div>
+                        <div class="col col-sm-auto">
+                            <p><button class="btn btn-primary btn-lg" v-on:click.prevent="gameReport.final = true">Game Played</button></p>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <input-datetime label="Game Date"
+                                v-bind:default-value="gameReport.gameDate"
+                                v-on:input="gameReport.gameDate = $event"></input-datetime>
+            </div>
+            <div class="col-sm-6">
+                <eventtype-list v-bind:sport-id="gameReport.sportId"
+                                v-bind:schedule-year-id="gameReport.scheduleYearId"
+                                v-bind:active-only="false"
+                                v-bind:default-value="gameReport.eventTypeItem.eventTypeListValue"
+                                v-on:change="setEventType($event)"></eventtype-list>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <participating-teams v-bind:teams="gameReport.participatingTeams"
+                                     v-bind:sport-id="gameReport.sportId"
+                                     v-bind:schedule-year-id="gameReport.scheduleYearId"
+                                     v-bind:is-report="gameReport.final"
+                                     v-on:gameteamsupdated="onGameTeamsUpdated"></participating-teams>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <input-field label="Game Location / Site"
+                             v-bind:default-value="gameReport.locationName"
+                             v-bind:required="true"
+                             v-on:input="gameReport.locationName = $event"></input-field>
+            </div>
+            <div class="col-md-4">
+                <input-field label="Game Location / City"
+                             v-bind:default-value="gameReport.locationCity"
+                             v-bind:required="true"
+                             v-on:input="gameReport.locationCity = $event"></input-field>
+            </div>
+            <div class="col-md-4">
+                <input-field label="Game Location / State"
+                             v-bind:default-value="gameReport.locationState"
+                             v-bind:required="true"
+                             v-bind:max-length="2"
+                             v-on:input="gameReport.locationState = $event"></input-field>   
+            </div>
+        </div>
+
+        <div class="row" v-if="gameReport.final">
+            <div v-bind:class="['col-12', {'col-md-6': isAdmin }]">
+                <input-textarea label="Add Notes"
+                                v-bind:default-value="gameReport.addNote"
+                                v-bind:required="true"
+                                v-on:input="gameReport.addNote = $event"></input-textarea>
+
+            </div>
+            <div class="col-md-6" v-if="isAdmin">
+                <p><strong>Notes History:</strong></p>
+                <div v-for="note in gameReport.notes">
+                    <strong>on {{ note.createdDate | compactDateWithTime}} {{ note.noteBy }} said: </strong>
+                    <div v-html="note.note"></div>
+                </div>
+                <div class="alert alert-info" v-if="gameReport.notes === undefined || gameReport.notes === null || gameReport.notes.length === 0">
+                    <p>No notes have been added to this game.</p>
+                </div>
+            </div>
+        </div>
+
+        <gamereport-meta v-if="gameReport.sport !== null"
+                         v-bind:sport-id="gameReport.sportId"
+                         v-bind:sport-meta="gameReport.sport.gameMetas"
+                         v-bind:game-meta="gameReport.meta"
+                         v-on:gamemetaupdated="onGameMetaUpdated"></gamereport-meta>
+
+        <template v-slot:footer>
+            <button class="btn btn-primary btn-lg" v-on:click.prevent="saveGameReport">
+                <template v-if="!loading">
+                    Save Changes
+                </template>
+                <template v-else>
+                    <i class="far fa-spin fa-spinner"></i> Saving
+                </template>
+            </button>
+            <button class="btn btn-link ml-auto" v-on:click.prevent="nextScreen" v-bind:disabled="loading">
+                Next Step: {{ nextScreenName }} <i class="far fa-chevron-right"></i>
+            </button>
+        </template>
+    </widget-wrapper>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        window.gameReport = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/game-overview.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/game-overview.min.js" asp-append-version="true"></script>
+    </environment>
+}

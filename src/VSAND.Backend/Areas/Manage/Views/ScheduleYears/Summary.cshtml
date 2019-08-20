@@ -1,0 +1,69 @@
+﻿@model VSAND.Data.ViewModels.ScheduleYear
+
+@{
+    ViewData["Title"] = "Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var refObj = Model.Summary.FirstOrDefault();
+}
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-wrench"></i> Manage Schedule Year
+        <small>
+            @Model.Name
+        </small>
+    </h1>
+</div>
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-wrench fa-fw"></i>
+            Schedule Year @Html.DisplayFor(model => model.Name) <i v-if="scheduleYear.active">(active)</i>
+        </h1>*@
+
+    <div class="row">
+        <div class="col-12">
+            <widget-wrapper icon="table" title="Summary by Sport" v-bind:padding="false">
+                <table-grid grid-id="sports"
+                            v-bind:col-info="rowColInfo"
+                            v-bind:all-data="scheduleYear.summary"
+                            data-key-name="sportId"
+                            title-property="name"
+                            v-bind:enable-edit="false"
+                            v-bind:enable-delete="false"
+                            v-bind:enable-extra-actions="true">
+                    <template v-slot:extra-actions="slotProps">
+                        <a v-bind:class="['btn', {'btn-success': slotProps.row.teamCount > 0, 'btn-danger': slotProps.row.teamCount <= 0}]"
+                           v-bind:href="'/Manage/ScheduleYears/' + scheduleYear.scheduleYearId + '/Provisioning/' + slotProps.row.sportId">Provisioning</a>
+                        <a v-bind:class="['btn', {'btn-success': slotProps.row.eventCount > 0, 'btn-danger': slotProps.row.eventCount <= 0}]"
+                           v-bind:href="'/Manage/ScheduleYears/' + scheduleYear.scheduleYearId + '/EventTypes/' + slotProps.row.sportId">Event Types</a>
+                        <a class="btn btn-default"
+                           v-bind:href="'/Manage/ScheduleYears/' + scheduleYear.scheduleYearId + '/Schedules/' + slotProps.row.sportId">Schedules</a>
+                        <a v-bind:class="['btn', {'btn-success': slotProps.row.hasPowerPointsConfig, 'btn-danger': slotProps.row.enablePowerPoints && !slotProps.row.hasPowerPointsConfig, 'btn-default': !slotProps.row.enablePowerPoints && !slotProps.row.hasPowerPointsConfig}]"
+                           v-bind:href="'/Manage/ScheduleYears/' + scheduleYear.scheduleYearId + '/PowerPoints/' + slotProps.row.sportId">Power Points</a>
+                        <a v-bind:class="['btn', {'btn-success': slotProps.row.hasLeagueRulesConfig, 'btn-default': !slotProps.row.hasLeagueRulesConfig}]"
+                           v-bind:href="'/Manage/ScheduleYears/' + scheduleYear.scheduleYearId + '/LeagueRules/' + slotProps.row.sportId">League Rules</a>
+                    </template>
+                </table-grid>
+            </widget-wrapper>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Configuration for table-grid Vue component -->
+    <col-info asp-for="@refObj" columns="Season,Sport,TeamCount,EventCount,HasPowerPointsConfig,HasLeagueRulesConfig"></col-info>
+
+    <script type="text/javascript">
+        window.scheduleYear = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-summary.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-summary.min.js" asp-append-version="true"></script>
+    </environment>
+}
+

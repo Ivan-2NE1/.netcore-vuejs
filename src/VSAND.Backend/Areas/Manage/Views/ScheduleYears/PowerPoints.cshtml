@@ -1,0 +1,165 @@
+﻿@model VSAND.Data.Entities.VsandPowerPointsConfig
+
+@{
+    ViewData["Title"] = "Power Points";
+    Layout = "_scheduleYearSportLayout.cshtml";
+}
+
+<div id="vueApp" v-cloak>
+    @*<h1 class="page-title txt-color-blueDark">
+        <i class="fa fa-wrench fa-fw"></i>
+        Power Points Configuration for @ViewData["ScheduleYearName"] @ViewData["SportName"]
+    </h1>*@
+
+    <widget-wrapper icon="pencil" title="Configure Power Points">
+        <div class="row">
+            <div class="col-md-8">
+                <input-field label="Include Games Count"
+                             v-bind:default-value="powerPoints.includeGamesCount"
+                             v-on:input="powerPoints.includeGamesCount = $event"
+                             form-help="The maximum number of games eligible for inclusion in the power points calculation"></input-field>
+
+                <input-checkbox label="Include Tie Games"
+                                v-bind:default-value="powerPoints.includeTieGames"
+                                v-on:input="powerPoints.includeTieGames = $event"></input-checkbox>
+
+                <input-field label="Best N Games"
+                             v-bind:default-value="powerPoints.bestNGames"
+                             v-on:input="powerPoints.includeGamesCount = $event"
+                             form-help="If set to a value greater than 0, but less than Include Games, will remove the lowest number of power point values from the final result. Ex. In football, 9 games are considered, but the power points value is based on the best 8 games, so the value would be 8."></input-field>
+
+                <div class="row">
+                    <div class="col-12">
+                        <b>Date Range</b>
+                        <p class="text-muted">Only games played between the start date and end date will be eligible for inclusion in the calculation.</p>
+                    </div>
+                    <div class="offset-1 col-md-5">
+                        <input-calendar label="Start Date"
+                                        v-bind:default-value="powerPoints.startDate"
+                                        v-on:input="powerPoints.startDate = $event"></input-calendar>
+                    </div>
+                    <div class="col-md-5">
+                        <input-calendar label="End Date"
+                                        v-bind:default-value="powerPoints.endDate"
+                                        v-on:input="powerPoints.endDate = $event"></input-calendar>
+                    </div>
+                </div>
+
+                <input-datetime label="Grace Period End Date"
+                                v-bind:default-value="powerPoints.gracePeriodEnd"
+                                v-on:input="powerPoints.gracePeriodEnd = $event"
+                                form-help="A date, after the season end date, that marks the last date that game report additions or changes will be accepted."></input-datetime>
+
+                <input-datetime label="Seeding Period End Date"
+                                v-bind:default-value="powerPoints.seedingPeriodEnd"
+                                v-on:input="powerPoints.seedingPeriodEnd = $event"
+                                form-help="The date that the seeding period is over (after brackets will be published) where changes will be allowed for game reports."></input-datetime>
+
+                <div class="row">
+                    <div class="col-12">
+                        <b>Quality Point Values</b>
+                        <p class="text-muted">The discrete value for a win, loss, or tie by the team.</p>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Win Value"
+                                     v-bind:default-value="powerPoints.winValue"
+                                     v-on:input="powerPoints.winValue"></input-field>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Loss Value"
+                                     v-bind:default-value="powerPoints.lossValue"
+                                     v-on:input="powerPoints.lossValue"></input-field>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Tie Value"
+                                     v-bind:default-value="powerPoints.tieValue"
+                                     v-on:input="powerPoints.tieValue"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <b>Group Point Multiplier</b>
+                        <p class="text-muted">A value that will be multiplied with the group value of the opponent to determine the group points for each pairing. If group points are not awarded for a particular outcome, set the multiplier value to 0.</p>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Opponent Group Win Multiplier"
+                                     v-bind:default-value="powerPoints.groupWinMultiplier"
+                                     v-on:input="powerPoints.groupWinMultiplier"></input-field>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Opponent Group Loss Multiplier"
+                                     v-bind:default-value="powerPoints.groupLossMultiplier"
+                                     v-on:input="powerPoints.groupLossMultiplier"></input-field>
+                    </div>
+                    <div class="offset-1 col-10">
+                        <input-field label="Opponent Group Tie Multiplier"
+                                     v-bind:default-value="powerPoints.groupTieMultiplier"
+                                     v-on:input="powerPoints.groupTieMultiplier"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <b>Residual Point Multiplier</b>
+                        <p class="text-muted">Residual points are calculated against the opponents record using multipliers based on the outcome of the game. Different outcomes can have different multipliers.</p>
+                    </div>
+                    <div class="col-4">
+                        <b>Win</b>
+                        <p>Opponent Record Multiplier</p>
+                        <input-field label="Wins"
+                                     v-bind:default-value="powerPoints.residualWinMultiplierOppWins"
+                                     v-on:input="powerPoints.residualWinMultiplierOppWins"></input-field>
+                        <input-field label="Losses"
+                                     v-bind:default-value="powerPoints.residualWinMultiplierOppLosses"
+                                     v-on:input="powerPoints.residualWinMultiplierOppLosses"></input-field>
+                        <input-field label="Ties"
+                                     v-bind:default-value="powerPoints.residualWinMultiplierOppTies"
+                                     v-on:input="powerPoints.residualWinMultiplierOppTies"></input-field>
+                    </div>
+                    <div class="col-4">
+                        <b>Loses</b>
+                        <p>Opponent Record Multiplier</p>
+                        <input-field label="Wins"
+                                     v-bind:default-value="powerPoints.residualLossMultiplierOppWins"
+                                     v-on:input="powerPoints.residualLossMultiplierOppWins"></input-field>
+                        <input-field label="Losses"
+                                     v-bind:default-value="powerPoints.residualLossMultiplierOppLosses"
+                                     v-on:input="powerPoints.residualLossMultiplierOppLosses"></input-field>
+                        <input-field label="Tie"
+                                     v-bind:default-value="powerPoints.residualLossMultiplierOppTies"
+                                     v-on:input="powerPoints.residualLossMultiplierOppTies"></input-field>
+                    </div>
+                    <div class="col-4">
+                        <b>Tie</b>
+                        <p>Opponent Record Multiplier</p>
+                        <input-field label="Wins"
+                                     v-bind:default-value="powerPoints.residualTieMultiplierOppWins"
+                                     v-on:input="powerPoints.residualTieMultiplierOppWins"></input-field>
+                        <input-field label="Losses"
+                                     v-bind:default-value="powerPoints.residualTieMultiplierOppLosses"
+                                     v-on:input="powerPoints.residualTieMultiplierOppWins"></input-field>
+                        <input-field label="Ties"
+                                     v-bind:default-value="powerPoints.residualTieMultiplierOppTies"
+                                     v-on:input="powerPoints.residualTieMultiplierOppTies"></input-field>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" v-on:click="updatePowerPoints">Save Changes</button>
+            </div>
+        </div>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script>
+        window.powerPoints = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-scheduleyears-powerpoints.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app//manage-scheduleyears-powerpoints.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,64 @@
+/* #IMPORTS ~~
+========================================================================== */
+@import './node_modules/bootstrap/scss/functions';
+@import './node_modules/bootstrap/scss/variables'; 
+@import './node_modules/bootstrap/scss/mixins';
+@import '../_mixins/mixins'; 
+@import '../_themes/_modules/variables';
+@import '../_themes/_modules/_placeholders';
+
+
+/* #GLOBAL IMPORTS
+========================================================================== */
+/*@import '_imports/_global-import';*/
+
+/* #FRAMEWORK - Structure and layout files. (**DO NOT** change order)
+                DOC: you can disable unused _modules
+========================================================================== */
+/* contains root variables to be used with css (see docs) */
+/* html and body base styles */
+@import '../_themes/_modules/_body';
+
+@import '../_themes/_modules/_page-header';
+@import '../_themes/_modules/_page-logo';
+@import '../_themes/_modules/_page-search';
+@import '../_themes/_modules/_dropdown-icon-menu';
+@import '../_themes/_modules/_dropdown-notification';
+@import '../_themes/_modules/_dropdown-app-list';
+@import '../_themes/_modules/_header-function-fixed';
+@import '../_themes/_modules/_left-panel';
+@import '../_themes/_modules/_nav';
+@import '../_themes/_modules/_nav-listfilter';
+@import '../_themes/_modules/_nav-info-card';
+@import '../_themes/_modules/_nav-function-top';
+@import '../_themes/_modules/_nav-function-minify';
+@import '../_themes/_modules/_nav-footer';
+@import '../_themes/_modules/_page-wrapper';
+@import '../_themes/_modules/_page-heading';
+@import '../_themes/_modules/_page-footer';
+@import '../_themes/_modules/_page-components-accordion';
+@import '../_themes/_modules/_page-components-alerts';
+@import '../_themes/_modules/_page-components-badge';
+//@import '../_themes/_modules/_page-components-breadcrumb';
+@import '../_themes/_modules/_page-components-buttons';
+@import '../_themes/_modules/_page-components-cards';
+@import '../_themes/_modules/_page-components-carousel';
+@import '../_themes/_modules/_page-components-dropdowns';
+@import '../_themes/_modules/_page-components-messanger';
+@import '../_themes/_modules/_page-components-modal';
+@import '../_themes/_modules/_page-components-panels';
+@import '../_themes/_modules/_page-components-popovers';
+@import '../_themes/_modules/_page-components-shortcut';
+
+@import '../_themes/_modules/_helpers';
+@import '../_themes/_modules/_misc';
+@import '../_themes/_modules/_hack';
+@import '../_themes/_modules/_responsive';
+@import '../_themes/_modules/_forms';
+@import '../_themes/_modules/_settings-demo';
+@import '../_themes/_modules/_settings-demo-incompatiblity-list';
+@import '../_themes/_modules/_settings-demo-theme-colors';
+
+
+@import '../_themes/_modules/_mod-nav-accessibility.scss';
+@import '../_themes/_modules/_colors';

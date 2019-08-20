@@ -1,0 +1,171 @@
+@model VSAND.Data.Identity.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fas fa-wrench"></i> Manage
+        <small>
+            @ViewData["Title"]
+        </small>
+    </h1>
+</div>
+
+<div id="vueApp" v-cloak>
+    <widget-wrapper icon="pencil" title="User Info">
+        <template v-slot:toolbar>
+            <a class="btn btn-default btn-sm rounded-pill mr-1 shadow-0 waves-effect waves-themed" href="/manage/users">
+                <i class="fal fa-chevron-left"></i> Back to Users
+            </a>
+        </template>
+        <div class="row">
+            <div class="col-md-7">
+                <input-field label="Username"
+                             v-bind:default-value="user.userName"
+                             v-on:input="user.username = $event"
+                             v-bind:required="true"
+                             v-bind:max-length="50"
+                             v-bind:input-disabled="true"
+                             form-help="Username cannot be changed."></input-field>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="Email"
+                                     v-bind:default-value="user.email"
+                                     v-on:input="user.email = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="100"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Password"
+                                     form-help="Leave this blank if you don't want to change the user's password."
+                                     v-bind:default-value="newPassword"
+                                     v-on:input="newPassword = $event"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="First Name"
+                                     v-bind:default-value="user.appxUser.firstName"
+                                     v-on:input="user.appxUser.firstName = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Last Name"
+                                     v-bind:default-value="user.appxUser.lastName"
+                                     v-on:input="user.appxUser.lastName = $event"
+                                     v-bind:required="true"
+                                     v-bind:max-length="50"></input-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input-field label="Mobile Phone"
+                                     form-help="Do not include +1 or any special characters, must be a 10 digit cell phone number."
+                                     v-bind:default-value="user.phoneNumber"
+                                     v-on:input="user.phoneNumber = $event"
+                                     v-bind:max-length="10"></input-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <input-field label="Other Phone"
+                                     form-help="May include extensions for office phones."
+                                     v-bind:default-value="user.appxUser.phoneNumber"
+                                     v-on:input="user.appxUser.phoneNumber = $event"
+                                     v-bind:max-length="20"></input-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Account Type Settings</div>
+                    </div>
+                    <div class="card-body">
+                        <input-checkbox label="Staff"
+                                        v-bind:default-value="user.appxUser.isAdmin"
+                                        v-on:input="user.appxUser.isAdmin = $event"></input-checkbox>
+
+                        <input-checkbox v-bind:label="masterAccountRole.roleName"
+                                        v-bind:default-value="isInRole(masterAccountRole.roleId)"
+                                        v-on:input="roleChecked($event, masterAccountRole)"
+                                        v-bind:form-help="masterAccountRole.description"></input-checkbox>
+
+                        <div v-if="user.appxUser.isAdmin">
+                            <publication-list v-bind:default-value="user.appxUser.publicationId"
+                                              v-on:change="user.appxUser.publicationId = $event[0].id"></publication-list>
+
+                        </div>
+                        <div v-else>
+                            <school-autocomplete v-bind:default-value.sync="user.appxUser.schoolId"
+                                                 v-on:update:value="user.appxUser.schoolId = $event.id"></school-autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-group" v-if="user.appxUser.isAdmin">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        Primary Role
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li v-for="role in primaryRoleCat.roles">
+                            <input-checkbox v-bind:label="role.roleName"
+                                            v-bind:default-value="isInRole(role.roleId)"
+                                            v-on:input="roleChecked($event, role)"
+                                            v-bind:form-help="role.description"></input-checkbox>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        Other Permissions
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div style="max-height:530px; overflow-y:scroll">
+                        <div v-for="category in otherRoleCats" class="px-3 py-1">
+                            <p class="font-weight-bold">{{ category.roleCat }}</p>
+                            <div v-for="role in category.roles" class="pl-5">
+                                <input-checkbox v-bind:label="role.roleName"
+                                                v-bind:default-value="isInRole(role.roleId)"
+                                                v-on:input="roleChecked($event, role)"
+                                                v-bind:form-help="role.description"></input-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template v-slot:footer>
+            <button class="btn btn-primary" v-on:click="updateUser">Save Changes</button>
+        </template>
+    </widget-wrapper>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.user = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        window.userRoleCategories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["UserRoleCategories"]));
+    </script>
+
+    <environment include="Development">
+        <script src="~/app/manage-user.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/manage-user.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,48 @@
+﻿/// <reference path="../site.scss" />
+
+.player-header {
+    padding-top: 1rem;
+    padding-bottom:1rem;
+
+    h1 {
+        text-transform: uppercase;
+        font-family: "Benton Sans", Arial, sans-serif;
+
+        strong {
+            font-family: "Benton Sans Medium", Arial, sans-serif;
+        }
+
+        .player-jersey-number {
+            font-weight: bold;
+            color:#808080;
+        }
+
+        .player-positions {
+            font-size: 2rem;
+        }
+    }
+
+    .navbar {
+        padding: 1rem 0 0;
+
+        .navbar-toggler {
+            &.collapsed {
+                .collapser {
+                    display: none;
+                }
+
+                .expander {
+                    display: inline;
+                }
+            }
+
+            .collapser {
+                display: inline;
+            }
+
+            .expander {
+                display: none;
+            }
+        }
+    }
+}

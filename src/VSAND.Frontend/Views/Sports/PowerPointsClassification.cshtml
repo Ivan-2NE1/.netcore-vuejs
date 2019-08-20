@@ -1,0 +1,115 @@
+﻿@model VSAND.Data.ViewModels.Sports.PowerpointsView;
+
+@{
+    ViewData["Title"] = $"{Model.Sport.Name} Power Points";
+
+    string basePath = ViewData["BasePath"].ToString();
+    string seasonSlug = Model.ScheduleYearSlug;
+
+    bool isFootball = Model.Sport.Name.ToLower().Contains("football");
+    List<VSAND.Data.ViewModels.TeamRecordInfo> rankedValues = null;
+    if (isFootball)
+    {
+        rankedValues = Model.Standings.OrderBy(s => s.UnitedPowerRank).ToList();
+    }
+    else
+    {
+        rankedValues = Model.Standings.OrderBy(s => s.PowerPointsRank).ToList();
+    }
+}
+
+<partial name="_sportHeader" model="Model.Sport" />
+
+<div class="marketing-block">
+    <div id="BelowHeaderAd" data-load="ad" data-position="TopRail_Below"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <strong>@Model.ScheduleYear.Name @Model.Sport.Name @Model.Classification Power Points</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-stats table-borderless table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th class="text-left">Team</th>
+                                <th>Record</th>
+                                <th class="section-end">PCT</th>
+                                @if (isFootball)
+                                {
+                                    <th class="section-end">PP</th>
+                                    <th class="section-end">BPI</th>
+                                    <th>UPR</th>
+                                }
+                                else
+                                {
+                                    <th>PP</th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var team in rankedValues)
+                            {
+                                var schoolSlug = "";
+                                if (Model.SchoolSlugs.ContainsKey(team.SchoolId))
+                                {
+                                    schoolSlug = Model.SchoolSlugs[team.SchoolId];
+                                }
+                            <tr>
+                                @if (isFootball)
+                                {
+                                    <td>@team.UnitedPowerRank</td>
+                                }
+                                else
+                                {
+                                    <td>@team.PowerPointsRank</td>
+                                }
+
+                                <td class="text-left">
+                                    @if (!string.IsNullOrWhiteSpace(schoolSlug))
+                                    {
+                                        <a href="/school/@schoolSlug/@Model.SportSlug/season/@Model.ScheduleYearSlug">@team.TeamName</a>
+                                    }
+                                    else
+                                    {
+                                        @team.TeamName
+                                    }
+                                </td>
+                                <td>@team.OverallRecord</td>
+                                <td class="section-end">@team.WinningPercentage.ToString("#.000")</td>
+                                @if (isFootball)
+                                {
+                                    <td class="section-end">@team.PowerPoints</td>
+                                    <td class="section-end">@team.BornPowerIndex</td>
+                                    <td>@team.UnitedPowerRank</td>
+                                }
+                                else
+                                {
+                                    <td>@team.PowerPoints</td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="marketing-block">
+                <div id="RightRailTopAd" data-load="ad" data-position="RightRail_Middle"></div>
+            </div>
+
+            <div class="marketing-block">
+                <div id="RightRailBottomAd" data-load="ad" data-position="RightRail_Bottom"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,186 @@
+﻿@model VSAND.Data.Entities.VsandSport
+
+@{
+    ViewData["Title"] = "Sports";
+    Layout = "_sportLayout.cshtml";
+}
+
+<widget-wrapper icon="plus" title="Add Sport">
+    <div class="row">
+        <div class="col-sm-8">
+            <input-field input-id="addSportName"
+                         v-bind:default-value="addSportForm.name"
+                         label="@Html.DisplayNameFor(model => model.Name)"
+                         v-bind:required="true"
+                         v-bind:max-length="50"
+                         v-on:input="addSportForm.name = $event"></input-field>
+        </div>
+        <div class="col-sm-4">
+            <input-field input-id="addSportAbbreviation"
+                         v-bind:default-value="addSportForm.abbreviation"
+                         label="@Html.DisplayNameFor(model => model.Abbreviation)"
+                         v-bind:required="true"
+                         v-bind:max-length="5"
+                         v-on:input="addSportForm.abbreviation = $event"></input-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <input-checkbox input-id="addSportEnabled"
+                            v-bind:default-value="addSportForm.enabled"
+                            label="@Html.DisplayNameFor(model => model.Enabled)"
+                            v-on:input="addSportForm.enabled = $event"></input-checkbox>
+        </div>
+        <div class="col-sm-6">
+            <season-list input-id="addSportSeason"
+                         v-on:change="addSportForm.season = $event.label"></season-list>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <input-field input-id="addSportMeetName"
+                         v-bind:default-value="addSportForm.meetName"
+                         label="@Html.DisplayNameFor(model => model.MeetName)"
+                         v-bind:required="true"
+                         v-bind:max-length="20"
+                         v-on:input="addSportForm.meetName = $event"
+                         form-help="Ex. Game or Meet"></input-field>
+        </div>
+
+        <div class="col-sm-6">
+            <input-select input-id="addSportMeetType"
+                          label="@Html.DisplayNameFor(model => model.MeetType)"
+                          v-bind:required="true"
+                          v-bind:options="['Team', 'Event']"
+                          v-on:change="addSportForm.meetType = $event.value"
+                          choose-prompt="Select a Meet Type"></input-select>
+        </div>
+    </div>
+
+
+    <input-checkbox input-id="addSportEnableLowScoreWins"
+                    v-bind:default-value="addSportForm.enableLowScoreWins"
+                    label="In this sport, the team with the lowest score wins."
+                    v-on:input="addSportForm.enableLowScoreWins = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportAllowTie"
+                    v-bind:default-value="addSportForm.allowTie"
+                    label="Allow results that end in ties; enable collecting ties as a Team Records metric."
+                    v-on:input="addSportForm.allowTie = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportAllowMultiEventPerDay"
+                    v-bind:default-value="addSportForm.allowMultiEventPerDay"
+                    label="Allow scheduling and reporting of multiple events with the same game date."
+                    v-on:input="addSportForm.allowMultiEventPerDay = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableTriPlusScheduling"
+                    v-bind:default-value="addSportForm.enableTriPlusScheduling"
+                    label="Allow scheduling and reporting of 3 or more teams within a meet."
+                    v-on:input="addSportForm.enableTriPlusScheduling = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableJerseyNumber"
+                    v-bind:default-value="addSportForm.enableJerseyNumber"
+                    label="Enable assignment of player jersey numbers in the team roster."
+                    v-on:input="addSportForm.enableJerseyNumber = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnablePosition"
+                    v-bind:default-value="addSportForm.enablePosition"
+                    label="Enable assignment of player positions."
+                    v-on:input="addSportForm.enablePosition = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableGamePosition"
+                    v-bind:default-value="addSportForm.enableGamePosition"
+                    label="Enable assignment of player position in game roster."
+                    v-on:input="addSportForm.enableGamePosition = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableStarter"
+                    v-bind:default-value="addSportForm.enableStarter"
+                    label="Enable setting player as starter/sub in game roster."
+                    v-on:input="addSportForm.enableStarter = $event"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableRosterOrder"
+                    v-bind:default-value="addSportForm.enableGameRosterOrder"
+                    label="Enable game roster special order (i.e., Batting Order)"
+                    v-on:input="addSportForm.enableGameRosterOrder = $event"></input-checkbox>
+
+    <div class="ml-5">
+        <input-field v-if="addSportForm.enableGameRosterOrder"
+                     input-id="addSportGameRosterOrderLabel"
+                     v-bind:default-value="addSportForm.gameRosterOrderLabel"
+                     label="@Html.DisplayNameFor(model => model.GameRosterOrderLabel)"
+                     v-bind:required="false"
+                     v-bind:max-length="50"
+                     v-on:input="addSportForm.gameRosterOrderLabel = $event"
+                     class="mb-5"></input-field>
+    </div>
+
+    <input-checkbox input-id="addSportCountZeroValueStats"
+                    v-bind:default-value="addSportForm.countZeroValueStats"
+                    label="Include zero-valued stats in aggregate calculations."
+                    v-on:input="addSportForm.countZeroValueStats = $event"></input-checkbox>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input-field input-id="addSportPlayerName"
+                         v-bind:default-value="addSportForm.playerName"
+                         label="@Html.DisplayNameFor(model => model.PlayerName)"
+                         v-bind:required="true"
+                         v-bind:max-length="20"
+                         v-on:input="addSportForm.playerName = $event"
+                         form-help="(i.e., Player)"></input-field>
+        </div>
+        <div class="col-md-6">
+            <input-field input-id="addSportPlayerNamePlural"
+                         v-bind:default-value="addSportForm.playerNamePlural"
+                         label="@Html.DisplayNameFor(model => model.PlayerNamePlural)"
+                         v-bind:required="true"
+                         v-bind:max-length="20"
+                         v-on:input="addSportForm.playerNamePlural = $event"
+                         form-help="(i.e., Players)"></input-field>
+        </div>
+    </div>
+
+    <input-checkbox input-id="addSportEnablePeriodScoring"
+                    v-bind:default-value="addSportForm.enablePeriodScoring"
+                    label="Enable Period Scoring"
+                    v-on:input="addSportForm.enablePeriodScoring = $event"
+                    class="mt-4"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnableScoringPlayByPlay"
+                    v-bind:default-value="addSportForm.enableScoringPlayByPlay"
+                    label="Enable scoring play-by-play."
+                    v-on:input="addSportForm.enableScoringPlayByPlay = $event"
+                    class="mt-4"></input-checkbox>
+
+    <input-checkbox input-id="addSportEnablePowerPoints"
+                    v-bind:default-value="addSportForm.enablePowerPoints"
+                    label="Enable Power Points"
+                    v-on:input="addSportForm.enablePowerPoints = $event"
+                    class="mt-4"></input-checkbox>
+
+    <input-checkbox input-id="addSportAllowOT"
+                    v-bind:default-value="addSportForm.allowOT"
+                    label="Allow the addition of overtime periods to the period scoring."
+                    v-on:input="addSportForm.allowOT = $event"
+                    class="mt-4"></input-checkbox>
+
+    <input-checkbox input-id="addSportAllowShootout"
+                    v-bind:default-value="addSportForm.allowShootout"
+                    label="Allow optional shootout, after regulation overtime periods."
+                    v-on:input="addSportForm.allowShootout = $event"
+                    class="mt-4"></input-checkbox>
+
+    <template v-slot:footer>
+        <button class="btn btn-primary btn-lg" v-on:click="createSport">Add Sport</button>
+    </template>
+</widget-wrapper>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/app/sports-dashboard.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/app/sports-dashboard.min.js" asp-append-version="true"></script>
+    </environment>
+}

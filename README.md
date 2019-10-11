@@ -3,3 +3,5 @@
 2. Install Vue CLI
 3. dotnet restore(from powershell)
 4. Task Runner Exploerer
+
+It works well.
